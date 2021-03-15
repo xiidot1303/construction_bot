@@ -1,0 +1,9 @@
+.env
+db.sqlite3
+app/__pycache__
+app/migrations
+app/views/__pycache__
+views/__init__.py
+bot/__pycache__
+construction_bot/__pycache__
+construction_bot/__init__.py

@@ -1,0 +1,38 @@
+from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import ConversationHandler
+from bot.conversationList import *
+from app.models import *
+
+
+def show_inf_about(update, context):
+    c = update.callback_query
+    bot = context.bot
+    data = str(c.data)
+    if 'inf-material' in data:
+        sth, obj_title = data.split('_')
+        materials = Material.objects.filter(obj=obj_title)
+        n=1
+        msg = ''
+        for m in materials:
+            msg += str(n) + '. {}, {}{}, {}{};\n'.format(m.title, m.amount, m.measurement, m.price, m.summ_or_dollar)
+            n += 1
+        i_back = InlineKeyboardButton(text='Назад', callback_data='back-show-inf_{}'.format(obj_title))
+        c.edit_message_text(msg, reply_markup = InlineKeyboardMarkup([[i_back]]))
+
+    elif 'inf-salary' in data:
+        sth, obj_title = data.split('_')
+        salaries = Salary.objects.filter(obj=obj_title)
+        n=1
+        msg = ''
+        for s in salaries:
+            msg += str(n) + '. {}, {}{};\n'.format(s.title,s.price, s.summ_or_dollar)
+            n += 1
+        i_back = InlineKeyboardButton(text='Назад', callback_data='back-show-inf_{}'.format(obj_title))
+        c.edit_message_text(msg, reply_markup = InlineKeyboardMarkup([[i_back]]))
+    elif 'back-show-inf' in data:
+        sth, text = data.split('_')
+        obj = Object.objects.get(title=text)
+        i_material = InlineKeyboardButton(text='Материалы', callback_data='inf-material_{}'.format(text))
+        i_salary = InlineKeyboardButton(text='Иш хакки', callback_data='inf-salary_{}'.format(text))
+        c.edit_message_text('Остаток денег:{}\nПоказать информацию о ...'.format(obj.price), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary]]))
+        return SHOW_INF_ABOUT

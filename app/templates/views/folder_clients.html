@@ -1,0 +1,46 @@
+{% extends "layout/basic.html" %}
+{% load static %}
+{% block link %}
+
+<link rel="stylesheet" href="{% static 'app/style-fixed.css' %}">
+{% endblock %}
+{% block section %}
+<div class="container">
+    <div class="fixedTable col-12" id="demo">
+        <div class="row">
+            <div class="col-sm-6 col-lg-4" style="padding-right: 0">
+                <aside class="fixedTable-sidebar">
+                    <table class="table table-bordered">
+                        <tbody>
+                            {% for c in clients %}
+                            <tr>
+                                <td>{{ c.name }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </aside>
+            </div>
+            <div class="col-sm-6 col-lg-8" style="padding-left: 0">
+                <div class="fixedTable-body">
+                    <table class="table table-bordered">
+                        <tbody>
+                            {% for o in objects %}
+                            <tr>
+                                {% for i in o %}
+                                <td><a href="{% url 'update_obj' i.pk %}">{{ i.title }}</td></a></td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src="{# static 'app/script.js' #}"></script>
+{% endblock %}

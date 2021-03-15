@@ -1,0 +1,30 @@
+{% extends "layout/basic.html" %}
+{% load static %}
+{% block section %}
+<div class="row" style="width: 80em;">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-body table-responsive no-padding">
+                <table class="table table-hover" id="userTable">
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Суммы или доллары</th>
+                            <th>Цена</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in salaries %}
+                        <tr>
+                            <td>{{ s.title }}</td>
+                            <td>{{ s.summ_or_dollar }}</td>
+                            <td>{{ s.price }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

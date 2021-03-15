@@ -1,0 +1,106 @@
+from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import ConversationHandler
+from bot.conversationList import *
+from app.models import *
+
+def spend_money_for(update, context):
+    c = update.callback_query
+    bot = context.bot
+    data = str(c.data)
+    if 'spend-money-to-material' in data:
+        s, object_title = str(data).split('_')
+        c.edit_message_text('Выберите название')
+        Material.objects.create(obj=object_title, user_id=c.message.chat.id)
+        return SEND_TITLE_MATERIAL
+    elif 'spend-money-for-salary' in data:
+        s, object_title = str(data).split('_')
+        c.edit_message_text('Выберите название')
+        Salary.objects.create(obj=object_title, user_id=c.message.chat.id)
+        return SEND_TITLE_SALARY
+
+def send_title_salary(update, context):
+    obj = Salary.objects.get(user_id=update.message.chat.id, title=None)
+    obj.title = update.message.text
+    obj.save()
+    update.message.reply_text('Выберите суммы или доллары')
+    return SEND_SUMM_OR_DOLLAR_SALARY
+
+def send_summ_or_dollar_salar(update, context):
+    obj = Salary.objects.get(user_id=update.message.chat.id, summ_or_dollar=None)
+    obj.summ_or_dollar = update.message.text
+    obj.save()
+    update.message.reply_text('Введите цену за работу')
+    return SEND_PRICE_SALARY
+
+def send_price_salary(update, context):
+    bot = context.bot
+    text = update.message.text
+    obj = Salary.objects.get(user_id=update.message.chat.id, price=None)
+    obj.price = update.message.text
+    obj.save()
+    Obj = Object.objects.get(title=obj.obj)
+    Obj.price = str(int(Obj.price) - int(update.message.text))
+    Obj.save()
+
+    # return to object menu, where can spend money for materials or salary
+    text = Obj.title
+    obj = Object.objects.get(title=Obj.title)
+    i_material = InlineKeyboardButton(text='Материалы', callback_data='spend-money-to-material_{}'.format(text))
+    i_salary = InlineKeyboardButton(text='Иш хакки', callback_data='spend-money-for-salary_{}'.format(text))
+    
+    d = bot.send_message(update.message.chat.id, 'Тратить деньги на...', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
+    bot.delete_message(update.message.chat.id, d.message_id)
+    bot.send_message(update.message.chat.id, 'Остаток денег:{}\nТратить деньги на...'.format(Obj.price), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary]]))
+        
+        
+    return SPEND_MONEY_FOR
+        
+
+
+def send_title_material(update, context):
+    text = update.message.text
+    obj = Material.objects.get(user_id=update.message.chat.id, title=None)
+    obj.title = text
+    obj.save()
+    update.message.reply_text('Выберите единицу измерения(м, кг, м^3, м^2)')
+    return SELECT_MEASUREMENT
+
+def select_measurement(update, context):
+    obj = Material.objects.get(user_id=update.message.chat.id, measurement=None)
+    obj.measurement = update.message.text
+    obj.save()
+    update.message.reply_text('Введите количество')
+    return SEND_AMOUNT
+
+
+def send_amount(update, context):
+    obj = Material.objects.get(user_id=update.message.chat.id, amount=None)
+    obj.amount = update.message.text
+    obj.save()
+    update.message.reply_text('Выберите суммы или доллары')
+    return SEND_SUMM_OR_DOLLAR_MATERIAL
+
+def send_summ_or_dollar_material(update, context):
+    obj = Material.objects.get(user_id=update.message.chat.id, summ_or_dollar=None)
+    obj.summ_or_dollar = update.message.text
+    obj.save()
+    update.message.reply_text('Введите цену за 1шт(м, кг и т.д)')
+    return SEND_PRICE_MATERIAL
+
+def send_price_material(update, context):
+    bot = context.bot
+    material_obj = Material.objects.get(user_id=update.message.chat.id, price=None)
+    material_obj.price = update.message.text
+    material_obj.save()
+    Obj = Object.objects.get(title=material_obj.obj)
+    Obj.price = str(int(Obj.price) - (int(material_obj.amount) * int(material_obj.price)))
+    Obj.save()
+    # return to object menu, where can spend money for materials or salary
+    text = Obj.title
+    i_material = InlineKeyboardButton(text='Материалы', callback_data='spend-money-to-material_{}'.format(text))
+    i_salary = InlineKeyboardButton(text='Иш хакки', callback_data='spend-money-for-salary_{}'.format(text))
+    
+    d = bot.send_message(update.message.chat.id, 'Тратить деньги на...', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
+    bot.delete_message(update.message.chat.id, d.message_id)
+    bot.send_message(update.message.chat.id, 'Остаток денег:{}\nТратить деньги на...'.format(Obj.price), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary]]))
+    return SPEND_MONEY_FOR
