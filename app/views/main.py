@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from dotenv import load_dotenv
 import os
 from app.models import *
+import json
 basedir = os.path.abspath(os.path.dirname(''))
 load_dotenv(os.path.join(basedir, '.env'))
 WHERE = os.environ.get('WHERE')
