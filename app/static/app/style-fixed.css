@@ -1,5 +1,5 @@
 .container {
-  margin-left: 1px;
+  margin-left: 100px;
   position: absolute;
   
 }
@@ -9,6 +9,7 @@
   height: 10px;
   background: #fff;
   cursor: pointer;
+
 }
 ::-webkit-scrollbar-button {
   width: 0;
@@ -27,9 +28,9 @@
 .fixedTable {
   position: relative;
   background: #fff;
-  width: 100%;
+  width: 600px;
   height: 100%;
-  margin: 1% auto;
+  
   background: #ecf0f5;
 }
 
@@ -48,14 +49,14 @@
   text-align: center;
 }
 .table-fixed tr td:nth-child(1) {
-  width: 100%;
+  width: 8%;
   min-height: 50px;
   height: 50px;
   font-size: 12px;
 }
 
 .fixedTable-header {
-  width: 120px;
+  width: 1200px;
   height: 50px;
   overflow: hidden;
 }
@@ -69,23 +70,37 @@
 
 
 .fixedTable-sidebar {
-  height: 60px;
+  height: 500px;
+  width: 200px;
   float: left;
   overflow: hidden;
-  background: #ecf0f5;
+  background: #fff;
 
   font-size: 12px;
 }
 
 .fixedTable-sidebar .table tr td:nth-child(1) {
-  width: 100%;
+  width: 5%;
   height: 20px;
+}
+.fixedTable-sidebar .table tr td:nth-child(2) {
+  width: 40%;
+  height: 20px;
+}
+.fixedTable-sidebar .table tr td:nth-child(3) {
+  width: 13%;
+  height: 20px;
+}
+.fixedTable-sidebar .table tr td:nth-child(4) {
+  width: 34%;
+  height: 20px;
+}
 
 
 .fixedTable-body {
   overflow: auto;
-  width: 120px;
-  height: 60px;
+  width: 800px;
+  height: 600px;
   float: left;
 }
 .fixedTable-body .table tr td,

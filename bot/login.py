@@ -40,10 +40,10 @@ def send_password(update, context):
         obj.password = password
         obj.save()
         #_____________ main menu___________________ 
-        obj = check[0]
+        obj = check[0].obj
 
         
-        objects_list = [i.title for i in obj.obj.all()]
+        objects_list = [[i.title] for i in obj.all()]
         update.message.reply_text('Все объекты', ReplyKeyboardMarkup(keyboard=objects_list))
         return ConversationHandler.END
     
