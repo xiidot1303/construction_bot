@@ -23,12 +23,6 @@
   border-radius: 2x;
 }
 
-ul {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  text-decoration: none;
-}
 
 .fixedTable {
   position: relative;
@@ -99,8 +93,4 @@ ul {
   min-width: 100px;
   width: 100px;
   height: 20px;
-}
-
-a{
-  color: red;
 }
