@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 import os
 from app.models import *
 import json
+from django.contrib.auth.decorators import login_required
 basedir = os.path.abspath(os.path.dirname(''))
 load_dotenv(os.path.join(basedir, '.env'))
 WHERE = os.environ.get('WHERE')
@@ -27,7 +28,7 @@ def bot_webhook(request):
     return HttpResponse('Bot started!')
 
 
-
+@login_required
 def folder_foremans(request):
     foremans = Foreman.objects.all()
     objects = []
@@ -36,6 +37,7 @@ def folder_foremans(request):
     context = {'foremans': foremans, 'objects': objects}
     return render(request, 'views/folder_foremans.html', context)
 
+@login_required
 def folder_clients(request):
     clients = Client.objects.all()
     objects = []
@@ -44,17 +46,19 @@ def folder_clients(request):
     context = {'clients': clients, 'objects': objects}
     return render(request, 'views/folder_clients.html', context)
 
-
+@login_required
 def material(request, obj):
     materials = Material.objects.filter(obj=obj)
     context = {'materials': materials}
     return render(request, 'views/material.html', context)
 
+@login_required
 def salary(request, obj):
     salaries = Salary.objects.filter(obj=obj)
     context = {'salaries': salaries}
     return render(request, 'views/salary.html', context)
 
+@login_required
 def all_foremans(request):
     foremans = Foreman.objects.all()
     context = {'foremans': foremans}
