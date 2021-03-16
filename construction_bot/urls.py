@@ -21,6 +21,8 @@ from app.views.create import *
 from app.views.update import *
 from dotenv import load_dotenv
 import os
+from django.conf import settings
+from django.conf.urls.static import static
 basedir = os.path.abspath(os.path.dirname(''))
 load_dotenv(os.path.join(basedir, '.env'))
 TOKEN = os.environ.get('TOKEN')
@@ -54,4 +56,4 @@ urlpatterns = [
 
     #salary
     path('salary/<str:obj>/', salary, name='salary'),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
