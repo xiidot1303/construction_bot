@@ -34,5 +34,18 @@ def show_inf_about(update, context):
         obj = Object.objects.get(title=text)
         i_material = InlineKeyboardButton(text='Материалы', callback_data='inf-material_{}'.format(text))
         i_salary = InlineKeyboardButton(text='Иш хакки', callback_data='inf-salary_{}'.format(text))
-        c.edit_message_text('Остаток денег:{}\nПоказать информацию о ...'.format(obj.price), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary]]))
+        i_back = InlineKeyboardButton(text='Назад', callback_data='back-to-objects_clients')
+        c.edit_message_text('Остаток денег:{}\nПоказать информацию о ...'.format(obj.price), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
         return SHOW_INF_ABOUT
+    
+    elif 'back-to-objects' in data:
+        sth, who = data.split('_')
+        user = Bot_users.objects.get(user_id=c.message.chat.id)
+        if who == 'foreman':
+            obj = Foreman.objects.get(login=user.login).obj
+        else:
+            obj = Client.objects.get(login=user.login).obj
+        objects_list = [[i.title] for i in obj.all()]
+        bot.delete_message(c.message.chat.id, c.message.message_id)
+        bot.send_message(c.message.chat.id, 'Все объекты', reply_markup=ReplyKeyboardMarkup(keyboard=objects_list, resize_keyboard=True))
+        return ConversationHandler.END

@@ -17,6 +17,19 @@ def spend_money_for(update, context):
         c.edit_message_text('Выберите название')
         Salary.objects.create(obj=object_title, user_id=c.message.chat.id)
         return SEND_TITLE_SALARY
+    
+
+    elif 'back-to-objects' in data:
+        sth, who = data.split('_')
+        user = Bot_users.objects.get(user_id=c.message.chat.id)
+        if who == 'foreman':
+            obj = Foreman.objects.get(login=user.login).obj
+        else:
+            obj = Client.objects.get(login=user.login).obj
+        objects_list = [[i.title] for i in obj.all()]
+        bot.delete_message(c.message.chat.id, c.message.message_id)
+        bot.send_message(c.message.chat.id, 'Все объекты', reply_markup=ReplyKeyboardMarkup(keyboard=objects_list, resize_keyboard=True))
+        return ConversationHandler.END
 
 def send_title_salary(update, context):
     obj = Salary.objects.get(user_id=update.message.chat.id, title=None)
@@ -47,10 +60,10 @@ def send_price_salary(update, context):
     obj = Object.objects.get(title=Obj.title)
     i_material = InlineKeyboardButton(text='Материалы', callback_data='spend-money-to-material_{}'.format(text))
     i_salary = InlineKeyboardButton(text='Иш хакки', callback_data='spend-money-for-salary_{}'.format(text))
-    
+    i_back = InlineKeyboardButton(text='Назад', callback_data='back-to-objects_foreman')
     d = bot.send_message(update.message.chat.id, 'Тратить деньги на...', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
     bot.delete_message(update.message.chat.id, d.message_id)
-    bot.send_message(update.message.chat.id, 'Остаток денег:{}\nТратить деньги на...'.format(Obj.price), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary]]))
+    bot.send_message(update.message.chat.id, 'Остаток денег:{}\nТратить деньги на...'.format(Obj.price), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
         
         
     return SPEND_MONEY_FOR
@@ -99,8 +112,8 @@ def send_price_material(update, context):
     text = Obj.title
     i_material = InlineKeyboardButton(text='Материалы', callback_data='spend-money-to-material_{}'.format(text))
     i_salary = InlineKeyboardButton(text='Иш хакки', callback_data='spend-money-for-salary_{}'.format(text))
-    
+    i_back = InlineKeyboardButton(text='Назад', callback_data='back-to-objects_foreman')
     d = bot.send_message(update.message.chat.id, 'Тратить деньги на...', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
     bot.delete_message(update.message.chat.id, d.message_id)
-    bot.send_message(update.message.chat.id, 'Остаток денег:{}\nТратить деньги на...'.format(Obj.price), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary]]))
+    bot.send_message(update.message.chat.id, 'Остаток денег:{}\nТратить деньги на...'.format(Obj.price), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
     return SPEND_MONEY_FOR

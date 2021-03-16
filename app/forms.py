@@ -11,12 +11,22 @@ class ObjForm(ModelForm):
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'price': forms.TextInput(attrs={'class': 'form-control'})
         }
+        labels = {
+            'title': 'название',
+            'price': 'остаток денег'
+        }
     field_order = ['title', 'price']
 
 class ForemanForm(ModelForm):
     class Meta:
         model = Foreman
         fields = {'name', 'login', 'password', 'obj'}
+        labels = {
+            'name': 'Имя',
+            'login': 'Логин',
+            'password': 'Пароль',
+            'obj': 'Объекты'
+        }
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'login': forms.TextInput(attrs={'class': 'form-control'}),
@@ -34,5 +44,11 @@ class ClientForm(ModelForm):
             'login': forms.TextInput(attrs={'class': 'form-control'}),
             'password': forms.TextInput(attrs={'class': 'form-control'}),
             'obj': forms.SelectMultiple(attrs={'class': 'form-control'})
+        }
+        labels = {
+            'name': 'Имя',
+            'login': 'Логин',
+            'password': 'Пароль',
+            'obj': 'Объекты'
         }
     field_order = ['name', 'login', 'password', 'obj']

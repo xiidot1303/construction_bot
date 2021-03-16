@@ -1,6 +1,7 @@
 .container {
-  margin-left: 100px;
-  position: absolute;
+  margin-left: 80px;
+  position: relative;
+  
   
 }
 
@@ -28,8 +29,8 @@
 .fixedTable {
   position: relative;
   background: #fff;
-  width: 600px;
-  height: 100%;
+  width: 770px;
+  height: 500px;
   
   background: #ecf0f5;
 }
@@ -37,6 +38,7 @@
 .fixedTable .table {
   position: relative;
   background: #fff;
+  
 }
 
 
@@ -70,13 +72,13 @@
 
 
 .fixedTable-sidebar {
-  height: 500px;
-  width: 200px;
+  height: auto;
+  max-height: 485px;
+  width: 250px;
   float: left;
   overflow: hidden;
-  background: #fff;
-
-  font-size: 12px;
+  background: #ecf0f5;
+  font-size: 14px;
 }
 
 .fixedTable-sidebar .table tr td:nth-child(1) {
@@ -100,12 +102,14 @@
 .fixedTable-body {
   overflow: auto;
   width: 800px;
-  height: 600px;
+  height: auto;
+  max-height: 500px;
   float: left;
+  background: #ecf0f5;
 }
 .fixedTable-body .table tr td,
 .fixedTable-body .table tr th {
-  min-width: 100px;
+  min-width: 150px;
   width: 100px;
   height: 20px;
 }
