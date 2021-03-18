@@ -12,12 +12,12 @@ class ObjCreateView(LoginRequiredMixin, CreateView):
 class ForemanCreateView(LoginRequiredMixin, CreateView):
     template_name = 'create/create_foreman.html'
     form_class = ForemanForm
-    success_url = '/main/'
+    success_url = '/foreman_detail/{id}'
     permanent = True
 
 
 class ClientCreateView(LoginRequiredMixin, CreateView):
     template_name = 'create/create_client.html'
     form_class = ClientForm
-    success_url = '/main/'
+    success_url = '/client_detail/{id}'
     permanent = True

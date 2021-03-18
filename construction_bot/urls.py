@@ -19,6 +19,7 @@ from django.urls import path
 from app.views.main import *
 from app.views.create import *
 from app.views.update import *
+from app.views.detail import *
 from dotenv import load_dotenv
 import os
 from django.conf import settings
@@ -31,7 +32,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/login/', LoginView.as_view()),
     path('main/', main_menu),
-    path('', main_menu),
+    path('', main_menu, name='main'),
     #start bot
     path(TOKEN, bot_webhook, name='bot'),
     ## Objects
@@ -41,11 +42,12 @@ urlpatterns = [
     # Foremans
     path('create_foreman', ForemanCreateView.as_view(), name='create_foreman'),
     path('update_foreman/<int:pk>/', ForemanEditView.as_view(), name='update_foreman'),
-
+    path('foreman_detail/<int:pk>', ForemanDetailView.as_view()),
+    
     #Clients
     path('create_client', ClientCreateView.as_view(), name='create_client'),
     path('update_client/<int:pk>/', ClientEditView.as_view(), name = 'udpate_client'),
-
+    path('client_detail/<int:pk>', ClientDetailView.as_view()),
     #requests
     path('folder1', folder_foremans, name='folder_foremans'),
     path('folder2', folder_clients, name='folder_clients'),

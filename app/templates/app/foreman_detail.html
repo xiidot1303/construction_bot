@@ -1,0 +1,9 @@
+{% extends 'layout/basic.html' %}
+{% block title %}Деталь{% endblock %}
+{% block section %}
+
+<h1>{{ message }}</h1>
+<h1>{{ name }}</h1>
+
+<p class="btn btn-flat bg-orange"><a href="{% url 'main' %}" style="color: whitesmoke;">Домой</a></p>
+{% endblock %}

@@ -1,5 +1,6 @@
 {% extends "layout/basic.html" %}
 {% load static %}
+{% load index %}
 {% block section %}
 
 <div class="row" style="width: 80em;">
@@ -14,6 +15,7 @@
                             <th>Количество</th>
                             <th>Суммы или доллары</th>
                             <th>Цена</th>
+                            <th>Общая сумма</th>
                             
                         </tr>
                     </thead>
@@ -25,6 +27,7 @@
                             <td>{{ m.amount }}</td>
                             <td>{{ m.summ_or_dollar }}</td>
                             <td>{{ m.price }}</td>
+                            <td>{{ total_amount|index:forloop.counter0 }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

@@ -49,7 +49,8 @@ def folder_clients(request):
 @login_required
 def material(request, obj):
     materials = Material.objects.filter(obj=obj)
-    context = {'materials': materials}
+    total_amount = [str(int(i.amount)*int(i.price)) for i in materials]
+    context = {'materials': materials, 'total_amount': total_amount}
     return render(request, 'views/material.html', context)
 
 @login_required
@@ -73,7 +74,7 @@ def all_foremans(request):
 
 
 
-
+@login_required
 def main_menu(request):
     return render(request, 'app/main.html', {})
 
