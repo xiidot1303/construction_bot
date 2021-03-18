@@ -7,7 +7,7 @@ from app.models import *
 class ObjEditView(LoginRequiredMixin, UpdateView):
     model = Object
     form_class = ObjForm
-    success_url = '/folder1/'
+    success_url = '/folder1'
     
 
 class ForemanEditView(LoginRequiredMixin, UpdateView):
