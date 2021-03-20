@@ -6,6 +6,7 @@ from bot.login import *
 from bot.conversationList import *
 from bot.spend_money import *
 from bot.show_inf import show_inf_about
+from app.models import Object
 from dotenv import load_dotenv
 import os
 
@@ -21,6 +22,9 @@ else:
     updater = Updater(token=TOKEN, use_context=True)
     dp = updater.dispatcher
 
+objects_list = [i.title for i in Object.objects.all()]
+
+
 login_handler = ConversationHandler(
     entry_points=[CommandHandler('start', start)],
     states={
@@ -32,8 +36,17 @@ login_handler = ConversationHandler(
     fallbacks = []
 )
 
+reload_handler = ConversationHandler(
+    entry_points=[CommandHandler('reload', reload), MessageHandler(Filters.text(['Дальше', 'Главное меню']), reload)],
+    states={
+        MAIN_MENU: [MessageHandler(Filters.text(['Выйти из аккаунта', 'Объекты']), main_menu)],
+        EXIT_OR_NO: [MessageHandler(Filters.text(['Да', 'Назад']), exit_or_no)],
+    },
+    fallbacks=[],
+)
+
 select_objects = ConversationHandler(
-    entry_points=[MessageHandler(Filters.text, objects)],
+    entry_points=[MessageHandler(Filters.text(objects_list), objects)],
     states={
         #_______ spend money:
         # for Salary
@@ -54,5 +67,8 @@ select_objects = ConversationHandler(
 
 
 )
+
+
 dp.add_handler(login_handler)
 dp.add_handler(select_objects)
+dp.add_handler(reload_handler)

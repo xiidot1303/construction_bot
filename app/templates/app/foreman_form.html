@@ -1,5 +1,7 @@
 {% extends 'layout/basic.html' %}
 {% block section %}
+
+
 <div class = "row">
     <div class="col-xs-12">
         <div class="box-body">
@@ -22,4 +24,7 @@
     </div>
 </div>
 
+{% endblock %}
+{% block active %}      
+    <a href="{% url 'delete_foreman' object.pk %}" class="" style="background-color: rgb(207, 32, 32); padding-right: 7px; font-size: 13px;" onclick="return confirm(&#39;Вы уверены?&#39;)"><i class="fas fa-trash" style="padding: 10px;"></i>Удалить</a>
 {% endblock %}

@@ -58,18 +58,18 @@
                     
                     <li class="header">НАВИГАЦИЯ</li>
                     
-                    <li class=""><div class="link"><a> <i class="fa fas fa-stream"></i>Каталог</a><i class="fa fa-chevron-down" style="color: white;"></i></div>
+                    <li class=""><div class="link"><a> <i class="fa fas fa-stream icon"></i>Каталог</a><i class="fa fa-chevron-down" style="color: white;"></i></div>
                         
                         <ul class="submenu">
                           
-                          <li><a href="{% url 'folder_foremans' %}"><i class="fas fa-user-hard-hat" style="color: seashell;"></i>Прорабы</a></li>
+                          <li><a href="{% url 'folder_foremans' %}"><i class="fas fa-users" style="color: seashell;"></i>Прорабы</a></li>
                           <li><a href="{% url 'folder_clients' %}"><i class="fas fa-shopping-basket" style="color: seashell;"></i>Клиенты</a></li>
-                          <li><a href="{% url 'create_obj' %}"><i class="fa fa-plus" style="color: seashell;"></i>Создать объект</a></li>
+                          
                             
                         </ul>
                     
                     </li>
-                    <li class=""><div class="link"><a> <i class="fas fa-user-hard-hat"></i>Прораб</a><i class="fa fa-chevron-down" style="color: white;"></i></div>
+                    <li class=""><div class="link"><a> <i class="fas fa-user icon"></i>Прораб</a><i class="fa fa-chevron-down" style="color: white;"></i></div>
                       <ul class="submenu">
                         
                         <li><a href="{% url 'create_foreman' %}"><i class="fas fa-user-plus" style="color: seashell;"></i>Добавить</a></li>
@@ -78,13 +78,20 @@
                       </ul>
                     </li>
 
-                    <li class=""><div class="link"><a> <i class="fas fa-shopping-basket"></i>Клиент</a><i class="fa fa-chevron-down" style="color: white;"></i></div>
+                    <li class=""><div class="link"><a> <i class="fas fa-shopping-basket icon"></i>Клиент</a><i class="fa fa-chevron-down" style="color: white;"></i></div>
                       <ul class="submenu">
           
-                        <li><a href="{% url 'create_client' %}"><i class="far fa-plus-hexagon" style="color: seashell;"></i>Добавить</a></li>
+                        <li><a href="{% url 'create_client' %}"><i class="fa fa-plus" style="color: seashell;"></i>Добавить</a></li>
                       </ul>
                     </li>
 
+                    
+                    <li class=""><div class="link"><a> <i class="fas fa-vector-square icon"></i>Объект</a><i class="fa fa-chevron-down" style="color: white;"></i></div>
+                      <ul class="submenu">
+                        <li><a href="{% url 'objects' %}"><i class="fas fa-object-group" style="color: seashell;"></i>Все объекты</a></li>
+                        <li><a href="{% url 'create_obj' %}"><i class="fa fa-plus" style="color: seashell;"></i>Создать объект</a></li>
+                      </ul>
+                    </li>
                 </ul>
             </section>
         </aside>
@@ -99,7 +106,7 @@
       <ol class="breadcrumb">
         
         
-    <li class="active"></li>
+    <li class="active">{% block active %}{% endblock %}</li>
 
       </ol>
     </section>

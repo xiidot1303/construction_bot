@@ -1,3 +1,5 @@
 python-telegram-bot
 django
 python-dotenv
+openpyxl
+pandas

@@ -46,6 +46,7 @@ def show_inf_about(update, context):
         else:
             obj = Client.objects.get(login=user.login).obj
         objects_list = [[i.title] for i in obj.all()]
+        objects_list.append(['Главное меню'])
         bot.delete_message(c.message.chat.id, c.message.message_id)
         bot.send_message(c.message.chat.id, 'Все объекты', reply_markup=ReplyKeyboardMarkup(keyboard=objects_list, resize_keyboard=True))
         return ConversationHandler.END

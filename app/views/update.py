@@ -13,8 +13,11 @@ class ObjEditView(LoginRequiredMixin, UpdateView):
 class ForemanEditView(LoginRequiredMixin, UpdateView):
     model = Foreman
     form_class = ForemanForm
-    success_url = '/main/'
+    success_url = '/folder1'
+    #def get_context_data(self, *args, **kwargs):
+    #    content = super().get_context_data(*args, **kwargs)
+    #    obj = cn
 class ClientEditView(LoginRequiredMixin, UpdateView):
     model = Client
     form_class = ClientForm
-    success_url = '/main/'
+    success_url = '/folder2'

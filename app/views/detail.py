@@ -23,3 +23,12 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
         context['message'] = 'Успешно добавлен новый Клиент'
         context['name'] = 'Имя: {}'.format(obj.name)
         return context
+
+
+class ObjDetailView(LoginRequiredMixin, DetailView):
+    model = Object
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        obj = context['object']
+        context['title'] = 'Название: {}'.format(obj.title)
+        return context

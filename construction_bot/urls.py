@@ -20,6 +20,7 @@ from app.views.main import *
 from app.views.create import *
 from app.views.update import *
 from app.views.detail import *
+from app.views.delete import *
 from dotenv import load_dotenv
 import os
 from django.conf import settings
@@ -31,31 +32,42 @@ urlpatterns = [
     
     path('admin/', admin.site.urls),
     path('accounts/login/', LoginView.as_view()),
-    path('main/', main_menu),
-    path('', main_menu, name='main'),
+    path('main/', objects),
+    path('', objects, name='main'),
     #start bot
     path(TOKEN, bot_webhook, name='bot'),
+    
+    
     ## Objects
+    path('objects', objects, name='objects'),
     path('create_obj', ObjCreateView.as_view(), name='create_obj'),
     path('update_obj/<int:pk>/', ObjEditView.as_view(), name='update_obj'),
-    
+    path('object_detail/<int:pk>/', ObjDetailView.as_view()),
+    path('delete_object/<int:pk>/', delete_object, name='delete_object'),
+
+
     # Foremans
     path('create_foreman', ForemanCreateView.as_view(), name='create_foreman'),
     path('update_foreman/<int:pk>/', ForemanEditView.as_view(), name='update_foreman'),
     path('foreman_detail/<int:pk>', ForemanDetailView.as_view()),
+    path('delete_foreman/<int:pk>/', delete_foreman, name='delete_foreman'),
     
     #Clients
     path('create_client', ClientCreateView.as_view(), name='create_client'),
-    path('update_client/<int:pk>/', ClientEditView.as_view(), name = 'udpate_client'),
+    path('update_client/<int:pk>/', ClientEditView.as_view(), name = 'update_client'),
     path('client_detail/<int:pk>', ClientDetailView.as_view()),
+    path('delete_client/<int:pk>/', delete_client, name='delete_client'),
     #requests
     path('folder1', folder_foremans, name='folder_foremans'),
     path('folder2', folder_clients, name='folder_clients'),
 
     #material
     path('material/<str:obj>/', material, name='material'),
-
-
+    path('delete_material/<int:pk>/', delete_material, name='delete_material'),
     #salary
     path('salary/<str:obj>/', salary, name='salary'),
+    path('delete_salary/<int:pk>/', delete_salary, name='delete_salary'),
+    # get files
+    path('get_excel/<str:file_path>', get_excel, name='get_excel'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+

@@ -39,12 +39,9 @@ def send_password(update, context):
     if check:
         obj.password = password
         obj.save()
-        #_____________ main menu___________________ 
-        obj = check[0].obj
+        #_____________ welcome menu___________________ 
 
-        
-        objects_list = [[i.title] for i in obj.all()]
-        update.message.reply_text('Все объекты', ReplyKeyboardMarkup(keyboard=objects_list))
+        update.message.reply_text('Добро пожаловать в наш бот', reply_markup = ReplyKeyboardMarkup(keyboard=[['Дальше']], resize_keyboard=True))
         return ConversationHandler.END
     
 

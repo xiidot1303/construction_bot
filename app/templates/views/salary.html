@@ -1,6 +1,11 @@
 {% extends "layout/basic.html" %}
 {% load static %}
 {% block section %}
+<div class="row add-button">
+    <div class="col-xs-4">
+           <a href="{% url 'get_excel' file_path %}" class="btn btn-flat bg-orange"><i class="fas fa-file-excel-o"></i>Скачать Excel</a>
+       </div>
+</div>
 <div class="row" style="width: 80em;">
     <div class="col-xs-12">
         <div class="box">
@@ -11,6 +16,8 @@
                             <th>Название</th>
                             <th>Суммы или доллары</th>
                             <th>Цена</th>
+                            <th>Действия</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -19,6 +26,7 @@
                             <td>{{ s.title }}</td>
                             <td>{{ s.summ_or_dollar }}</td>
                             <td>{{ s.price }}</td>
+                            <td><a id = "a" href="{% url 'delete_salary' s.pk %}" onclick="return confirm(&#39;Вы уверены?&#39;)" class="btn btn-danger btn-flat"><i class="fas fa-trash" aria-hidden="true"></i></a></td>
                         </tr>
                         {% endfor %}
                     </tbody>

@@ -1,4 +1,9 @@
 {% extends "layout/basic.html" %}
 {% block section %}
-
+<div class="row add-button">
+    <div class="col-xs-10">
+        <a href="{% url 'folder_foremans' %}" class="btn btn-flat bg-orange"><i class=""></i>Прорабы</a>
+        <a href="{% url 'folder_clients' %}" class="btn btn-flat bg-orange"><i class=""></i>Клиенты</a>
+    </div>
+</div>
 {% endblock %}

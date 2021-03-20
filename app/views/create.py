@@ -6,7 +6,7 @@ from app.models import *
 class ObjCreateView(LoginRequiredMixin, CreateView):
     template_name = 'create/create_obj.html'
     form_class = ObjForm
-    success_url = '/main/'
+    success_url = '/object_detail/{id}'
     permanent = True
 
 class ForemanCreateView(LoginRequiredMixin, CreateView):

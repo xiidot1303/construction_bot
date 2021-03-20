@@ -15,7 +15,7 @@
                         <tbody>
                             {% for f in foremans %}
                             <tr>
-                                <td>{{ f.name }}</td>
+                                <td><a href="{% url 'update_foreman' f.pk %}">{{ f.name }}</a></td>
                             </tr>
                             {% endfor %}
                         </tbody>

@@ -14,7 +14,7 @@
                         <tbody>
                             {% for c in clients %}
                             <tr>
-                                <td>{{ c.name }}</td>
+                                <td><a href="{% url 'update_client' c.pk %}">{{ c.name }}</a></td>
                             </tr>
                             {% endfor %}
                         </tbody>
