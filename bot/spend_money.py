@@ -54,7 +54,12 @@ def send_price_salary(update, context):
         obj.price = update.message.text
         obj.save()
         Obj = Object.objects.get(title=obj.obj)
-        Obj.price = str(int(Obj.price) - int(update.message.text))
+
+        if obj.summ_or_dollar == 'суммы':
+            Obj.price_summ = str(int(Obj.price_summ) - (int(update.message.text)))
+        else:
+            Obj.price_dollar = str(int(Obj.price_dollar) - (int(update.message.text)))        
+        
         Obj.save()
 
         # return to object menu, where can spend money for materials or salary
@@ -65,7 +70,7 @@ def send_price_salary(update, context):
         i_back = InlineKeyboardButton(text='Назад', callback_data='back-to-objects_foreman')
         d = bot.send_message(update.message.chat.id, 'Тратить деньги на...', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
         bot.delete_message(update.message.chat.id, d.message_id)
-        bot.send_message(update.message.chat.id, 'Остаток денег:{}\nТратить деньги на...'.format(Obj.price), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
+        bot.send_message(update.message.chat.id, 'Остаток денег:{} сумм, {} доллар\nТратить деньги на...'.format(Obj.price_summ, Obj.price_dollar), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
 
 
         return SPEND_MONEY_FOR
@@ -110,7 +115,10 @@ def send_price_material(update, context):
         material_obj.price = update.message.text
         material_obj.save()
         Obj = Object.objects.get(title=material_obj.obj)
-        Obj.price = str(int(Obj.price) - (int(material_obj.amount) * int(material_obj.price)))
+        if material_obj.summ_or_dollar == 'суммы':
+            Obj.price_summ = str(int(Obj.price_summ) - (int(material_obj.amount) * int(material_obj.price)))
+        else:
+            Obj.price_dollar = str(int(Obj.price_dollar) - (int(material_obj.amount) * int(material_obj.price)))
         Obj.save()
         # return to object menu, where can spend money for materials or salary
         text = Obj.title
@@ -119,5 +127,5 @@ def send_price_material(update, context):
         i_back = InlineKeyboardButton(text='Назад', callback_data='back-to-objects_foreman')
         d = bot.send_message(update.message.chat.id, 'Тратить деньги на...', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
         bot.delete_message(update.message.chat.id, d.message_id)
-        bot.send_message(update.message.chat.id, 'Остаток денег:{}\nТратить деньги на...'.format(Obj.price), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
+        bot.send_message(update.message.chat.id, 'Остаток денег:{} сумм, {} доллар\nТратить деньги на...'.format(Obj.price_summ, Obj.price_dollar), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
         return SPEND_MONEY_FOR

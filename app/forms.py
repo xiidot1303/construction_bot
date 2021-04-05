@@ -6,16 +6,19 @@ from django import forms
 class ObjForm(ModelForm):
     class Meta:
         model = Object
-        fields = {'title', 'price'}
+        fields = {'title', 'price_summ', 'price_dollar'}
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'price': forms.TextInput(attrs={'class': 'form-control'})
+            'price_summ': forms.TextInput(attrs={'class': 'form-control'}),
+            'price_dollar': forms.TextInput(attrs={'class': 'form-control'})
+
         }
         labels = {
-            'title': 'название',
-            'price': 'остаток денег'
+            'title': 'Название',
+            'price_summ': 'Остаток денег (Сумм)',
+            'price_dollar': 'Остаток денег (Доллар)'
         }
-    field_order = ['title', 'price']
+    field_order = ['title', 'price_summ', 'price_dollar']
 
 class ForemanForm(ModelForm):
     class Meta:

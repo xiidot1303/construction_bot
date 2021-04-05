@@ -51,8 +51,10 @@ def folder_clients(request):
 def material(request, obj):
     materials = Material.objects.filter(obj=obj)
     total_amount = [str(int(i.amount)*int(i.price)) for i in materials]
+    foreman = Foreman.objects.get(obj__title=obj).name
+
     # ________create excel file
-    df = {'Название': [], 'Измерение': [], 'Количество': [], 'Суммы или доллары': [], 'Цена': [], 'Общая сумма': []}
+    df = {'Название': [], 'Измерение': [], 'Количество': [], 'Суммы или доллары': [], 'Цена': [], 'Общая сумма': [], 'Прораб': []}
     
     #add title
     df['Название'] = [i.title for i in materials]
@@ -61,24 +63,26 @@ def material(request, obj):
     df['Суммы или доллары'] = [i.summ_or_dollar for i in materials]
     df['Цена'] = [i.price for i in materials]
     df['Общая сумма'] = [i for i in total_amount]
+    df['Прораб'] = [foreman for i in materials]
     df = pd.DataFrame(df)
     df.to_excel('files/excel/material_{}.xlsx'.format(obj))
     #_________
-    context = {'materials': materials, 'total_amount': total_amount, 'file_path': 'material_{}'.format(obj)}
+    context = {'materials': materials, 'total_amount': total_amount, 'file_path': 'material_{}'.format(obj), 'foreman': foreman}
     return render(request, 'views/material.html', context)
 
 @login_required
 def salary(request, obj):
     salaries = Salary.objects.filter(obj=obj)
-    df = {'Название': [], 'Суммы или доллары': [], 'Цена': []}
-    
+    df = {'Название': [], 'Суммы или доллары': [], 'Цена': [], 'Прораб': []}
+    foreman = Foreman.objects.get(obj__title=obj).name
     #add title
     df['Название'] = [i.title for i in salaries]
     df['Суммы или доллары'] = [i.summ_or_dollar for i in salaries]
     df['Цена'] = [i.price for i in salaries]
+    df['Прораб'] = [foreman for i in salaries]
     df = pd.DataFrame(df)
     df.to_excel('files/excel/salary_{}.xlsx'.format(obj))
-    context = {'salaries': salaries, 'file_path': 'salary_{}'.format(obj)}
+    context = {'salaries': salaries, 'file_path': 'salary_{}'.format(obj), 'foreman': foreman}
     return render(request, 'views/salary.html', context)
 
 @login_required

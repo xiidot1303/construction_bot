@@ -14,7 +14,7 @@ def show_inf_about(update, context):
         n=1
         msg = ''
         for m in materials:
-            msg += str(n) + '. {}, {}{}, {}{};\n'.format(m.title, m.amount, m.measurement, m.price, m.summ_or_dollar)
+            msg += str(n) + '. {}, {} {}, {}, {};\n'.format(m.title, m.amount, m.measurement, m.price, m.summ_or_dollar)
             n += 1
         i_back = InlineKeyboardButton(text='Назад', callback_data='back-show-inf_{}'.format(obj_title))
         c.edit_message_text(msg, reply_markup = InlineKeyboardMarkup([[i_back]]))
@@ -25,7 +25,7 @@ def show_inf_about(update, context):
         n=1
         msg = ''
         for s in salaries:
-            msg += str(n) + '. {}, {}{};\n'.format(s.title,s.price, s.summ_or_dollar)
+            msg += str(n) + '. {}, {}, {};\n'.format(s.title,s.price, s.summ_or_dollar)
             n += 1
         i_back = InlineKeyboardButton(text='Назад', callback_data='back-show-inf_{}'.format(obj_title))
         c.edit_message_text(msg, reply_markup = InlineKeyboardMarkup([[i_back]]))
@@ -35,7 +35,7 @@ def show_inf_about(update, context):
         i_material = InlineKeyboardButton(text='Материалы', callback_data='inf-material_{}'.format(text))
         i_salary = InlineKeyboardButton(text='Иш хакки', callback_data='inf-salary_{}'.format(text))
         i_back = InlineKeyboardButton(text='Назад', callback_data='back-to-objects_clients')
-        c.edit_message_text('Остаток денег:{}\nПоказать информацию о ...'.format(obj.price), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
+        c.edit_message_text('Остаток денег: {} сумм, {} доллар \nПоказать информацию о ...'.format(obj.price_summ, obj.price_dollar), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
         return SHOW_INF_ABOUT
     
     elif 'back-to-objects' in data:

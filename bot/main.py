@@ -84,7 +84,7 @@ def objects(update, context):
             i_back = InlineKeyboardButton(text='Назад', callback_data='back-to-objects_foreman')
             d = bot.send_message(update.message.chat.id, 'Тратить деньги на...', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
             bot.delete_message(update.message.chat.id, d.message_id)
-            bot.send_message(update.message.chat.id, 'Остаток денег:{}\nТратить деньги на...'.format(obj.price), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
+            bot.send_message(update.message.chat.id, 'Остаток денег:{} сумм, {} доллар\nТратить деньги на...'.format(Obj.price_summ, Obj.price_dollar), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
 
             return SPEND_MONEY_FOR
         else:
@@ -94,7 +94,7 @@ def objects(update, context):
             i_back = InlineKeyboardButton(text='Назад', callback_data='back-to-objects_client')
             d = bot.send_message(update.message.chat.id, 'Показать информацию о ...', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
             bot.delete_message(update.message.chat.id, d.message_id)
-            bot.send_message(update.message.chat.id, 'Остаток денег:{}\nПоказать информацию о ...'.format(obj.price), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
+            bot.send_message(update.message.chat.id, 'Остаток денег: {} сумм, {} доллар \nПоказать информацию о ...'.format(obj.price_summ, obj.price_dollar), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
             return SHOW_INF_ABOUT
     except:
         update.message.reply_text('Нет такого объекта')

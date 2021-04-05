@@ -20,6 +20,7 @@
                             <th>Суммы или доллары</th>
                             <th>Цена</th>
                             <th>Общая сумма</th>
+                            <th>Прораб</th>
                             <th>Действия</th>
                             
                         </tr>
@@ -32,7 +33,9 @@
                             <td>{{ m.amount }}</td>
                             <td>{{ m.summ_or_dollar }}</td>
                             <td>{{ m.price }}</td>
+                            
                             <td>{{ total_amount|index:forloop.counter0 }}</td>
+                            <td>{{ foreman }}</td>
                             <td><a id = "a" href="{% url 'delete_material' m.pk %}" onclick="return confirm(&#39;Вы уверены?&#39;)" class="btn btn-danger btn-flat"><i class="fas fa-trash" aria-hidden="true"></i></a></td>
                         </tr>
                         {% endfor %}
