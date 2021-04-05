@@ -8,4 +8,4 @@ admin.site.register(Material)
 admin.site.register(Salary)
 admin.site.register(Client)
 admin.site.register(Bot_users)
-
+admin.site.register(transfer_money)

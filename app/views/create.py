@@ -21,3 +21,16 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
     form_class = ClientForm
     success_url = '/client_detail/{id}'
     permanent = True
+
+class Material_titleCreateView(LoginRequiredMixin, CreateView):
+    template_name = 'create/create_material_title.html'
+    form_class = Material_titleForm
+    success_url = 'material_titles'
+    permanent = True
+
+class Salary_titleCreateView(LoginRequiredMixin, CreateView):
+    template_name = 'create/create_salary_title.html'
+    form_class = Salary_titleForm
+    success_url = 'salary_titles'
+    permanent = True
+    

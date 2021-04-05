@@ -67,6 +67,16 @@ urlpatterns = [
     #salary
     path('salary/<str:obj>/', salary, name='salary'),
     path('delete_salary/<int:pk>/', delete_salary, name='delete_salary'),
+
+    #material_title
+    path('material_titles', material_title, name='material_titles'),
+    path('create_material_title', Material_titleCreateView.as_view(), name='create_material_title'),
+
+    #salary_title
+    path('salary_titles', salary_title, name='salary_titles'),
+    path('create_salary_title', Salary_titleCreateView.as_view(), name='create_salary_title'),
+
+
     # get files
     path('get_excel/<str:file_path>', get_excel, name='get_excel'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

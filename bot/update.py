@@ -6,6 +6,7 @@ from bot.login import *
 from bot.conversationList import *
 from bot.spend_money import *
 from bot.show_inf import show_inf_about
+from bot.manager import *
 from app.models import Object
 from dotenv import load_dotenv
 import os
@@ -68,7 +69,25 @@ select_objects = ConversationHandler(
 
 )
 
+manager_handler = ConversationHandler(
+    entry_points=[CommandHandler('manager', enter_manager)],
+    states = {
+        MAIN_MENU_MANAGER: [MessageHandler(Filters.text(['Создать объект', 'Пополнить счёт']), main_menu_manager)],
+        SEND_OBJECT_TITLE: [MessageHandler(Filters.text, send_object_title)],
+        SEND_OBJECT_PRICE_DOLLAR: [MessageHandler(Filters.text, send_object_price_dollar)],
+        SEND_OBJECT_PRICE_SUMM: [MessageHandler(Filters.text, send_object_price_summ)],
+        #transfering
+        REPLENISH: [CallbackQueryHandler(replenish)],
+        SEND_TRANS_OBJ: [CallbackQueryHandler(send_trans_obj)],
+        SEND_TRANS_SUMM_OR_DOLLAR: [CallbackQueryHandler(send_trans_summ_or_dollar)],
+        SEND_TRANS_PRICE: [MessageHandler(Filters.text, send_trans_price)],
+
+    },
+    fallbacks = [],
+
+)
 
 dp.add_handler(login_handler)
 dp.add_handler(select_objects)
 dp.add_handler(reload_handler)
+dp.add_handler(manager_handler)

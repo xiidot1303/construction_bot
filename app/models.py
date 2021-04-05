@@ -14,6 +14,8 @@ class Foreman(models.Model):
     login = models.CharField(null=True, blank=False, max_length=100)
     password = models.CharField(null=True, blank=False, max_length=100)
     obj = models.ManyToManyField('Object')
+    account_summ = models.CharField(null=True, max_length=100)
+    account_dollar = models.CharField(null=True, max_length=100)
 
 
 class Client(models.Model):
@@ -32,6 +34,10 @@ class Material(models.Model):
     price = models.CharField(null=True, blank=True, max_length=30)
     obj = models.CharField(null=True, blank=False, max_length=100)
 
+class Material_title(models.Model):
+    title = models.CharField(null=True, max_length=200, verbose_name='Названия')
+
+
 class Salary(models.Model):
     user_id = models.IntegerField(null=True, blank=True)
     title = models.CharField(null=True, blank=True, max_length=200)
@@ -39,7 +45,8 @@ class Salary(models.Model):
     price = models.CharField(null=True, blank=True, max_length=30)
     obj = models.CharField(null=True, blank=False, max_length=100)
 
-
+class Salary_title(models.Model):
+    title = models.CharField(null=True, max_length=200, verbose_name='Названия')
 
 
 #bot
@@ -49,3 +56,12 @@ class Bot_users(models.Model):
     login = models.CharField(null=True, blank=True, max_length=100)
     password = models.CharField(null=True, blank=True, max_length=100)
 
+
+
+class transfer_money(models.Model):
+    user_id = models.IntegerField(null=True, blank=False)
+    foreman = models.CharField(null=True, blank=True, max_length=100)
+    object = models.CharField(null=True, blank=True, max_length=100)
+    summ_or_dollar = models.CharField(null=True, blank=True, max_length=10)
+    price = models.CharField(null=True, blank=True, max_length=100)
+    transfered = models.CharField(null=True, max_length=10, blank=True)

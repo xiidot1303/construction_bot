@@ -111,3 +111,19 @@ def get_excel(request, file_path):
 def main_menu(request):
     return render(request, 'app/main.html', {})
 
+
+
+@login_required
+def material_title(request):
+    titles = Material_title.objects.all()
+    one_to_three = list(range(3))
+    context = {'titles': titles, 'count': one_to_three}
+    return render(request, 'views/material_titles.html', context)
+
+
+@login_required
+def salary_title(request):
+    titles = Salary_title.objects.all()
+    one_to_three = list(range(3))
+    context = {'titles': titles, 'count': one_to_three}
+    return render(request, 'views/salary_titles.html', context)
