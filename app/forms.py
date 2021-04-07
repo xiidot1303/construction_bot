@@ -28,13 +28,17 @@ class ForemanForm(ModelForm):
             'name': 'Имя',
             'login': 'Логин',
             'password': 'Пароль',
-            'obj': 'Объекты'
+            'obj': 'Объекты',
+            'account_summ': 'Счёт (сумм)',
+            'account_dollar': 'Счёт (доллар)'
         }
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'login': forms.TextInput(attrs={'class': 'form-control'}),
             'password': forms.TextInput(attrs={'class': 'form-control'}),
-            'obj': forms.SelectMultiple(attrs={'class': 'form-control'})
+            'obj': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            'account_summ': forms.TextInput(attrs={'class': 'form-control'}),
+            'account_dollar': forms.TextInput(attrs={'class': 'form-control'}),
         }
     field_order = ['name', 'login', 'password', 'obj', 'account_summ', 'account_dollar']
 
