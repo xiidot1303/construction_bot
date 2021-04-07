@@ -71,11 +71,12 @@ urlpatterns = [
     #material_title
     path('material_titles', material_title, name='material_titles'),
     path('create_material_title', Material_titleCreateView.as_view(), name='create_material_title'),
+    path('delete_material_title/<int:pk>', delete_material_title, name = 'delete_material_title'),
 
     #salary_title
     path('salary_titles', salary_title, name='salary_titles'),
     path('create_salary_title', Salary_titleCreateView.as_view(), name='create_salary_title'),
-
+    path('delete_salary_title/<int:pk>', delete_salary_title, name = 'delete_salary_title'),
 
     # get files
     path('get_excel/<str:file_path>', get_excel, name='get_excel'),

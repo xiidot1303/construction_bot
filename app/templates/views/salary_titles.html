@@ -20,6 +20,7 @@
                         {% for t in titles %}
                         <tr>
                                 <td>{{ t.title }}</td>
+                                <td><a id = "a" href="{% url 'delete_salary_title' t.pk %}" onclick="return confirm(&#39;Вы уверены?&#39;)" class="btn btn-danger btn-flat"><i class="fas fa-trash" aria-hidden="true"></i></a></td>
                         </tr>
                         {% endfor %}
                     </tbody>

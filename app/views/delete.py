@@ -34,3 +34,13 @@ def delete_salary(request, pk):
     return redirect(salary, obj=obj)
 
 
+def delete_material_title(request, pk):
+    obj = Material_title.objects.get(pk=pk)
+    obj.delete()
+    return redirect(material_title)
+
+
+def delete_salary_title(request, pk):
+    obj = Salary_title.objects.get(pk=pk)
+    obj.delete()
+    return redirect(salary_title)
