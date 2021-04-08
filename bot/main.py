@@ -31,6 +31,7 @@ def start(update, context):
         update.message.reply_text('Авторизация как', reply_markup=ReplyKeyboardMarkup(keyboard=[['Прораб'], ['Клиент']], resize_keyboard=True))
         return LOGIN_AS
 def reload(update, context):
+    print('oladaopmn')
     empty_material = Material.objects.filter(price=None)
     empty_salary = Salary.objects.filter(price=None)
     if empty_material or empty_salary:

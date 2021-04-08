@@ -89,5 +89,6 @@ manager_handler = ConversationHandler(
 
 dp.add_handler(login_handler)
 dp.add_handler(select_objects)
-dp.add_handler(reload_handler)
+
 dp.add_handler(manager_handler)
+dp.add_handler(reload_handler)
