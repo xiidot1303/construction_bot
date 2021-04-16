@@ -2,11 +2,19 @@ from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, KeyboardButton, I
 from telegram.ext import ConversationHandler
 from bot.conversationList import *
 from app.models import *
+from dotenv import load_dotenv
+import os
 
+basedir = os.path.abspath(os.path.dirname(''))
+load_dotenv(os.path.join(basedir, '.env'))
+MANAGER = os.environ.get('MANAGER')
 def enter_manager(update, context):
-    update.message.reply_text('Вы можете создать объекты и пополнить счёт прораба', reply_markup=ReplyKeyboardMarkup(keyboard=[['Создать объект', 'Пополнить счёт']], resize_keyboard=True))
-    return MAIN_MENU_MANAGER
-
+    managers = list(map(int, MANAGER.split()))
+    if update.message.chat.id in managers:
+        update.message.reply_text('Вы можете создать объекты и пополнить счёт прораба', reply_markup=ReplyKeyboardMarkup(keyboard=[['Создать объект', 'Пополнить счёт']], resize_keyboard=True))
+        return MAIN_MENU_MANAGER
+    else:
+        update.message.reply_text('У вас нет разрешения на доступ к этому меню')
 def main_menu_manager(update, context):
     bot = context.bot
     message = update.message.text
@@ -98,7 +106,7 @@ def send_trans_price(update, context):
         foreman.account_dollar = int(foreman.account_dollar) + int(text)
         foreman.save()
         obj.price_dollar = int(obj.price_dollar) - int(text)    
-        objs.save()
+        obj.save()
     bot.send_message(update.message.chat.id, 'Успешно перенесено')
     enter_manager(update, context)
     return MAIN_MENU_MANAGER

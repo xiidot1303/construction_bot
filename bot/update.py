@@ -43,7 +43,7 @@ reload_handler = ConversationHandler(
         MAIN_MENU: [MessageHandler(Filters.text(['Выйти из аккаунта', 'Объекты']), main_menu)],
         EXIT_OR_NO: [MessageHandler(Filters.text(['Да', 'Назад']), exit_or_no)],
     },
-    fallbacks=[],
+    fallbacks=[CommandHandler('cancel', cancel)],
 )
 
 select_objects = ConversationHandler(
@@ -64,7 +64,7 @@ select_objects = ConversationHandler(
         # ______ show inf
         SHOW_INF_ABOUT: [CallbackQueryHandler(show_inf_about)],
     },
-    fallbacks=[],
+    fallbacks=[CommandHandler('cancel', cancel)],
 
 
 )
@@ -83,7 +83,7 @@ manager_handler = ConversationHandler(
         SEND_TRANS_PRICE: [MessageHandler(Filters.text, send_trans_price)],
 
     },
-    fallbacks = [],
+    fallbacks = [CommandHandler('cancel', cancel)],
 
 )
 
@@ -92,3 +92,4 @@ dp.add_handler(select_objects)
 
 dp.add_handler(manager_handler)
 dp.add_handler(reload_handler)
+dp.add_handler(CommandHandler('cancel', cancel))

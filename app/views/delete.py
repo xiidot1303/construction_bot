@@ -4,6 +4,13 @@ import os
 from app.models import *
 from app.views.main import *
 from django.contrib.auth.decorators import login_required
+from dotenv import load_dotenv
+import os
+import telegram
+from telegram import ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton
+basedir = os.path.abspath(os.path.dirname(''))
+load_dotenv(os.path.join(basedir, '.env'))
+TOKEN = os.environ.get('TOKEN')
 
 def delete_object(request, pk):
     obj = Object.objects.get(pk=pk)
@@ -12,11 +19,32 @@ def delete_object(request, pk):
 
 def delete_foreman(request, pk):
     obj = Foreman.objects.get(pk=pk)
+    bot_user = Bot_users.objects.get(login=obj.login, password=obj.password)
+
+    # send message to user
+    bot = telegram.Bot(token=TOKEN)
+    try:
+        get = bot.sendMessage(chat_id=bot_user.user_id, text='Ваш профиль удален\nНажмите /cancel', reply_markup=ReplyKeyboardMarkup(keyboard=[['/cancel']], resize_keyboard=True))
+
+    except:
+        dedfedf = 0
+    # delete
+    bot_user.delete()
     obj.delete()
     return redirect(folder_foremans)
 
 def delete_client(request, pk):
     obj = Client.objects.get(pk=pk)
+    bot_user = Bot_users.objects.get(login=obj.login, password=obj.password)
+        # send message to user
+    bot = telegram.Bot(token=TOKEN)
+    try:
+        get = bot.sendMessage(chat_id=bot_user.user_id, text='Ваш профиль удален\nНажмите /cancel', reply_markup=ReplyKeyboardMarkup(keyboard=[['/cancel']], resize_keyboard=True))
+
+    except:
+        dedfedf = 0
+    # delete
+    bot_user.delete()
     obj.delete()
     return redirect(folder_clients)
 

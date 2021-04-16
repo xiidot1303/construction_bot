@@ -12,7 +12,10 @@ MANAGER = os.environ.get('MANAGER')
 
 def start(update, context):
     user = Bot_users.objects.filter(user_id=update.message.chat.id)
-    if MANAGER == update.message.chat.id:
+    managers = list(map(int, MANAGER.split()))
+    
+
+    if update.message.chat.id in managers:
         dwoidhoqw = 0
         return ConversationHandler.END
     elif user:
@@ -31,13 +34,14 @@ def start(update, context):
         update.message.reply_text('Авторизация как', reply_markup=ReplyKeyboardMarkup(keyboard=[['Прораб'], ['Клиент']], resize_keyboard=True))
         return LOGIN_AS
 def reload(update, context):
-    print('oladaopmn')
-    empty_material = Material.objects.filter(price=None)
-    empty_salary = Salary.objects.filter(price=None)
-    if empty_material or empty_salary:
-        qwerty = 0 # do nothing
-    update.message.reply_text('Главное меню', reply_markup=ReplyKeyboardMarkup(keyboard=[['Объекты'], ['Выйти из аккаунта']], resize_keyboard=True))
-    return MAIN_MENU
+    managers = list(map(int, MANAGER.split()))
+    if not update.message.chat.id in managers:
+        empty_material = Material.objects.filter(price=None)
+        empty_salary = Salary.objects.filter(price=None)
+        if empty_material or empty_salary:
+            qwerty = 0 # do nothing
+        update.message.reply_text('Главное меню', reply_markup=ReplyKeyboardMarkup(keyboard=[['Объекты'], ['Выйти из аккаунта']], resize_keyboard=True))
+        return MAIN_MENU
 
 
 def main_menu(update, context):
@@ -98,7 +102,7 @@ def objects(update, context):
             i_back = InlineKeyboardButton(text='Назад', callback_data='back-to-objects_foreman')
             d = bot.send_message(update.message.chat.id, 'Тратить деньги на...', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
             bot.delete_message(update.message.chat.id, d.message_id)
-            bot.send_message(update.message.chat.id, 'Остаток денег:{} сумм, {} доллар\nТратить деньги на...'.format(foreman.account_summ, foreman.account_dollar), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
+            bot.send_message(update.message.chat.id, 'Остаток денег:{} сумм, {} доллар\nТратить деньги на...'.format(obj.price_summ, obj.price_dollar), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
 
             return SPEND_MONEY_FOR
         else:
@@ -108,9 +112,16 @@ def objects(update, context):
             i_back = InlineKeyboardButton(text='Назад', callback_data='back-to-objects_client')
             d = bot.send_message(update.message.chat.id, 'Показать информацию о ...', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
             bot.delete_message(update.message.chat.id, d.message_id)
-            bot.send_message(update.message.chat.id, 'Остаток денег: {} сумм, {} доллар \nПоказать информацию о ...'.format(foreman.account_summ, foreman.account_dollar), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
+            bot.send_message(update.message.chat.id, 'Остаток денег: {} сумм, {} доллар \nПоказать информацию о ...'.format(obj.price_summ, obj.price_dollar), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
             return SHOW_INF_ABOUT
     except:
         update.message.reply_text('Нет такого объекта')
 
 
+def cancel(update, context):
+    bot = context.bot
+    if not Bot_users.objects.filter(user_id=update.message.chat.id):
+        get = update.message.reply_text('Нажмите /start для повторного входа в бота', reply_markup=ReplyKeyboardMarkup(keyboard=[['/start']], resize_keyboard=True))
+        bot.delete_message(update.message.chat.id, get.message_id-2)
+        bot.delete_message(update.message.chat.id, get.message_id-1)
+        return ConversationHandler.END

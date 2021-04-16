@@ -67,12 +67,22 @@ def send_price_salary(update, context):
         foreman = Foreman.objects.get(obj__title=obj.obj)
         if obj.summ_or_dollar == 'суммы':
             foreman.account_summ = str(int(foreman.account_summ) - (int(update.message.text)))
+            if int(foreman.account_summ) < 0:
+                bot.send_message(update.message.chat.id, 'Недостаточно средств')
+                obj.delete()
+            else:
+                foreman.save()
         else:
             foreman.account_dollar = str(int(foreman.account_dollar) - (int(update.message.text)))        
-        
-        foreman.save()
+            if int(foreman.account_dollar) < 0:
+                bot.send_message(update.message.chat.id, 'Недостаточно средств')
+                obj.delete()
+            else:
+                foreman.save()
+
 
         # return to object menu, where can spend money for materials or salary
+        foreman = Foreman.objects.get(obj__title=Obj.title)
         text = Obj.title
         obj = Object.objects.get(title=Obj.title)
         i_material = InlineKeyboardButton(text='Материалы', callback_data='spend-money-to-material_{}'.format(text))
@@ -80,7 +90,7 @@ def send_price_salary(update, context):
         i_back = InlineKeyboardButton(text='Назад', callback_data='back-to-objects_foreman')
         d = bot.send_message(update.message.chat.id, 'Тратить деньги на...', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
         bot.delete_message(update.message.chat.id, d.message_id)
-        bot.send_message(update.message.chat.id, 'Остаток денег:{} сумм, {} доллар\nТратить деньги на...'.format(foreman.account_summ, foreman.account_dollar), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
+        bot.send_message(update.message.chat.id, 'Остаток денег:{} сумм, {} доллар\nТратить деньги на...'.format(Obj.price_summ, Obj.price_dollar), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
 
 
         return SPEND_MONEY_FOR
@@ -128,15 +138,25 @@ def send_price_material(update, context):
         foreman = Foreman.objects.get(obj__title=material_obj.obj)
         if material_obj.summ_or_dollar == 'суммы':
             foreman.account_summ = str(int(foreman.account_summ) - (int(material_obj.amount) * int(material_obj.price)))
+            if int(foreman.account_summ) < 0:
+                bot.send_message(update.message.chat.id, 'Недостаточно средств')
+                material_obj.delete()
+            else:
+                foreman.save()
         else:
             foreman.account_dollar = str(int(foreman.account_dollar) - (int(material_obj.amount) * int(material_obj.price)))
-        foreman.save()
+            if int(foreman.account_dollar) < 0:
+                bot.send_message(update.message.chat.id, 'Недостаточно средств')
+                material_obj.delete()
+            else:
+                foreman.save()
         # return to object menu, where can spend money for materials or salary
+        foreman = Foreman.objects.get(obj__title=Obj.title)
         text = Obj.title
         i_material = InlineKeyboardButton(text='Материалы', callback_data='spend-money-to-material_{}'.format(text))
         i_salary = InlineKeyboardButton(text='Иш хакки', callback_data='spend-money-for-salary_{}'.format(text))
         i_back = InlineKeyboardButton(text='Назад', callback_data='back-to-objects_foreman')
         d = bot.send_message(update.message.chat.id, 'Тратить деньги на...', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
         bot.delete_message(update.message.chat.id, d.message_id)
-        bot.send_message(update.message.chat.id, 'Остаток денег:{} сумм, {} доллар\nТратить деньги на...'.format(foreman.account_summ, foreman.account_dollar), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
+        bot.send_message(update.message.chat.id, 'Остаток денег:{} сумм, {} доллар\nТратить деньги на...'.format(Obj.price_summ, Obj.price_dollar), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
         return SPEND_MONEY_FOR

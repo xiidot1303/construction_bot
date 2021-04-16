@@ -17,6 +17,10 @@ def login_as(update, context):
 
 def send_login(update, context):
     login = update.message.text
+    who = Bot_users.objects.get(user_id=update.message.chat.id).who
+    if Bot_users.objects.filter(login=login, who=who):
+        update.message.reply_text('Этот профиль используется другим пользователем, введите другой логин')
+        return SEND_LOGIN
     check = Foreman.objects.filter(login=login)
     if not check:
         check = Client.objects.filter(login=login)
