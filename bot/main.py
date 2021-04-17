@@ -29,19 +29,22 @@ def start(update, context):
         #objects_list = [[i.title] for i in obj.all()]
         #update.message.reply_text('Все объекты', reply_markup=ReplyKeyboardMarkup(keyboard=objects_list, resize_keyboard=True))
         #return ConversationHandler.END
-        sth = 0
+    
     else:
         update.message.reply_text('Авторизация как', reply_markup=ReplyKeyboardMarkup(keyboard=[['Прораб'], ['Клиент']], resize_keyboard=True))
         return LOGIN_AS
 def reload(update, context):
     managers = list(map(int, MANAGER.split()))
     if not update.message.chat.id in managers:
-        empty_material = Material.objects.filter(price=None)
-        empty_salary = Salary.objects.filter(price=None)
-        if empty_material or empty_salary:
-            qwerty = 0 # do nothing
-        update.message.reply_text('Главное меню', reply_markup=ReplyKeyboardMarkup(keyboard=[['Объекты'], ['Выйти из аккаунта']], resize_keyboard=True))
-        return MAIN_MENU
+        if Bot_users.objects.filter(user_id=update.message.chat.id):
+            empty_material = Material.objects.filter(price=None)
+            empty_salary = Salary.objects.filter(price=None)
+            if empty_material or empty_salary:
+                qwerty = 0 # do nothing
+            update.message.reply_text('Главное меню', reply_markup=ReplyKeyboardMarkup(keyboard=[['Объекты'], ['Выйти из аккаунта']], resize_keyboard=True))
+            return MAIN_MENU
+        else:
+            update..message.reply_text('Вы не зарегистрированы. нажмите /start')
 
 
 def main_menu(update, context):
