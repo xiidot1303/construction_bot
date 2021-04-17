@@ -13,7 +13,7 @@ def spend_money_for(update, context):
         titles = [[i.title] for i in Material_title.objects.all()]
         bot.delete_message(c.message.chat.id, c.message.message_id)
 
-        bot.send_message(c.message.chat.id, 'Выберите название', reply_markup=ReplyKeyboardMarkup(keyboard=titles, resize_keyboard=True))
+        bot.send_message(c.message.chat.id, 'Выберите название')
 
         Material.objects.create(obj=object_title, user_id=c.message.chat.id)
         return SEND_TITLE_MATERIAL
@@ -23,7 +23,7 @@ def spend_money_for(update, context):
         titles = [[i.title] for i in Salary_title.objects.all()]
         bot.delete_message(c.message.chat.id, c.message.message_id)
 
-        bot.send_message(c.message.chat.id, 'Выберите название', reply_markup=ReplyKeyboardMarkup(keyboard=titles, resize_keyboard=True))
+        bot.send_message(c.message.chat.id, 'Выберите название')
 
         Salary.objects.create(obj=object_title, user_id=c.message.chat.id)
         return SEND_TITLE_SALARY
