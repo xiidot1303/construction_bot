@@ -44,7 +44,7 @@ def reload(update, context):
             update.message.reply_text('Главное меню', reply_markup=ReplyKeyboardMarkup(keyboard=[['Объекты'], ['Выйти из аккаунта']], resize_keyboard=True))
             return MAIN_MENU
         else:
-            update..message.reply_text('Вы не зарегистрированы. нажмите /start')
+            update.message.reply_text('Вы не зарегистрированы. нажмите /start')
 
 
 def main_menu(update, context):
