@@ -29,7 +29,7 @@ def start(update, context):
         #objects_list = [[i.title] for i in obj.all()]
         #update.message.reply_text('Все объекты', reply_markup=ReplyKeyboardMarkup(keyboard=objects_list, resize_keyboard=True))
         #return ConversationHandler.END
-    
+        sth = 0
     else:
         update.message.reply_text('Авторизация как', reply_markup=ReplyKeyboardMarkup(keyboard=[['Прораб'], ['Клиент']], resize_keyboard=True))
         return LOGIN_AS
