@@ -47,7 +47,7 @@ reload_handler = ConversationHandler(
 )
 
 select_objects = ConversationHandler(
-    entry_points=[MessageHandler(Filters.text(objects_list), objects)],
+    entry_points=[MessageHandler(Filters.text, objects)],
     states={
         #_______ spend money:
         # for Salary
@@ -88,8 +88,9 @@ manager_handler = ConversationHandler(
 )
 
 dp.add_handler(login_handler)
-dp.add_handler(select_objects)
+
 
 dp.add_handler(manager_handler)
 dp.add_handler(reload_handler)
 dp.add_handler(CommandHandler('cancel', cancel))
+dp.add_handler(select_objects)
