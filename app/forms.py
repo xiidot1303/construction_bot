@@ -80,3 +80,40 @@ class Salary_titleForm(ModelForm):
             'title': forms.TextInput(attrs={'class': 'form-control'}),
         }
     field_order = ['title']
+
+class MaterialForm(ModelForm):
+    class Meta:
+        model = Material
+        fields = {'title', 'measurement', 'amount', 'summ_or_dollar', 'price'}
+        labels = {
+            'title': 'Названия',
+            'measurement': 'Единицу измерения',
+            'amount': 'Количество',
+            'summ_or_dollar': 'Валюта',
+            'price': 'Цена'
+        }
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'measurement': forms.Select(attrs={'class': 'form-control'}, choices=[('м', 'м'), ('кг', 'кг'), ('м^3', 'м^3'), ('м^2', 'м^2')]),
+            'amount': forms.TextInput(attrs={'class': 'form-control'}),
+            'summ_or_dollar': forms.Select(attrs={'class': 'form-control'}, choices=[('суммы', 'суммы'), ('доллары', 'доллары')]),
+            'price': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+    field_order = ['title', 'measurement', 'amount', 'summ_or_dollar', 'price']
+
+
+class SalaryForm(ModelForm):
+    class Meta:
+        model = Material
+        fields = {'title', 'summ_or_dollar', 'price'}
+        labels = {
+            'title': 'Названия',
+            'summ_or_dollar': 'Валюта',
+            'price': 'Цена'
+        }
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'summ_or_dollar': forms.Select(attrs={'class': 'form-control'}, choices=[('суммы', 'суммы'), ('доллары', 'доллары')]),
+            'price': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+    field_order = ['title', 'summ_or_dollar', 'price']

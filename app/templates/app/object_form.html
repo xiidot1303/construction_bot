@@ -1,9 +1,11 @@
 {% extends 'layout/basic.html' %}
 {% block section %}
 <div class="row add-button">
-    <div class="col-xs-4">
+    <div class="col-xs-10">
         <a href="{% url 'material' object.title %}" class="btn btn-flat bg-orange"><i class=""></i>Материалы</a>
         <a href="{% url 'salary' object.title %}" class="btn btn-flat bg-orange"><i class=""></i>Иш хакки</a>
+        <a href="{% url 'create_material' object.title %}" class="btn btn-flat bg-orange"><i class="fas fa-plus"></i>Добавить материал</a>
+        <a href="{% url 'create_salary' object.title %}" class="btn btn-flat bg-orange"><i class="fas fa-plus"></i>Добавить иш хакки</a>
     </div>
 </div>
 <div class = "row">

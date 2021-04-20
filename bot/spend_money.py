@@ -2,7 +2,7 @@ from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, KeyboardButton, I
 from telegram.ext import ConversationHandler
 from bot.conversationList import *
 from app.models import *
-
+from bot.functions import *
 def spend_money_for(update, context):
     c = update.callback_query
     bot = context.bot
@@ -58,6 +58,9 @@ def send_summ_or_dollar_salar(update, context):
 
 def send_price_salary(update, context):
     if update.message.text != '/reload':
+        if not is_int(update.message.text):
+            update.message.reply_text('Неверное значение\nВведите цену')
+            return SEND_PRICE_SALARY
         bot = context.bot
         text = update.message.text
         obj = Salary.objects.get(user_id=update.message.chat.id, price=None)
@@ -115,6 +118,9 @@ def select_measurement(update, context):
 
 def send_amount(update, context):
     if update.message.text != '/reload':
+        if not is_int(update.message.text):
+            update.message.reply_text('Неверное значение\nВведите количество')
+            return SEND_AMOUNT
         obj = Material.objects.get(user_id=update.message.chat.id, amount=None)
         obj.amount = update.message.text
         obj.save()
@@ -130,6 +136,9 @@ def send_summ_or_dollar_material(update, context):
 
 def send_price_material(update, context):
     if update.message.text != '/reload':   
+        if not is_int(update.message.text):
+            update.message.reply_text('Неверное значение\nВведите цену')
+            return SEND_PRICE_MATERIAL
         bot = context.bot
         material_obj = Material.objects.get(user_id=update.message.chat.id, price=None)
         material_obj.price = update.message.text

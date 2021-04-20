@@ -64,10 +64,15 @@ urlpatterns = [
     #material
     path('material/<str:obj>/', material, name='material'),
     path('delete_material/<int:pk>/', delete_material, name='delete_material'),
+    path('create_material/<str:object>/', create_material, name='create_material'),
+    path('update_material/<int:pk>/', MaterialEditView.as_view()),
+    path('material_detail/<int:pk>/', MaterialDetailView.as_view()),
     #salary
     path('salary/<str:obj>/', salary, name='salary'),
     path('delete_salary/<int:pk>/', delete_salary, name='delete_salary'),
-
+    path('create_salary/<str:object>/', create_salary, name='create_salary'),
+    path('update_salary/<int:pk>/', SalaryEditView.as_view()),
+    path('salary_detail/<int:pk>/', SalaryDetailView.as_view()),
     #material_title
     path('material_titles', material_title, name='material_titles'),
     path('create_material_title', Material_titleCreateView.as_view(), name='create_material_title'),

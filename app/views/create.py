@@ -22,6 +22,23 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
     success_url = '/client_detail/{id}'
     permanent = True
 
+
+def create_material(request, object):
+    login = Foreman.objects.get(obj__title=object).login
+    user_id = Bot_users.objects.get(login=login).user_id
+    m = Material.objects.create(obj=object)
+    return redirect('/update_material/{}'.format(str(m.pk)))
+
+
+
+def create_salary(request, object):
+    login = Foreman.objects.get(obj__title=object).login
+    user_id = Bot_users.objects.get(login=login).user_id
+    m = Salary.objects.create(obj=object)
+    return redirect('/update_salary/{}'.format(str(m.pk)))
+
+
+
 class Material_titleCreateView(LoginRequiredMixin, CreateView):
     template_name = 'create/create_material_title.html'
     form_class = Material_titleForm

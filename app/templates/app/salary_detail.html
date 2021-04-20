@@ -1,0 +1,9 @@
+{% extends 'layout/basic.html' %}
+{% block title %}Деталь{% endblock %}
+{% block section %}
+
+<h1>{{ message }}</h1>
+
+
+<p class="btn btn-flat bg-orange"><a href="{% url 'update_obj' pk %}" style="color: whitesmoke;">Домой</a></p>
+{% endblock %}

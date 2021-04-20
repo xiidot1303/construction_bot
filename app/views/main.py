@@ -49,6 +49,10 @@ def folder_clients(request):
 
 @login_required
 def material(request, obj):
+    del_materials = Material.objects.filter(title=None)
+    for m in del_materials:
+        m.delete()
+
     materials = Material.objects.filter(obj=obj)
     total_amount = [str(int(i.amount)*int(i.price)) for i in materials]
     foreman = Foreman.objects.get(obj__title=obj).name
@@ -72,6 +76,10 @@ def material(request, obj):
 
 @login_required
 def salary(request, obj):
+    del_salaries = Salary.objects.filter(title=None)
+    for m in del_salaries:
+        m.delete()
+     
     salaries = Salary.objects.filter(obj=obj)
     df = {'Название': [], 'Суммы или доллары': [], 'Цена': [], 'Прораб': []}
     foreman = Foreman.objects.get(obj__title=obj).name

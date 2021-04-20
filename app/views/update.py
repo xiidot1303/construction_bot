@@ -21,3 +21,14 @@ class ClientEditView(LoginRequiredMixin, UpdateView):
     model = Client
     form_class = ClientForm
     success_url = '/folder2'
+
+class MaterialEditView(LoginRequiredMixin, UpdateView):
+    model = Material
+    form_class = MaterialForm
+    success_url = '/material_detail/{id}'
+
+
+class SalaryEditView(LoginRequiredMixin, UpdateView):
+    model = Salary
+    form_class = SalaryForm
+    success_url = '/salary_detail/{id}'
