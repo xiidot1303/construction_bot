@@ -39,22 +39,23 @@ class MaterialDetailView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(*args, **kwargs)
         obj = context['object']
         foreman = Foreman.objects.get(obj__title=obj.obj)
+        Obj = Object.objects.get(title=obj.obj)
         try:
             if obj.summ_or_dollar == 'суммы':
-                foreman.account_summ = str(int(foreman.account_summ) - (int(obj.amount) * int(obj.price)))
-                if int(foreman.account_summ) < 0:
+                Obj.price_summ = str(int(Obj.price_summ) - (int(obj.amount) * int(obj.price)))
+                if int(Obj.price_summ) < 0:
                     context['message'] = 'Недостаточно средств'
                     obj.delete()
                 else:
-                    foreman.save()
+                    Obj.save()
                     context['message'] = 'Успешно создано'
             else:
-                foreman.account_dollar = str(int(foreman.account_dollar) - (int(obj.amount) * int(obj.price)))
-                if int(foreman.account_dollar) < 0:
+                Obj.price_dollar = str(int(Obj.price_dollar) - (int(obj.amount) * int(obj.price)))
+                if int(Obj.price_dollar) < 0:
                     context['message'] = 'Недостаточно средств'
                     obj.delete()
                 else:
-                    foreman.save()
+                    Obj.save()
                     context['message'] = 'Успешно создано'
         except:
             context['message'] = 'Значения введены неверно'
@@ -73,22 +74,23 @@ class SalaryDetailView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(*args, **kwargs)
         obj = context['object']
         foreman = Foreman.objects.get(obj__title=obj.obj)
+        Obj = Object.objects.get(title=obj.obj)
         try:
             if obj.summ_or_dollar == 'суммы':
-                foreman.account_summ = str(int(foreman.account_summ) - int(obj.price))
-                if int(foreman.account_summ) < 0:
+                Obj.price_summ = str(int(Obj.price_summ) - int(obj.price))
+                if int(Obj.price_summ) < 0:
                     context['message'] = 'Недостаточно средств'
                     obj.delete()
                 else:
-                    foreman.save()
+                    Obj.save()
                     context['message'] = 'Успешно создано'
             else:
-                foreman.account_dollar = str(int(foreman.account_dollar) - int(obj.price))
-                if int(foreman.account_dollar) < 0:
+                Obj.price_dollar = str(int(Obj.price_dollar) - int(obj.price))
+                if int(Obj.price_dollar) < 0:
                     context['message'] = 'Недостаточно средств'
                     obj.delete()
                 else:
-                    foreman.save()
+                    Obj.save()
                     context['message'] = 'Успешно создано'
         except:
             context['message'] = 'Значения введены неверно'

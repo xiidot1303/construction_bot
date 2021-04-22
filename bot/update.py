@@ -72,7 +72,7 @@ select_objects = ConversationHandler(
 manager_handler = ConversationHandler(
     entry_points=[CommandHandler('manager', enter_manager)],
     states = {
-        MAIN_MENU_MANAGER: [MessageHandler(Filters.text(['Создать объект', 'Пополнить счёт']), main_menu_manager)],
+        MAIN_MENU_MANAGER: [MessageHandler(Filters.text(['Создать объект', 'Пополнить счёт', 'Создать иш хакки', 'Создать материал']), main_menu_manager)],
         SEND_OBJECT_TITLE: [MessageHandler(Filters.text, send_object_title)],
         SEND_OBJECT_PRICE_DOLLAR: [MessageHandler(Filters.text, send_object_price_dollar)],
         SEND_OBJECT_PRICE_SUMM: [MessageHandler(Filters.text, send_object_price_summ)],
@@ -81,6 +81,21 @@ manager_handler = ConversationHandler(
         SEND_TRANS_OBJ: [CallbackQueryHandler(send_trans_obj)],
         SEND_TRANS_SUMM_OR_DOLLAR: [CallbackQueryHandler(send_trans_summ_or_dollar)],
         SEND_TRANS_PRICE: [MessageHandler(Filters.text, send_trans_price)],
+        #Create material
+        CREATE_MATERIAL_send_object_title: [MessageHandler(Filters.text, create_material_send_object_title)],
+        CREATE_MATERIAL_send_material_title: [MessageHandler(Filters.text, create_material_send_material_title)],
+        CREATE_MATERIAL_SELECT_MEASUREMENT: [MessageHandler(Filters.text, create_material_select_measurement)],
+        CREATE_MATERIAL_SEND_AMOUNT: [MessageHandler(Filters.text, create_material_send_amount)],
+        CREATE_MATERIAL_SEND_SUMM_OR_DOLLAR_MATERIAL: [MessageHandler(Filters.text, create_material_send_summ_or_dollar_material)],
+        CREATE_MATERIAL_SEND_PRICE_MATERIAL: [MessageHandler(Filters.text, create_material_send_price_material)],
+
+        #create salary
+        CREATE_SALARY_send_object_title: [MessageHandler(Filters.text, create_salary_send_object_title)],
+        CREATE_SALARY_send_material_title: [MessageHandler(Filters.text, create_salary_send_material_title)],
+        CREATE_SALARY_SEND_SUMM_OR_DOLLAR_SALARY: [MessageHandler(Filters.text, create_salary_send_summ_or_dollar_salary)],
+        CREATE_SALARY_SEND_PRICE_SALARY: [MessageHandler(Filters.text, create_salary_send_price_salary)]
+
+        
 
     },
     fallbacks = [CommandHandler('cancel', cancel)],

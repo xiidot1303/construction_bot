@@ -33,7 +33,7 @@ class Material(models.Model):
     summ_or_dollar = models.CharField(null=True, blank=True, max_length=50)
     price = models.CharField(null=True, blank=True, max_length=30)
     obj = models.CharField(null=True, blank=False, max_length=100)
-
+    published = models.DateTimeField(db_index = True, null=True, auto_now_add=True, blank=True)
 class Material_title(models.Model):
     title = models.CharField(null=True, max_length=200, verbose_name='Названия')
 
@@ -44,6 +44,7 @@ class Salary(models.Model):
     summ_or_dollar = models.CharField(null=True, blank=True, max_length=50)
     price = models.CharField(null=True, blank=True, max_length=30)
     obj = models.CharField(null=True, blank=False, max_length=100)
+    published = models.DateTimeField(db_index = True, null=True, auto_now_add=True, blank=True)
 
 class Salary_title(models.Model):
     title = models.CharField(null=True, max_length=200, verbose_name='Названия')

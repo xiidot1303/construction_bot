@@ -69,21 +69,23 @@ def send_price_salary(update, context):
         Obj = Object.objects.get(title=obj.obj)
         foreman = Foreman.objects.get(obj__title=obj.obj)
         if obj.summ_or_dollar == 'суммы':
-            foreman.account_summ = str(int(foreman.account_summ) - (int(update.message.text)))
-            if int(foreman.account_summ) < 0:
+            Obj.price_summ = str(int(Obj.price_summ) - (int(update.message.text)))
+            if int(Obj.price_summ) < 0:
                 bot.send_message(update.message.chat.id, 'Недостаточно средств')
                 obj.delete()
             else:
                 foreman.save()
+                Obj.save()
         else:
-            foreman.account_dollar = str(int(foreman.account_dollar) - (int(update.message.text)))        
-            if int(foreman.account_dollar) < 0:
+            Obj.price_dollar = str(int(Obj.price_dollar) - (int(update.message.text)))        
+            if int(Obj.price_dollar) < 0:
                 bot.send_message(update.message.chat.id, 'Недостаточно средств')
                 obj.delete()
             else:
                 foreman.save()
+                Obj.save()
 
-
+        
         # return to object menu, where can spend money for materials or salary
         foreman = Foreman.objects.get(obj__title=Obj.title)
         text = Obj.title
@@ -146,19 +148,22 @@ def send_price_material(update, context):
         Obj = Object.objects.get(title=material_obj.obj)
         foreman = Foreman.objects.get(obj__title=material_obj.obj)
         if material_obj.summ_or_dollar == 'суммы':
-            foreman.account_summ = str(int(foreman.account_summ) - (int(material_obj.amount) * int(material_obj.price)))
-            if int(foreman.account_summ) < 0:
+            Obj.price_summ = str(int(Obj.price_summ) - (int(material_obj.amount) * int(material_obj.price)))
+            if int(Obj.price_summ) < 0:
                 bot.send_message(update.message.chat.id, 'Недостаточно средств')
                 material_obj.delete()
             else:
                 foreman.save()
+                Obj.save()
         else:
-            foreman.account_dollar = str(int(foreman.account_dollar) - (int(material_obj.amount) * int(material_obj.price)))
-            if int(foreman.account_dollar) < 0:
+            Obj.price_dollar = str(int(Obj.price_dollar) - (int(material_obj.amount) * int(material_obj.price)))
+            if int(Obj.price_dollar) < 0:
                 bot.send_message(update.message.chat.id, 'Недостаточно средств')
                 material_obj.delete()
             else:
                 foreman.save()
+                Obj.save()
+        
         # return to object menu, where can spend money for materials or salary
         foreman = Foreman.objects.get(obj__title=Obj.title)
         text = Obj.title

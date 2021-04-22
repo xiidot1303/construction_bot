@@ -58,7 +58,7 @@ def material(request, obj):
     foreman = Foreman.objects.get(obj__title=obj).name
 
     # ________create excel file
-    df = {'Название': [], 'Измерение': [], 'Количество': [], 'Суммы или доллары': [], 'Цена': [], 'Общая сумма': [], 'Прораб': []}
+    df = {'Название': [], 'Измерение': [], 'Количество': [], 'Суммы или доллары': [], 'Цена': [], 'Общая сумма': [], 'Прораб': [], 'Дата': []}
     
     #add title
     df['Название'] = [i.title for i in materials]
@@ -68,6 +68,7 @@ def material(request, obj):
     df['Цена'] = [i.price for i in materials]
     df['Общая сумма'] = [i for i in total_amount]
     df['Прораб'] = [foreman for i in materials]
+    df['Дата'] = [i.published.strftime('%d.%m.%Y') for i in materials]
     df = pd.DataFrame(df)
     df.to_excel('files/excel/material_{}.xlsx'.format(obj))
     #_________
@@ -81,13 +82,14 @@ def salary(request, obj):
         m.delete()
      
     salaries = Salary.objects.filter(obj=obj)
-    df = {'Название': [], 'Суммы или доллары': [], 'Цена': [], 'Прораб': []}
+    df = {'Название': [], 'Суммы или доллары': [], 'Цена': [], 'Прораб': [], 'Дата': []}
     foreman = Foreman.objects.get(obj__title=obj).name
     #add title
     df['Название'] = [i.title for i in salaries]
     df['Суммы или доллары'] = [i.summ_or_dollar for i in salaries]
     df['Цена'] = [i.price for i in salaries]
     df['Прораб'] = [foreman for i in salaries]
+    df['Дата'] = [i.published.strftime('%d.%m.%Y') for i in salaries]
     df = pd.DataFrame(df)
     df.to_excel('files/excel/salary_{}.xlsx'.format(obj))
     context = {'salaries': salaries, 'file_path': 'salary_{}'.format(obj), 'foreman': foreman}

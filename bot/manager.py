@@ -1,6 +1,7 @@
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ConversationHandler
 from bot.conversationList import *
+from bot.functions import *
 from app.models import *
 from dotenv import load_dotenv
 import os
@@ -11,7 +12,7 @@ MANAGER = os.environ.get('MANAGER')
 def enter_manager(update, context):
     managers = list(map(int, MANAGER.split()))
     if update.message.chat.id in managers:
-        update.message.reply_text('Вы можете создать объекты и пополнить счёт прораба', reply_markup=ReplyKeyboardMarkup(keyboard=[['Создать объект', 'Пополнить счёт']], resize_keyboard=True))
+        update.message.reply_text('Вы можете создать объекты и пополнить счёт прораба', reply_markup=ReplyKeyboardMarkup(keyboard=[['Создать объект', 'Пополнить счёт'], ['Создать материал', 'Создать иш хакки']], resize_keyboard=True))
         return MAIN_MENU_MANAGER
     else:
         update.message.reply_text('У вас нет разрешения на доступ к этому меню')
@@ -27,7 +28,16 @@ def main_menu_manager(update, context):
         bot.delete_message(update.message.chat.id, del_msg.message_id)
         bot.send_message(update.message.chat.id, 'Укажите имя прораба, который хотите пополнить счёта', reply_markup=InlineKeyboardMarkup(foremans))
         return REPLENISH
-
+    elif message == 'Создать материал':
+        titles = [[i.title] for i in Object.objects.all()]
+        titles.append(['Назад'])
+        update.message.reply_text('Введите имя объекта, из которого вы хотите создать материал:', reply_markup = ReplyKeyboardMarkup(keyboard=titles, resize_keyboard=True))
+        return CREATE_MATERIAL_send_object_title
+    elif message == 'Создать иш хакки':
+        titles = [[i.title] for i in Object.objects.all()]
+        titles.append(['Назад'])
+        update.message.reply_text('Введите имя объекта, из которого вы хотите создать материал:', reply_markup = ReplyKeyboardMarkup(keyboard=titles, resize_keyboard=True))
+        return CREATE_SALARY_send_object_title
 
 
 def send_object_title(update, context):
@@ -110,3 +120,154 @@ def send_trans_price(update, context):
     bot.send_message(update.message.chat.id, 'Успешно перенесено')
     enter_manager(update, context)
     return MAIN_MENU_MANAGER
+    
+
+
+
+# create Material
+def create_material_send_object_title(update, context):
+    text = update.message.text
+    if text == 'Назад':
+        update.message.reply_text('Вы можете создать объекты и пополнить счёт прораба', reply_markup=ReplyKeyboardMarkup(keyboard=[['Создать объект', 'Пополнить счёт'], ['Создать материал', 'Создать иш хакки']], resize_keyboard=True))
+        return MAIN_MENU_MANAGER
+    is_available = Object.objects.filter(title=text)
+    if not is_available:
+        update.message.reply_text('Объект недоступен, повторно введите названия объекта')
+        return CREATE_MATERIAL_send_object_title
+    Material.objects.create(obj=text, user_id=update.message.chat.id)
+    update.message.reply_text('Выберите название', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
+    return CREATE_MATERIAL_send_material_title
+
+def create_material_send_material_title(update, context):
+    text = update.message.text
+    obj = Material.objects.get(user_id=update.message.chat.id, title=None)
+    obj.title = text
+    obj.save()
+    update.message.reply_text('Выберите единицу измерения', reply_markup=ReplyKeyboardMarkup(keyboard=[['м', 'кг', 'м^3', 'м^2']], resize_keyboard=True))
+    return CREATE_MATERIAL_SELECT_MEASUREMENT
+
+def create_material_select_measurement(update, context):
+    obj = Material.objects.get(user_id=update.message.chat.id, measurement=None)
+    obj.measurement = update.message.text
+    obj.save()
+    update.message.reply_text('Введите количество', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
+    return CREATE_MATERIAL_SEND_AMOUNT
+
+
+def create_material_send_amount(update, context):
+    if update.message.text != '/manager':
+        if not is_int(update.message.text):
+            update.message.reply_text('Неверное значение\nВведите количество')
+            return CREATE_MATERIAL_SEND_AMOUNT
+        obj = Material.objects.get(user_id=update.message.chat.id, amount=None)
+        obj.amount = update.message.text
+        obj.save()
+        update.message.reply_text('Выберите суммы или доллары', reply_markup=ReplyKeyboardMarkup(keyboard=[['суммы', 'доллары']], resize_keyboard=True))
+        return CREATE_MATERIAL_SEND_SUMM_OR_DOLLAR_MATERIAL
+
+def create_material_send_summ_or_dollar_material(update, context):
+    obj = Material.objects.get(user_id=update.message.chat.id, summ_or_dollar=None)
+    obj.summ_or_dollar = update.message.text
+    obj.save()
+    update.message.reply_text('Введите цену за 1шт(м, кг и т.д)', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
+    return CREATE_MATERIAL_SEND_PRICE_MATERIAL
+
+def create_material_send_price_material(update, context):
+    if update.message.text != '/manager':   
+        if not is_int(update.message.text):
+            update.message.reply_text('Неверное значение\nВведите цену')
+            return CREATE_MATERIAL_SEND_PRICE_MATERIAL
+        bot = context.bot
+        material_obj = Material.objects.get(user_id=update.message.chat.id, price=None)
+        material_obj.price = update.message.text
+        material_obj.save()
+        Obj = Object.objects.get(title=material_obj.obj)
+        foreman = Foreman.objects.get(obj__title=material_obj.obj)
+        if material_obj.summ_or_dollar == 'суммы':
+            Obj.price_summ = str(int(Obj.price_summ) - (int(material_obj.amount) * int(material_obj.price)))
+            if int(Obj.price_summ) < 0:
+                bot.send_message(update.message.chat.id, 'Недостаточно средств')
+                material_obj.delete()
+            else:
+                foreman.save()
+                Obj.save()
+                bot.send_message(update.message.chat.id, 'Успешно создан новый материал')
+        else:
+            Obj.price_dollar = str(int(Obj.price_dollar) - (int(material_obj.amount) * int(material_obj.price)))
+            if int(Obj.price_dollar) < 0:
+                bot.send_message(update.message.chat.id, 'Недостаточно средств')
+                material_obj.delete()
+            else:
+                foreman.save()
+                Obj.save()
+                bot.send_message(update.message.chat.id, 'Успешно создан новый материал')
+        
+        bot.send_message(update.message.chat.id, 'Вы можете создать объекты и пополнить счёт прораба', reply_markup=ReplyKeyboardMarkup(keyboard=[['Создать объект', 'Пополнить счёт'], ['Создать материал', 'Создать иш хакки']], resize_keyboard=True))
+        return MAIN_MENU_MANAGER
+
+
+# create salary
+def create_salary_send_object_title(update, context):
+    text = update.message.text
+    if text == 'Назад':
+        update.message.reply_text('Вы можете создать объекты и пополнить счёт прораба', reply_markup=ReplyKeyboardMarkup(keyboard=[['Создать объект', 'Пополнить счёт'], ['Создать материал', 'Создать иш хакки']], resize_keyboard=True))
+        return MAIN_MENU_MANAGER
+    is_available = Object.objects.filter(title=text)
+    if not is_available:
+        update.message.reply_text('Объект недоступен, повторно введите названия объекта')
+        return CREATE_SALARY_send_object_title
+    Salary.objects.create(obj=text, user_id=update.message.chat.id)
+    update.message.reply_text('Выберите название', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
+    return CREATE_SALARY_send_material_title
+
+def create_salary_send_material_title(update, context):
+    obj = Salary.objects.get(user_id=update.message.chat.id, title=None)
+    obj.title = update.message.text
+    obj.save()
+    update.message.reply_text('Выберите суммы или доллары', reply_markup=ReplyKeyboardMarkup(keyboard=[['суммы', 'доллары']], resize_keyboard=True))
+    return CREATE_SALARY_SEND_SUMM_OR_DOLLAR_SALARY
+
+def create_salary_send_summ_or_dollar_salary(update, context):
+    obj = Salary.objects.get(user_id=update.message.chat.id, summ_or_dollar=None)
+    obj.summ_or_dollar = update.message.text
+    obj.save()
+    update.message.reply_text('Введите цену за работу', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
+    return CREATE_SALARY_SEND_PRICE_SALARY
+
+def create_salary_send_price_salary(update, context):
+    if update.message.text != '/manager':
+        if not is_int(update.message.text):
+            update.message.reply_text('Неверное значение\nВведите цену')
+            return CREATE_SALARY_SEND_PRICE_SALARY
+        bot = context.bot
+        text = update.message.text
+        obj = Salary.objects.get(user_id=update.message.chat.id, price=None)
+        obj.price = update.message.text
+        obj.save()
+        Obj = Object.objects.get(title=obj.obj)
+        foreman = Foreman.objects.get(obj__title=obj.obj)
+        if obj.summ_or_dollar == 'суммы':
+            Obj.price_summ = str(int(Obj.price_summ) - (int(update.message.text)))
+            if int(Obj.price_summ) < 0:
+                bot.send_message(update.message.chat.id, 'Недостаточно средств')
+                obj.delete()
+            else:
+                foreman.save()
+                Obj.save()
+                bot.send_message(update.message.chat.id, 'Успешно создан новый иш хакки')
+        else:
+            Obj.price_dollar = str(int(Obj.price_dollar) - (int(update.message.text)))        
+            if int(Obj.price_dollar) < 0:
+                bot.send_message(update.message.chat.id, 'Недостаточно средств')
+                obj.delete()
+            else:
+                foreman.save()
+                Obj.save()
+                bot.send_message(update.message.chat.id, 'Успешно создан новый иш хакки')
+        
+
+        
+        bot.send_message(update.message.chat.id, 'Вы можете создать объекты и пополнить счёт прораба', reply_markup=ReplyKeyboardMarkup(keyboard=[['Создать объект', 'Пополнить счёт'], ['Создать материал', 'Создать иш хакки']], resize_keyboard=True))
+        return MAIN_MENU_MANAGER
+
+
