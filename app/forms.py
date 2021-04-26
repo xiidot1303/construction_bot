@@ -84,13 +84,14 @@ class Salary_titleForm(ModelForm):
 class MaterialForm(ModelForm):
     class Meta:
         model = Material
-        fields = {'title', 'measurement', 'amount', 'summ_or_dollar', 'price'}
+        fields = {'title', 'measurement', 'amount', 'summ_or_dollar', 'price', 'type'}
         labels = {
             'title': 'Названия',
             'measurement': 'Единицу измерения',
             'amount': 'Количество',
             'summ_or_dollar': 'Валюта',
-            'price': 'Цена'
+            'price': 'Цена',
+            'type': 'Тип'
         }
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
@@ -98,22 +99,25 @@ class MaterialForm(ModelForm):
             'amount': forms.TextInput(attrs={'class': 'form-control'}),
             'summ_or_dollar': forms.Select(attrs={'class': 'form-control'}, choices=[('суммы', 'суммы'), ('доллары', 'доллары')]),
             'price': forms.TextInput(attrs={'class': 'form-control'}),
+            'type': forms.Select(attrs={'class': 'form-control'}, choices=[('Квартира', 'Квартира'), ('Участка', 'Участка')]),
         }
-    field_order = ['title', 'measurement', 'amount', 'summ_or_dollar', 'price']
+    field_order = ['title', 'measurement', 'amount', 'summ_or_dollar', 'price', 'type']
 
 
 class SalaryForm(ModelForm):
     class Meta:
         model = Material
-        fields = {'title', 'summ_or_dollar', 'price'}
+        fields = {'title', 'summ_or_dollar', 'price', 'type'}
         labels = {
             'title': 'Названия',
             'summ_or_dollar': 'Валюта',
-            'price': 'Цена'
+            'price': 'Цена',
+            'type': 'Тип'
         }
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'summ_or_dollar': forms.Select(attrs={'class': 'form-control'}, choices=[('суммы', 'суммы'), ('доллары', 'доллары')]),
             'price': forms.TextInput(attrs={'class': 'form-control'}),
+            'type': forms.Select(attrs={'class': 'form-control'}, choices=[('Квартира', 'Квартира'), ('Участка', 'Участка')]),
         }
-    field_order = ['title', 'summ_or_dollar', 'price']
+    field_order = ['title', 'summ_or_dollar', 'price', 'type']

@@ -13,20 +13,20 @@ def spend_money_for(update, context):
         titles = [[i.title] for i in Material_title.objects.all()]
         bot.delete_message(c.message.chat.id, c.message.message_id)
 
-        bot.send_message(c.message.chat.id, 'Выберите название')
+        bot.send_message(c.message.chat.id, 'Выберите тип договора', reply_markup=ReplyKeyboardMarkup(keyboard=[['Квартира', 'Участка']], resize_keyboard=True))
 
         Material.objects.create(obj=object_title, user_id=c.message.chat.id)
-        return SEND_TITLE_MATERIAL
+        return SEND_TYPE_MATERIAL 
     elif 'spend-money-for-salary' in data:
         s, object_title = str(data).split('_')
         
         titles = [[i.title] for i in Salary_title.objects.all()]
         bot.delete_message(c.message.chat.id, c.message.message_id)
-
-        bot.send_message(c.message.chat.id, 'Выберите название')
+        bot.send_message(c.message.chat.id, 'Выберите тип договора', reply_markup=ReplyKeyboardMarkup(keyboard=[['Квартира', 'Участка']], resize_keyboard=True))
+    
 
         Salary.objects.create(obj=object_title, user_id=c.message.chat.id)
-        return SEND_TITLE_SALARY
+        return SEND_TYPE_SALARY
     
 
     elif 'back-to-objects' in data:
@@ -41,6 +41,24 @@ def spend_money_for(update, context):
         bot.delete_message(c.message.chat.id, c.message.message_id)
         bot.send_message(c.message.chat.id, 'Все объекты', reply_markup=ReplyKeyboardMarkup(keyboard=objects_list, resize_keyboard=True))
         return ConversationHandler.END
+
+def send_type_salary(update, context):
+    text = update.message.text
+    obj = Salary.objects.get(user_id=update.message.chat.id, type=None)
+    if text == 'Квартира': 
+        obj.type = 'flat'
+        obj.save()
+    elif text == 'Участка':
+        obj.type = 'plot'
+        obj.save()
+    else:
+        update.message.reply_text('Выберите тип договора')
+        return SEND_TYPE_SALARY
+    titles = [[i.title] for i in Salary_title.objects.all()]
+    update.message.reply_text('Выберите название', reply_markup=ReplyKeyboardMarkup(keyboard=titles, resize_keyboard=True))
+    return SEND_TITLE_SALARY
+
+
 
 def send_title_salary(update, context):
     obj = Salary.objects.get(user_id=update.message.chat.id, title=None)
@@ -101,6 +119,21 @@ def send_price_salary(update, context):
         return SPEND_MONEY_FOR
         
 
+def send_type_material(update, context):
+    text = update.message.text
+    obj = Material.objects.get(user_id=update.message.chat.id, type=None)
+    if text == 'Квартира': 
+        obj.type = 'flat'
+    elif text == 'Участка':
+        obj.type = 'plot'
+    else:
+        update.message.reply_text('Выберите тип договора')
+        return SEND_TYPE_MATERIAL
+    obj.save()
+    update.message.reply_text('Выберите название', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
+
+
+    return SEND_TITLE_MATERIAL
 
 def send_title_material(update, context):
     text = update.message.text

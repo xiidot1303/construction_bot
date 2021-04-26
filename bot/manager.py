@@ -135,6 +135,24 @@ def create_material_send_object_title(update, context):
         update.message.reply_text('Объект недоступен, повторно введите названия объекта')
         return CREATE_MATERIAL_send_object_title
     Material.objects.create(obj=text, user_id=update.message.chat.id)
+    
+    update.message.reply_text('Выберите тип договора', reply_markup=ReplyKeyboardMarkup(keyboard=[['Квартира', 'Участка']], resize_keyboard=True))
+    return CREATE_MATERIAL_SEND_TYPE
+    
+    
+def create_material_send_type(update, context):
+    text = update.message.text
+    obj = Material.objects.get(user_id=update.message.chat.id, type=None)
+
+    if text == 'Квартира': 
+        obj.type = 'flat'
+        obj.save()
+    elif text == 'Участка':
+        obj.type = 'plot'
+        obj.save()
+    else:
+        update.message.reply_text('Выберите тип договора')
+        return CREATE_MATERIAL_SEND_TYPE
     update.message.reply_text('Выберите название', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
     return CREATE_MATERIAL_send_material_title
 
@@ -217,10 +235,30 @@ def create_salary_send_object_title(update, context):
         update.message.reply_text('Объект недоступен, повторно введите названия объекта')
         return CREATE_SALARY_send_object_title
     Salary.objects.create(obj=text, user_id=update.message.chat.id)
-    update.message.reply_text('Выберите название', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
-    return CREATE_SALARY_send_material_title
+    update.message.reply_text('Выберите тип договора', reply_markup=ReplyKeyboardMarkup(keyboard=[['Квартира', 'Участка']], resize_keyboard=True))
+    return CREATE_SALARY_send_type
 
-def create_salary_send_material_title(update, context):
+def create_salary_send_type(update, context):
+    text = update.message.text
+    obj = Salary.objects.get(user_id=update.message.chat.id, type=None)
+
+    if text == 'Квартира': 
+        obj.type = 'flat'
+        obj.save()
+    elif text == 'Участка':
+        obj.type = 'plot'
+        obj.save()
+    else:
+        update.message.reply_text('Выберите тип договора')
+        return CREATE_SALARY_send_type
+    titles = [[i.title] for i in Salary_title.objects.all()]
+    update.message.reply_text('Выберите название', reply_markup=ReplyKeyboardMarkup(keyboard=titles, resize_keyboard=True))
+    
+    return CREATE_SALARY_send_salary_title
+
+
+
+def create_salary_send_salary_title(update, context):
     obj = Salary.objects.get(user_id=update.message.chat.id, title=None)
     obj.title = update.message.text
     obj.save()

@@ -8,9 +8,19 @@ def show_inf_about(update, context):
     c = update.callback_query
     bot = context.bot
     data = str(c.data)
-    if 'inf-material' in data:
+    if 'inf-material-flat' in data:
         sth, obj_title = data.split('_')
-        materials = Material.objects.filter(obj=obj_title)
+        materials = Material.objects.filter(obj=obj_title, type='flat')
+        n=1
+        msg = ''
+        for m in materials:
+            msg += str(n) + '. {}, {} {}, {}, {};\n'.format(m.title, m.amount, m.measurement, m.price, m.summ_or_dollar)
+            n += 1
+        i_back = InlineKeyboardButton(text='Назад', callback_data='back-show-inf_{}'.format(obj_title))
+        c.edit_message_text(msg, reply_markup = InlineKeyboardMarkup([[i_back]]))
+    elif 'inf-material-plot' in data:
+        sth, obj_title = data.split('_')
+        materials = Material.objects.filter(obj=obj_title, type='plot')
         n=1
         msg = ''
         for m in materials:
@@ -21,7 +31,7 @@ def show_inf_about(update, context):
 
     elif 'inf-salary' in data:
         sth, obj_title = data.split('_')
-        salaries = Salary.objects.filter(obj=obj_title)
+        salaries = Salary.objects.filter(obj=obj_title, type='flat')
         n=1
         msg = ''
         for s in salaries:
@@ -32,10 +42,11 @@ def show_inf_about(update, context):
     elif 'back-show-inf' in data:
         sth, text = data.split('_')
         obj = Object.objects.get(title=text)
-        i_material = InlineKeyboardButton(text='Материалы', callback_data='inf-material_{}'.format(text))
+        i_material_flat = InlineKeyboardButton(text='Материалы квартиры', callback_data='inf-material-flat_{}'.format(text))
+        i_material_plot = InlineKeyboardButton(text='Материалы участки', callback_data='inf-material-plot_{}'.format(text))
         i_salary = InlineKeyboardButton(text='Иш хакки', callback_data='inf-salary_{}'.format(text))
         i_back = InlineKeyboardButton(text='Назад', callback_data='back-to-objects_clients')
-        c.edit_message_text('Остаток денег: {} сумм, {} доллар \nПоказать информацию о ...'.format(obj.price_summ, obj.price_dollar), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
+        c.edit_message_text('Остаток денег: {} сумм, {} доллар \nПоказать информацию о ...'.format(obj.price_summ, obj.price_dollar), reply_markup=InlineKeyboardMarkup([[i_material_flat], [i_material_plot], [i_salary], [i_back]]))
         return SHOW_INF_ABOUT
     
     elif 'back-to-objects' in data:

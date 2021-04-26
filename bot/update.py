@@ -51,11 +51,13 @@ select_objects = ConversationHandler(
     states={
         #_______ spend money:
         # for Salary
+        SEND_TYPE_SALARY: [MessageHandler(Filters.text, send_type_salary)],
         SPEND_MONEY_FOR: [CallbackQueryHandler(spend_money_for)],
         SEND_TITLE_SALARY: [MessageHandler(Filters.text, send_title_salary)],   
         SEND_SUMM_OR_DOLLAR_SALARY: [MessageHandler(Filters.text, send_summ_or_dollar_salar)],
         SEND_PRICE_SALARY: [MessageHandler(Filters.text, send_price_salary)],
         # For materials
+        SEND_TYPE_MATERIAL: [MessageHandler(Filters.text, send_type_material)],
         SEND_TITLE_MATERIAL: [MessageHandler(Filters.text, send_title_material)],
         SELECT_MEASUREMENT: [MessageHandler(Filters.text, select_measurement)],
         SEND_AMOUNT: [MessageHandler(Filters.text, send_amount)],
@@ -82,7 +84,9 @@ manager_handler = ConversationHandler(
         SEND_TRANS_SUMM_OR_DOLLAR: [CallbackQueryHandler(send_trans_summ_or_dollar)],
         SEND_TRANS_PRICE: [MessageHandler(Filters.text, send_trans_price)],
         #Create material
+
         CREATE_MATERIAL_send_object_title: [MessageHandler(Filters.text, create_material_send_object_title)],
+        CREATE_MATERIAL_SEND_TYPE: [MessageHandler(Filters.text, create_material_send_type)],
         CREATE_MATERIAL_send_material_title: [MessageHandler(Filters.text, create_material_send_material_title)],
         CREATE_MATERIAL_SELECT_MEASUREMENT: [MessageHandler(Filters.text, create_material_select_measurement)],
         CREATE_MATERIAL_SEND_AMOUNT: [MessageHandler(Filters.text, create_material_send_amount)],
@@ -91,7 +95,8 @@ manager_handler = ConversationHandler(
 
         #create salary
         CREATE_SALARY_send_object_title: [MessageHandler(Filters.text, create_salary_send_object_title)],
-        CREATE_SALARY_send_material_title: [MessageHandler(Filters.text, create_salary_send_material_title)],
+        CREATE_SALARY_send_type: [MessageHandler(Filters.text, create_salary_send_type)],
+        CREATE_SALARY_send_salary_title: [MessageHandler(Filters.text, create_salary_send_salary_title)],
         CREATE_SALARY_SEND_SUMM_OR_DOLLAR_SALARY: [MessageHandler(Filters.text, create_salary_send_summ_or_dollar_salary)],
         CREATE_SALARY_SEND_PRICE_SALARY: [MessageHandler(Filters.text, create_salary_send_price_salary)]
 

@@ -43,6 +43,12 @@ class MaterialDetailView(LoginRequiredMixin, DetailView):
         try:
             if obj.summ_or_dollar == 'суммы':
                 Obj.price_summ = str(int(Obj.price_summ) - (int(obj.amount) * int(obj.price)))
+                if obj.type == 'Квартира':
+                    obj.type = 'flat'
+                elif obj.type == 'Участка':
+                    obj.type = 'plot'
+                obj.save()
+
                 if int(Obj.price_summ) < 0:
                     context['message'] = 'Недостаточно средств'
                     obj.delete()
@@ -78,6 +84,12 @@ class SalaryDetailView(LoginRequiredMixin, DetailView):
         try:
             if obj.summ_or_dollar == 'суммы':
                 Obj.price_summ = str(int(Obj.price_summ) - int(obj.price))
+                if obj.type == 'Квартира':
+                    obj.type = 'flat'
+                elif obj.type == 'Участка':
+                    obj.type = 'plot'
+                obj.save()
+
                 if int(Obj.price_summ) < 0:
                     context['message'] = 'Недостаточно средств'
                     obj.delete()

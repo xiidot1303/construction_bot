@@ -1,10 +1,37 @@
 {% extends "layout/basic.html" %}
 {% load static %}
 {% load index %}
+
+{% block link %}
+<link rel="stylesheet" href="{% static 'app/form.css' %}">
+{% endblock %}
+
+{% block active %}
+
+<nav class="dropdownmenu">
+    <ul>
+
+      <li><a style="padding: 10px 60px 10px 60px;">{{ type }}</a>
+        <ul id="submenyu">
+          <li><a href="{% url 'material' obj %}">Все</a></li>
+          <li><a href="{% url 'sort_material' obj 'flat' %}">Квартиры</a></li>
+          <li><a href="{% url 'sort_material' obj 'plot' %}">Участки</a></li>
+      
+        </ul>
+      </li>
+
+    </ul>
+</nav>
+
+{% endblock %}
+
+
 {% block section %}
 <div class="row add-button">
     <div class="col-xs-4">
            <a href="{% url 'get_excel' file_path %}" class="btn btn-flat bg-orange"><i class="fas fa-file-excel-o"></i>Скачать Excel</a>
+            
+
        </div>
 </div>
 <div class="row" style="width: 80em;">
@@ -21,6 +48,7 @@
                             <th>Цена</th>
                             <th>Общая сумма</th>
                             <th>Прораб</th>
+     
                             <th>Действия</th>
                             
                         </tr>
@@ -36,6 +64,7 @@
                             
                             <td>{{ total_amount|index:forloop.counter0 }}</td>
                             <td>{{ foreman }}</td>
+                
                             <td><a id = "a" href="{% url 'delete_material' m.pk %}" onclick="return confirm(&#39;Вы уверены?&#39;)" class="btn btn-danger btn-flat"><i class="fas fa-trash" aria-hidden="true"></i></a></td>
                         </tr>
                         {% endfor %}
