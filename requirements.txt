@@ -3,3 +3,5 @@ django
 python-dotenv
 openpyxl
 pandas
+bs4
+requets
