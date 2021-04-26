@@ -57,6 +57,12 @@ class MaterialDetailView(LoginRequiredMixin, DetailView):
                     context['message'] = 'Успешно создано'
             else:
                 Obj.price_dollar = str(int(Obj.price_dollar) - (int(obj.amount) * int(obj.price)))
+                if obj.type == 'Квартира':
+                    obj.type = 'flat'
+                elif obj.type == 'Участка':
+                    obj.type = 'plot'
+                obj.save()
+
                 if int(Obj.price_dollar) < 0:
                     context['message'] = 'Недостаточно средств'
                     obj.delete()
@@ -98,6 +104,12 @@ class SalaryDetailView(LoginRequiredMixin, DetailView):
                     context['message'] = 'Успешно создано'
             else:
                 Obj.price_dollar = str(int(Obj.price_dollar) - int(obj.price))
+                if obj.type == 'Квартира':
+                    obj.type = 'flat'
+                elif obj.type == 'Участка':
+                    obj.type = 'plot'
+                obj.save()
+
                 if int(Obj.price_dollar) < 0:
                     context['message'] = 'Недостаточно средств'
                     obj.delete()
