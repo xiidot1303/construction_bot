@@ -42,28 +42,28 @@ class MaterialDetailView(LoginRequiredMixin, DetailView):
         Obj = Object.objects.get(title=obj.obj)
         try:
             if obj.summ_or_dollar == 'суммы':
-                Obj.price_summ = str(int(Obj.price_summ) - (int(obj.amount) * int(obj.price)))
+                Obj.price_summ = str(float(Obj.price_summ) - (float(obj.amount) * float(obj.price)))
                 if obj.type == 'Квартира':
                     obj.type = 'flat'
                 elif obj.type == 'Участка':
                     obj.type = 'plot'
                 obj.save()
 
-                if int(Obj.price_summ) < 0:
+                if float(Obj.price_summ) < 0:
                     context['message'] = 'Недостаточно средств'
                     obj.delete()
                 else:
                     Obj.save()
                     context['message'] = 'Успешно создано'
             else:
-                Obj.price_dollar = str(int(Obj.price_dollar) - (int(obj.amount) * int(obj.price)))
+                Obj.price_dollar = str(float(Obj.price_dollar) - (float(obj.amount) * float(obj.price)))
                 if obj.type == 'Квартира':
                     obj.type = 'flat'
                 elif obj.type == 'Участка':
                     obj.type = 'plot'
                 obj.save()
 
-                if int(Obj.price_dollar) < 0:
+                if float(Obj.price_dollar) < 0:
                     context['message'] = 'Недостаточно средств'
                     obj.delete()
                 else:
@@ -72,7 +72,7 @@ class MaterialDetailView(LoginRequiredMixin, DetailView):
         except:
             context['message'] = 'Значения введены неверно'
             obj.delete()
-        context['pk'] = int(Object.objects.get(title=obj.obj).pk)
+        context['pk'] = Object.objects.get(title=obj.obj).pk
         
         
         return context
@@ -89,28 +89,28 @@ class SalaryDetailView(LoginRequiredMixin, DetailView):
         Obj = Object.objects.get(title=obj.obj)
         try:
             if obj.summ_or_dollar == 'суммы':
-                Obj.price_summ = str(int(Obj.price_summ) - int(obj.price))
+                Obj.price_summ = str(float(Obj.price_summ) - float(obj.price))
                 if obj.type == 'Квартира':
                     obj.type = 'flat'
                 elif obj.type == 'Участка':
                     obj.type = 'plot'
                 obj.save()
 
-                if int(Obj.price_summ) < 0:
+                if float(Obj.price_summ) < 0:
                     context['message'] = 'Недостаточно средств'
                     obj.delete()
                 else:
                     Obj.save()
                     context['message'] = 'Успешно создано'
             else:
-                Obj.price_dollar = str(int(Obj.price_dollar) - int(obj.price))
+                Obj.price_dollar = str(float(Obj.price_dollar) - float(obj.price))
                 if obj.type == 'Квартира':
                     obj.type = 'flat'
                 elif obj.type == 'Участка':
                     obj.type = 'plot'
                 obj.save()
 
-                if int(Obj.price_dollar) < 0:
+                if float(Obj.price_dollar) < 0:
                     context['message'] = 'Недостаточно средств'
                     obj.delete()
                 else:
@@ -119,7 +119,7 @@ class SalaryDetailView(LoginRequiredMixin, DetailView):
         except:
             context['message'] = 'Значения введены неверно'
             obj.delete()
-        context['pk'] = int(Object.objects.get(title=obj.obj).pk)
+        context['pk'] = Object.objects.get(title=obj.obj).pk
         
         
         return context

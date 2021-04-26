@@ -1,0 +1,101 @@
+{% extends "layout/basic.html" %}
+{% load static %}
+{% load index %}
+
+{% block link %}
+<link rel="stylesheet" href="{% static 'app/form.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'app/fixed.css' %}">
+{% endblock %}
+
+{% block active %}
+
+<nav class="dropdownmenu">
+    <ul>
+
+      <li><a style="padding: 10px 60px 10px 60px;">{{ type }}</a>
+        <ul id="submenyu">
+          <li><a href="{% url 'all_materials' 'Все' %}">Все</a></li>
+          <li><a href="{% url 'all_materials' 'flat' %}">Квартиры</a></li>
+          <li><a href="{% url 'all_materials' 'plot' %}">Участки</a></li>
+      
+        </ul>
+      </li>
+
+    </ul>
+</nav>
+
+{% endblock %}
+
+{% block section %}
+
+<div class="tbl-header">
+    <table cellpadding="0" cellspacing="0" border="0">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Измерение</th>
+                <th>Количество</th>
+                <th>Цена</th>
+                <th>Всего (сум)</th>
+                <th>Всего ($)</th>
+                <th>Объект</th>
+                <th>Дата</th>
+            
+            </tr>
+        </thead>
+    </table>
+</div>
+<div class="tbl-content">
+    <table cellpadding="0" cellspacing="0" border="0">
+        <tbody>
+            {% for m in materials %}
+            <tr>
+                <td>{{ m.title }}</td>
+                <td>{{ m.measurement }}</td>
+                <td>{{ m.amount }}</td>
+                <td>{{ m.price }}</td>
+                {% if m.summ_or_dollar == 'суммы' %}
+                <td>{{ total_amount|index:forloop.counter0 }}</td>
+                <td></td>
+                {% else %}
+                <td></td>
+                <td>{{ total_amount|index:forloop.counter0 }}</td>
+                {% endif %}
+                
+                
+                <td>{{ m.obj }}</td>
+                <td>{{ m.published|date:"d.m.Y" }}</td>
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="tbl-content">
+    <table cellpadding="0" cellspacing="0" border="0">
+        <tbody>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{ price_summ }}</td>
+                <td>{{ price_dollar }}</td>
+                
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>1$ = {{ currency }}</td>
+                <td>{{ summ_to_dollar }}$</td>
+                <td></td>
+                <td></td>
+                <td>Всего {{ overall }}$</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

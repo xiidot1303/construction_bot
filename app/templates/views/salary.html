@@ -64,7 +64,7 @@
                             <td>{{ s.summ_or_dollar }}</td>
                             <td>{{ s.price }}</td>
                             <td>{{ foreman }}</td>
-                            <td>{{ s.published }}</td>
+                            <td>{{ s.published|date:"d.m.Y" }}</td>
                             <td><a id = "a" href="{% url 'delete_salary' s.pk %}" onclick="return confirm(&#39;Вы уверены?&#39;)" class="btn btn-danger btn-flat"><i class="fas fa-trash" aria-hidden="true"></i></a></td>
                         </tr>
                         {% endfor %}

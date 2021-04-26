@@ -1,6 +1,6 @@
-def is_int(msg):
+def is_float(msg):
     try:
-        a = int(msg)
+        a = float(msg)
         return True
     except:
         return False

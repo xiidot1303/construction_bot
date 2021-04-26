@@ -29,12 +29,14 @@
     table-layout: fixed;
   }
   .tbl-header{
+    margin-top: 20px;
     background-color: rgba(31, 3, 99, 0.3);
    }
   .tbl-content{
-    height:600px;
+    height:auto;
+    max-height: 590px;
     overflow-x:auto;
-    margin-top: 0px;
+    margin-top: 10px;
     border: 1px solid rgba(60, 78, 128, 0.3);
   }
   th{

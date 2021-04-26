@@ -63,19 +63,24 @@ urlpatterns = [
 
     #material
     path('material/<str:obj>/', material, name='material'),
-    path('sort_material/<str:obj>/<str:type>/', sort_material, name='sort_material'),
+    path('sort_material/<str:obj>/<str:type>/', sort_material, name='sort_material'), # sort 
     path('delete_material/<int:pk>/', delete_material, name='delete_material'),
     path('create_material/<str:object>/', create_material, name='create_material'),
     path('update_material/<int:pk>/', MaterialEditView.as_view()),
     path('material_detail/<int:pk>/', MaterialDetailView.as_view()),
-    
+        #all
+    path('all_materials/<str:type>/', all_materials, name='all_materials'),
+
     #salary
     path('salary/<str:obj>/', salary, name='salary'),
-    path('sort_salary/<str:obj>/<str:title>/<str:type>/', sort_salary, name='sort_salary'),
+    path('sort_salary/<str:obj>/<str:title>/<str:type>/', sort_salary, name='sort_salary'), # sort
     path('delete_salary/<int:pk>/', delete_salary, name='delete_salary'),
     path('create_salary/<str:object>/', create_salary, name='create_salary'),
     path('update_salary/<int:pk>/', SalaryEditView.as_view()),
     path('salary_detail/<int:pk>/', SalaryDetailView.as_view()),
+        #all
+    path('all_salaries/<str:type>/', all_salaries, name='all_salaries'),
+
     #material_title
     path('material_titles', material_title, name='material_titles'),
     path('create_material_title', Material_titleCreateView.as_view(), name='create_material_title'),
@@ -85,6 +90,7 @@ urlpatterns = [
     path('salary_titles', salary_title, name='salary_titles'),
     path('create_salary_title', Salary_titleCreateView.as_view(), name='create_salary_title'),
     path('delete_salary_title/<int:pk>', delete_salary_title, name = 'delete_salary_title'),
+
 
     # get files
     path('get_excel/<str:file_path>', get_excel, name='get_excel'),

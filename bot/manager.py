@@ -10,7 +10,7 @@ basedir = os.path.abspath(os.path.dirname(''))
 load_dotenv(os.path.join(basedir, '.env'))
 MANAGER = os.environ.get('MANAGER')
 def enter_manager(update, context):
-    managers = list(map(int, MANAGER.split()))
+    managers = list(map(float, MANAGER.split()))
     if update.message.chat.id in managers:
         update.message.reply_text('Вы можете создать объекты и пополнить счёт прораба', reply_markup=ReplyKeyboardMarkup(keyboard=[['Создать объект', 'Пополнить счёт'], ['Создать материал', 'Создать иш хакки']], resize_keyboard=True))
         return MAIN_MENU_MANAGER
@@ -108,14 +108,14 @@ def send_trans_price(update, context):
     foreman = Foreman.objects.get(name=trans_obj.foreman)
     obj = Object.objects.get(title=trans_obj.object)
     if trans_obj.summ_or_dollar == 'Сумм':
-        foreman.account_summ = int(foreman.account_summ) + int(text)
+        foreman.account_summ = float(foreman.account_summ) + float(text)
         foreman.save()
-        obj.price_summ = int(obj.price_summ) - int(text)
+        obj.price_summ = float(obj.price_summ) - float(text)
         obj.save()
     else:
-        foreman.account_dollar = int(foreman.account_dollar) + int(text)
+        foreman.account_dollar = float(foreman.account_dollar) + float(text)
         foreman.save()
-        obj.price_dollar = int(obj.price_dollar) - int(text)    
+        obj.price_dollar = float(obj.price_dollar) - float(text)    
         obj.save()
     bot.send_message(update.message.chat.id, 'Успешно перенесено')
     enter_manager(update, context)
@@ -174,7 +174,7 @@ def create_material_select_measurement(update, context):
 
 def create_material_send_amount(update, context):
     if update.message.text != '/manager':
-        if not is_int(update.message.text):
+        if not is_float(update.message.text):
             update.message.reply_text('Неверное значение\nВведите количество')
             return CREATE_MATERIAL_SEND_AMOUNT
         obj = Material.objects.get(user_id=update.message.chat.id, amount=None)
@@ -192,7 +192,7 @@ def create_material_send_summ_or_dollar_material(update, context):
 
 def create_material_send_price_material(update, context):
     if update.message.text != '/manager':   
-        if not is_int(update.message.text):
+        if not is_float(update.message.text):
             update.message.reply_text('Неверное значение\nВведите цену')
             return CREATE_MATERIAL_SEND_PRICE_MATERIAL
         bot = context.bot
@@ -202,8 +202,8 @@ def create_material_send_price_material(update, context):
         Obj = Object.objects.get(title=material_obj.obj)
         foreman = Foreman.objects.get(obj__title=material_obj.obj)
         if material_obj.summ_or_dollar == 'суммы':
-            Obj.price_summ = str(int(Obj.price_summ) - (int(material_obj.amount) * int(material_obj.price)))
-            if int(Obj.price_summ) < 0:
+            Obj.price_summ = str(float(Obj.price_summ) - (float(material_obj.amount) * float(material_obj.price)))
+            if float(Obj.price_summ) < 0:
                 bot.send_message(update.message.chat.id, 'Недостаточно средств')
                 material_obj.delete()
             else:
@@ -211,8 +211,8 @@ def create_material_send_price_material(update, context):
                 Obj.save()
                 bot.send_message(update.message.chat.id, 'Успешно создан новый материал')
         else:
-            Obj.price_dollar = str(int(Obj.price_dollar) - (int(material_obj.amount) * int(material_obj.price)))
-            if int(Obj.price_dollar) < 0:
+            Obj.price_dollar = str(float(Obj.price_dollar) - (float(material_obj.amount) * float(material_obj.price)))
+            if float(Obj.price_dollar) < 0:
                 bot.send_message(update.message.chat.id, 'Недостаточно средств')
                 material_obj.delete()
             else:
@@ -274,7 +274,7 @@ def create_salary_send_summ_or_dollar_salary(update, context):
 
 def create_salary_send_price_salary(update, context):
     if update.message.text != '/manager':
-        if not is_int(update.message.text):
+        if not is_float(update.message.text):
             update.message.reply_text('Неверное значение\nВведите цену')
             return CREATE_SALARY_SEND_PRICE_SALARY
         bot = context.bot
@@ -285,8 +285,8 @@ def create_salary_send_price_salary(update, context):
         Obj = Object.objects.get(title=obj.obj)
         foreman = Foreman.objects.get(obj__title=obj.obj)
         if obj.summ_or_dollar == 'суммы':
-            Obj.price_summ = str(int(Obj.price_summ) - (int(update.message.text)))
-            if int(Obj.price_summ) < 0:
+            Obj.price_summ = str(float(Obj.price_summ) - (float(update.message.text)))
+            if float(Obj.price_summ) < 0:
                 bot.send_message(update.message.chat.id, 'Недостаточно средств')
                 obj.delete()
             else:
@@ -294,8 +294,8 @@ def create_salary_send_price_salary(update, context):
                 Obj.save()
                 bot.send_message(update.message.chat.id, 'Успешно создан новый иш хакки')
         else:
-            Obj.price_dollar = str(int(Obj.price_dollar) - (int(update.message.text)))        
-            if int(Obj.price_dollar) < 0:
+            Obj.price_dollar = str(float(Obj.price_dollar) - (float(update.message.text)))        
+            if float(Obj.price_dollar) < 0:
                 bot.send_message(update.message.chat.id, 'Недостаточно средств')
                 obj.delete()
             else:

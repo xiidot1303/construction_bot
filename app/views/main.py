@@ -6,6 +6,8 @@ from django.http import HttpResponse, FileResponse
 from dotenv import load_dotenv
 import os
 from app.models import *
+from bs4 import BeautifulSoup
+import requests
 import json
 from django.contrib.auth.decorators import login_required
 import pandas as pd
@@ -54,7 +56,7 @@ def material(request, obj):
         m.delete()
 
     materials = Material.objects.filter(obj=obj)
-    total_amount = [str(int(i.amount)*int(i.price)) for i in materials]
+    total_amount = [str(float(i.amount)*float(i.price)) for i in materials]
     foreman = Foreman.objects.get(obj__title=obj).name
 
     # ________create excel file
@@ -83,7 +85,7 @@ def sort_material(request, obj, type):
         m.delete()
 
     materials = Material.objects.filter(obj=obj, type=type)
-    total_amount = [str(int(i.amount)*int(i.price)) for i in materials]
+    total_amount = [str(float(i.amount)*float(i.price)) for i in materials]
     foreman = Foreman.objects.get(obj__title=obj).name
 
     # ________create excel file
@@ -130,8 +132,8 @@ def salary(request, obj):
     df = pd.DataFrame(df)
     df.to_excel('files/excel/salary_{}.xlsx'.format(obj))
     allsalaries = Salary.objects.all()
-    overall_price_summ = sum([int(i.price) for i in salaries.filter(summ_or_dollar='суммы')])
-    overall_price_dollar = sum([int(i.price) for i in salaries.filter(summ_or_dollar='доллары')])
+    overall_price_summ = sum([float(i.price) for i in salaries.filter(summ_or_dollar='суммы')])
+    overall_price_dollar = sum([float(i.price) for i in salaries.filter(summ_or_dollar='доллары')])
     context = {'salaries': salaries, 'file_path': 'salary_{}'.format(obj), 'foreman': foreman, 'type': 'Все', 'type_for_filter': 'Все'
     ,'obj': obj, 'title': 'Все', 'allsalaries': allsalaries, 'overall_price_summ': overall_price_summ, 'overall_price_dollar': overall_price_dollar}
     return render(request, 'views/salary.html', context)
@@ -175,8 +177,8 @@ def sort_salary(request, obj, title, type):
             allsalaries.append(i)
             l.append(i.title)
     import math
-    overall_price_summ = sum([int(i.price) for i in salaries.filter(summ_or_dollar='суммы')])
-    overall_price_dollar = sum([int(i.price) for i in salaries.filter(summ_or_dollar='доллары')])
+    overall_price_summ = sum([float(i.price) for i in salaries.filter(summ_or_dollar='суммы')])
+    overall_price_dollar = sum([float(i.price) for i in salaries.filter(summ_or_dollar='доллары')])
     context = {'salaries': salaries, 'file_path': 'salary_{}'.format(obj), 'foreman': foreman, 'type_for_filter': type_for_filter, 'type': type, 
     'obj': obj, 'title': title, 'allsalaries': allsalaries, 'overall_price_summ': overall_price_summ, 'overall_price_dollar': overall_price_dollar}
     return render(request, 'views/salary.html', context)
@@ -225,3 +227,60 @@ def salary_title(request):
     one_to_three = list(range(3))
     context = {'titles': titles, 'count': one_to_three}
     return render(request, 'views/salary_titles.html', context)
+
+@login_required
+def all_materials(request, type):
+    if type == 'Все':
+        materials = Material.objects.all()
+    else:
+        materials = Material.objects.filter(type=type)
+    total_amount = [str(float(i.amount)*float(i.price)) for i in materials]
+    type_for_filter = 'Все'
+    if type == 'flat':
+        type_for_filter = 'Квартиры'
+    elif type == 'plot':
+        type_for_filter = 'Участки'
+    price_summ = sum([float(i.amount)*float(i.price) for i in materials.filter(summ_or_dollar='суммы')])
+    price_dollar = sum([float(i.amount)*float(i.price) for i in materials.filter(summ_or_dollar='доллары')])
+    #### find currency
+    url = 'https://bank.uz/currency'
+    content = BeautifulSoup(requests.get(url).content, features='lxml')
+    top_left = content.find('div', {'class':"diogram-top-left"})
+    ul = top_left.find('ul', {'class': 'nav nav-tabs'})
+    tabs_a = ul.find('div', {'class': 'tabs-a'})
+    text = tabs_a.find_all('span', {'class': "medium-text"})
+    currency = float(text[1].text.replace(' ', ''))
+    #_________
+    summ_to_dollar = round(float(price_summ / currency), 4)
+    overall = price_dollar + summ_to_dollar
+    context = {'materials': materials, 'type': type_for_filter, 'total_amount': total_amount, 'price_summ': price_summ, 'price_dollar': price_dollar,
+    'currency': currency, 'summ_to_dollar': summ_to_dollar, 'overall': overall}
+    return render(request, 'views/all_materials.html', context)
+
+def all_salaries(request, type):
+    if type == 'Все':
+        salaries = Salary.objects.all()
+    else:
+        salaries = Salary.objects.filter(type=type)
+    
+    type_for_filter = 'Все'
+    if type == 'flat':
+        type_for_filter = 'Квартиры'
+    elif type == 'plot':
+        type_for_filter = 'Участки'
+    price_summ = sum([float(i.price) for i in salaries.filter(summ_or_dollar='суммы')])
+    price_dollar = sum([float(i.price) for i in salaries.filter(summ_or_dollar='доллары')])
+    #### find currency
+    url = 'https://bank.uz/currency'
+    content = BeautifulSoup(requests.get(url).content, features='lxml')
+    top_left = content.find('div', {'class':"diogram-top-left"})
+    ul = top_left.find('ul', {'class': 'nav nav-tabs'})
+    tabs_a = ul.find('div', {'class': 'tabs-a'})
+    text = tabs_a.find_all('span', {'class': "medium-text"})
+    currency = float(text[1].text.replace(' ', ''))
+    #_________
+    summ_to_dollar = round(float(price_summ / currency), 4)
+    overall = price_dollar + summ_to_dollar
+    context = {'salaries': salaries, 'type': type_for_filter, 'price_summ': price_summ, 'price_dollar': price_dollar,
+    'currency': currency, 'summ_to_dollar': summ_to_dollar, 'overall': overall}
+    return render(request, 'views/all_salaries.html', context)
