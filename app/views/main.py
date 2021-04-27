@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from telegram import Update
 from bot.update import dp, updater
+from functions.get_currency import currency
 from django.http import HttpResponse, FileResponse
 from dotenv import load_dotenv
 import os
@@ -57,24 +58,49 @@ def material(request, obj):
 
     materials = Material.objects.filter(obj=obj)
     total_amount = [str(float(i.amount)*float(i.price)) for i in materials]
-    foreman = Foreman.objects.get(obj__title=obj).name
-
+    price_summ = sum([float(i.amount)*float(i.price) for i in materials.filter(summ_or_dollar='суммы')])
+    price_dollar = sum([float(i.amount)*float(i.price) for i in materials.filter(summ_or_dollar='доллары')])
+    summ_to_dollar = round(float(price_summ / currency()), 4)
+    overall = price_dollar + summ_to_dollar
     # ________create excel file
-    df = {'Название': [], 'Измерение': [], 'Количество': [], 'Суммы или доллары': [], 'Цена': [], 'Общая сумма': [], 'Прораб': [], 'Дата': []}
+    df = {'№': [], 'Название': [], 'Измерение': [], 'Количество': [], 'Цена': [], 'Всего (сум)': [], 'Всего ($)': [], 'Дата': []}
     
     #add title
+    df['№'] = [i for i in range(1, len(materials)+1)]
     df['Название'] = [i.title for i in materials]
     df['Измерение'] = [i.measurement for i in materials]
     df['Количество'] = [i.amount for i in materials]
-    df['Суммы или доллары'] = [i.summ_or_dollar for i in materials]
     df['Цена'] = [i.price for i in materials]
-    df['Общая сумма'] = [i for i in total_amount]
-    df['Прораб'] = [foreman for i in materials]
+    n = 0
+    for i in materials:
+        if i.summ_or_dollar == 'суммы':
+            df['Всего (сум)'].append(str(total_amount[n]))
+            df['Всего ($)'].append(' ')
+        else:
+            df['Всего (сум)'].append(' ')
+            df['Всего ($)'].append(str(total_amount[n]))
+
+        n += 1
+
+    
     df['Дата'] = [i.published.strftime('%d.%m.%Y') for i in materials]
-    df = pd.DataFrame(df)
+    df['Цена'].append(' ')
+    df['Цена'].append(str(currency()))
+    df['Всего (сум)'].append(str(price_summ))
+    df['Всего (сум)'].append(str(summ_to_dollar))
+    df['Всего (сум)'].append('$'+str(overall))
+    df['Всего ($)'].append(str(price_dollar))
+    for a in df:
+        while len(df[a]) != len(df['Всего (сум)']):
+            df[a].append(' ')
+    df = pd.DataFrame(df).set_index('№')
+
+
     df.to_excel('files/excel/material_{}.xlsx'.format(obj))
     #_________
-    context = {'materials': materials, 'total_amount': total_amount, 'file_path': 'material_{}'.format(obj), 'foreman': foreman, 'type': 'Все', 'obj': obj}
+    context = {'materials': materials, 'total_amount': total_amount, 'file_path': 'material_{}'.format(obj), 'type': 'Все', 'obj': obj,
+    'price_summ': price_summ, 'price_dollar': price_dollar,
+    'currency': currency, 'summ_to_dollar': summ_to_dollar, 'overall': overall}
     return render(request, 'views/material.html', context)
 
 
@@ -86,21 +112,43 @@ def sort_material(request, obj, type):
 
     materials = Material.objects.filter(obj=obj, type=type)
     total_amount = [str(float(i.amount)*float(i.price)) for i in materials]
-    foreman = Foreman.objects.get(obj__title=obj).name
+    price_summ = sum([float(i.amount)*float(i.price) for i in materials.filter(summ_or_dollar='суммы')])
+    price_dollar = sum([float(i.amount)*float(i.price) for i in materials.filter(summ_or_dollar='доллары')])
+    summ_to_dollar = round(float(price_summ / currency()), 4)
+    overall = price_dollar + summ_to_dollar
 
     # ________create excel file
-    df = {'Название': [], 'Измерение': [], 'Количество': [], 'Суммы или доллары': [], 'Цена': [], 'Общая сумма': [], 'Прораб': [], 'Дата': []}
+    df = {'№': [], 'Название': [], 'Измерение': [], 'Количество': [], 'Цена': [], 'Всего (сум)': [], 'Всего ($)': [], 'Дата': []}
     
     #add title
+    df['№'] = [i for i in range(1, len(materials)+1)]
     df['Название'] = [i.title for i in materials]
     df['Измерение'] = [i.measurement for i in materials]
     df['Количество'] = [i.amount for i in materials]
-    df['Суммы или доллары'] = [i.summ_or_dollar for i in materials]
     df['Цена'] = [i.price for i in materials]
-    df['Общая сумма'] = [i for i in total_amount]
-    df['Прораб'] = [foreman for i in materials]
+    n = 0
+    for i in materials:
+        if i.summ_or_dollar == 'суммы':
+            df['Всего (сум)'].append(str(total_amount[n]))
+            df['Всего ($)'].append(' ')
+        else:
+            df['Всего (сум)'].append(' ')
+            df['Всего ($)'].append(str(total_amount[n]))
+
+        n += 1
+
+    
     df['Дата'] = [i.published.strftime('%d.%m.%Y') for i in materials]
-    df = pd.DataFrame(df)
+    df['Цена'].append(' ')
+    df['Цена'].append(str(currency()))
+    df['Всего (сум)'].append(str(price_summ))
+    df['Всего (сум)'].append(str(summ_to_dollar))
+    df['Всего (сум)'].append('$'+str(overall))
+    df['Всего ($)'].append(str(price_dollar))
+    for a in df:
+        while len(df[a]) != len(df['Всего (сум)']):
+            df[a].append(' ')
+    df = pd.DataFrame(df).set_index('№')
     df.to_excel('files/excel/material_{}.xlsx'.format(obj))
     #_________
     type_for_filter = 'Все'
@@ -109,7 +157,9 @@ def sort_material(request, obj, type):
     elif type == 'plot':
         type_for_filter = 'Участки'
 
-    context = {'materials': materials, 'total_amount': total_amount, 'file_path': 'material_{}'.format(obj), 'foreman': foreman, 'type': type_for_filter, 'obj': obj}
+    context = {'materials': materials, 'total_amount': total_amount, 'file_path': 'material_{}'.format(obj), 'type': type_for_filter, 'obj': obj,
+    'price_summ': price_summ, 'price_dollar': price_dollar,
+    'currency': currency, 'summ_to_dollar': summ_to_dollar, 'overall': overall}
     return render(request, 'views/material.html', context)
 
 
@@ -121,21 +171,46 @@ def salary(request, obj):
         m.delete()
      
     salaries = Salary.objects.filter(obj=obj)
-    df = {'Название': [], 'Суммы или доллары': [], 'Цена': [], 'Прораб': [], 'Дата': []}
-    foreman = Foreman.objects.get(obj__title=obj).name
+    
+    price_summ = sum([float(i.price) for i in salaries.filter(summ_or_dollar='суммы')])
+    price_dollar = sum([float(i.price) for i in salaries.filter(summ_or_dollar='доллары')])
+    summ_to_dollar = round(float(price_summ / currency()), 4)
+    overall = price_dollar + summ_to_dollar
+    #___to excel
+    df = {'№': [], 'Название': [], 'Цена (сум)': [], 'Цена ($)': [], 'Дата': []}
+ 
     #add title
+    df['№'] = [i for i in range(1, len(salaries)+1)]
     df['Название'] = [i.title for i in salaries]
-    df['Суммы или доллары'] = [i.summ_or_dollar for i in salaries]
-    df['Цена'] = [i.price for i in salaries]
-    df['Прораб'] = [foreman for i in salaries]
+    for i in salaries:
+        if i.summ_or_dollar == 'суммы':
+            df['Цена (сум)'].append(str(i.price))
+            df['Цена ($)'].append(' ')
+        else:
+            df['Цена (сум)'].append(' ')
+            df['Цена ($)'].append(str(i.price))
+
     df['Дата'] = [i.published.strftime('%d.%m.%Y') for i in salaries]
-    df = pd.DataFrame(df)
+    
+    df['Название'].append(' ')
+    df['Название'].append(str(currency()))
+    df['Цена (сум)'].append(str(price_summ))
+    df['Цена (сум)'].append(str(summ_to_dollar))
+    df['Цена (сум)'].append('$'+str(overall))
+    df['Цена ($)'].append(str(price_dollar))
+    for a in df:
+        while len(df[a]) != len(df['Цена (сум)']):
+            df[a].append(' ')
+    
+    df = pd.DataFrame(df).set_index('№')
+
     df.to_excel('files/excel/salary_{}.xlsx'.format(obj))
     allsalaries = Salary.objects.all()
-    overall_price_summ = sum([float(i.price) for i in salaries.filter(summ_or_dollar='суммы')])
-    overall_price_dollar = sum([float(i.price) for i in salaries.filter(summ_or_dollar='доллары')])
-    context = {'salaries': salaries, 'file_path': 'salary_{}'.format(obj), 'foreman': foreman, 'type': 'Все', 'type_for_filter': 'Все'
-    ,'obj': obj, 'title': 'Все', 'allsalaries': allsalaries, 'overall_price_summ': overall_price_summ, 'overall_price_dollar': overall_price_dollar}
+
+    context = {'salaries': salaries, 'file_path': 'salary_{}'.format(obj), 'type': 'Все', 'type_for_filter': 'Все'
+    ,'obj': obj, 'title': 'Все', 'allsalaries': allsalaries,
+    'price_summ': price_summ, 'price_dollar': price_dollar,
+    'currency': currency, 'summ_to_dollar': summ_to_dollar, 'overall': overall}
     return render(request, 'views/salary.html', context)
 
 
@@ -155,15 +230,38 @@ def sort_salary(request, obj, title, type):
             salaries = Salary.objects.filter(obj=obj, type=type)
         else:
             salaries = Salary.objects.filter(obj=obj, type=type, title=title)
-    df = {'Название': [], 'Суммы или доллары': [], 'Цена': [], 'Прораб': [], 'Дата': []}
-    foreman = Foreman.objects.get(obj__title=obj).name
+    
+    price_summ = sum([float(i.price) for i in salaries.filter(summ_or_dollar='суммы')])
+    price_dollar = sum([float(i.price) for i in salaries.filter(summ_or_dollar='доллары')])
+    summ_to_dollar = round(float(price_summ / currency()), 4)
+    overall = price_dollar + summ_to_dollar
+    #___to excel
+    df = {'№': [], 'Название': [], 'Цена (сум)': [], 'Цена ($)': [], 'Дата': []}
+ 
     #add title
+    df['№'] = [i for i in range(1, len(salaries)+1)]
     df['Название'] = [i.title for i in salaries]
-    df['Суммы или доллары'] = [i.summ_or_dollar for i in salaries]
-    df['Цена'] = [i.price for i in salaries]
-    df['Прораб'] = [foreman for i in salaries]
+    for i in salaries:
+        if i.summ_or_dollar == 'суммы':
+            df['Цена (сум)'].append(str(i.price))
+            df['Цена ($)'].append(' ')
+        else:
+            df['Цена (сум)'].append(' ')
+            df['Цена ($)'].append(str(i.price))
+
     df['Дата'] = [i.published.strftime('%d.%m.%Y') for i in salaries]
-    df = pd.DataFrame(df)
+    
+    df['Название'].append(' ')
+    df['Название'].append(str(currency()))
+    df['Цена (сум)'].append(str(price_summ))
+    df['Цена (сум)'].append(str(summ_to_dollar))
+    df['Цена (сум)'].append('$'+str(overall))
+    df['Цена ($)'].append(str(price_dollar))
+    for a in df:
+        while len(df[a]) != len(df['Цена (сум)']):
+            df[a].append(' ')
+    
+    df = pd.DataFrame(df).set_index('№')
     df.to_excel('files/excel/salary_{}.xlsx'.format(obj))
     type_for_filter = 'Все'
     if type == 'flat':
@@ -176,11 +274,12 @@ def sort_salary(request, obj, title, type):
         if not i.title in l:
             allsalaries.append(i)
             l.append(i.title)
-    import math
-    overall_price_summ = sum([float(i.price) for i in salaries.filter(summ_or_dollar='суммы')])
-    overall_price_dollar = sum([float(i.price) for i in salaries.filter(summ_or_dollar='доллары')])
-    context = {'salaries': salaries, 'file_path': 'salary_{}'.format(obj), 'foreman': foreman, 'type_for_filter': type_for_filter, 'type': type, 
-    'obj': obj, 'title': title, 'allsalaries': allsalaries, 'overall_price_summ': overall_price_summ, 'overall_price_dollar': overall_price_dollar}
+
+
+    context = {'salaries': salaries, 'file_path': 'salary_{}'.format(obj), 'type_for_filter': type_for_filter, 'type': type, 
+    'obj': obj, 'title': title, 'allsalaries': allsalaries,
+    'price_summ': price_summ, 'price_dollar': price_dollar,
+    'currency': currency, 'summ_to_dollar': summ_to_dollar, 'overall': overall}
     return render(request, 'views/salary.html', context)
 
 

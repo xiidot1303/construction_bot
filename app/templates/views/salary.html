@@ -34,9 +34,9 @@
 <div class="row add-button">
     <div class="col-xs-4">
            <a href="{% url 'get_excel' file_path %}" class="btn btn-flat bg-orange"><i class="fas fa-file-excel-o"></i>Скачать Excel</a>
-           <form style="padding: 10px;">
+           <!-- <form style="padding: 10px;">
             <label>Названия</label><input id="search" type="text" value="{{ title }}"><a id = "url" style="background-color: rgb(252, 52, 52); font-size: 15px; color: black;">поиск</a>
-          </form>
+          </form> -->
        </div>
 </div>
 <div class="row" style="width: 80em;">
@@ -47,9 +47,9 @@
                     <thead>
                         <tr>
                             <th>Название</th>
-                            <th>Суммы или доллары</th>
-                            <th>Цена</th>
-                            <th>Прораб</th>
+                            <th>Цена (сум)</th>
+                            <th>Цена ($)</th>
+                            <th>Объект</th>
                             <th>Дата</th>
                             <th>Действия</th>
                             
@@ -61,29 +61,36 @@
                         {% for s in salaries %}
                         <tr>
                             <td>{{ s.title }}</td>
-                            <td>{{ s.summ_or_dollar }}</td>
+                            {% if s.summ_or_dollar == 'суммы' %}
                             <td>{{ s.price }}</td>
-                            <td>{{ foreman }}</td>
+                            <td></td>
+                            {% else %}
+                            <td></td>
+                            <td>{{ s.price }}</td>
+                            {% endif %}
+                            
+                            
+                            <td>{{ s.obj }}</td>
                             <td>{{ s.published|date:"d.m.Y" }}</td>
                             <td><a id = "a" href="{% url 'delete_salary' s.pk %}" onclick="return confirm(&#39;Вы уверены?&#39;)" class="btn btn-danger btn-flat"><i class="fas fa-trash" aria-hidden="true"></i></a></td>
                         </tr>
                         {% endfor %}
                         {% if salaries %}
                         <tr>
-                            <th>Общая цена (суммы)</th>
-                            <td></td>
-                            <th>{{ overall_price_summ }}</th>
+                            <th></th>
+                            <th>{{ price_summ }}</th>
+                            <th>{{ price_dollar }}</th>
                             <td></td>
                             <td></td>
                             <td></td>
                             
                         </tr>
                         <tr>
-                            <th>Общая цена (доллары)</th>
-                            <td></td>
+                            <th>1$ = {{ currency }}</th>
+                            <th>{{ summ_to_dollar }}$</th>
                             <th>{{ overall_price_dollar }}</th>
-                            <td></td>
-                            <td></td>
+                            <th>Всего {{ overall }}$</th>
+                            <th></th>
                             <td></td>
                             
                         </tr>

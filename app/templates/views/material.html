@@ -44,10 +44,10 @@
                             <th>Название</th>
                             <th>Измерение</th>
                             <th>Количество</th>
-                            <th>Суммы или доллары</th>
                             <th>Цена</th>
-                            <th>Общая сумма</th>
-                            <th>Прораб</th>
+                            <th>Всего (сум)</th>
+                            <th>Всего ($)</th>
+                            
                             <th>Дата</th>
                             <th>Действия</th>
                             
@@ -59,15 +59,45 @@
                             <td>{{ m.title }}</td>
                             <td>{{ m.measurement }}</td>
                             <td>{{ m.amount }}</td>
-                            <td>{{ m.summ_or_dollar }}</td>
                             <td>{{ m.price }}</td>
-                            
+                            {% if m.summ_or_dollar == 'суммы' %}
                             <td>{{ total_amount|index:forloop.counter0 }}</td>
-                            <td>{{ foreman }}</td>
+                            <td></td>
+                            {% else %}
+                            <td></td>
+                            <td>{{ total_amount|index:forloop.counter0 }}</td>
+                            {% endif %}
+                            
+                            
+                
                             <td>{{ m.published|date:"d.m.Y" }}</td>
                             <td><a id = "a" href="{% url 'delete_material' m.pk %}" onclick="return confirm(&#39;Вы уверены?&#39;)" class="btn btn-danger btn-flat"><i class="fas fa-trash" aria-hidden="true"></i></a></td>
                         </tr>
                         {% endfor %}
+                        {% if materials %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <th>{{ price_summ }}</th>
+                            <th>{{ price_dollar }}</th>
+                            
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <th>1$ = {{ currency }}</th>
+                            <th>{{ summ_to_dollar }}$</th>
+                            <td></td>
+                            <td></td>
+                            <th>Всего {{ overall }}$</th>
+                        </tr>
+                        {% else %}
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
