@@ -38,7 +38,6 @@ class MaterialDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         obj = context['object']
-        foreman = Foreman.objects.get(obj__title=obj.obj)
         Obj = Object.objects.get(title=obj.obj)
         try:
             if obj.summ_or_dollar == 'суммы':
@@ -85,7 +84,7 @@ class SalaryDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         obj = context['object']
-        foreman = Foreman.objects.get(obj__title=obj.obj)
+    
         Obj = Object.objects.get(title=obj.obj)
         try:
             if obj.summ_or_dollar == 'суммы':

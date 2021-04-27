@@ -200,14 +200,14 @@ def create_material_send_price_material(update, context):
         material_obj.price = update.message.text
         material_obj.save()
         Obj = Object.objects.get(title=material_obj.obj)
-        foreman = Foreman.objects.get(obj__title=material_obj.obj)
+       
         if material_obj.summ_or_dollar == 'суммы':
             Obj.price_summ = str(float(Obj.price_summ) - (float(material_obj.amount) * float(material_obj.price)))
             if float(Obj.price_summ) < 0:
                 bot.send_message(update.message.chat.id, 'Недостаточно средств')
                 material_obj.delete()
             else:
-                foreman.save()
+           
                 Obj.save()
                 bot.send_message(update.message.chat.id, 'Успешно создан новый материал')
         else:
@@ -216,7 +216,7 @@ def create_material_send_price_material(update, context):
                 bot.send_message(update.message.chat.id, 'Недостаточно средств')
                 material_obj.delete()
             else:
-                foreman.save()
+        
                 Obj.save()
                 bot.send_message(update.message.chat.id, 'Успешно создан новый материал')
         
@@ -283,14 +283,14 @@ def create_salary_send_price_salary(update, context):
         obj.price = update.message.text
         obj.save()
         Obj = Object.objects.get(title=obj.obj)
-        foreman = Foreman.objects.get(obj__title=obj.obj)
+  
         if obj.summ_or_dollar == 'суммы':
             Obj.price_summ = str(float(Obj.price_summ) - (float(update.message.text)))
             if float(Obj.price_summ) < 0:
                 bot.send_message(update.message.chat.id, 'Недостаточно средств')
                 obj.delete()
             else:
-                foreman.save()
+        
                 Obj.save()
                 bot.send_message(update.message.chat.id, 'Успешно создан новый иш хакки')
         else:
@@ -299,7 +299,7 @@ def create_salary_send_price_salary(update, context):
                 bot.send_message(update.message.chat.id, 'Недостаточно средств')
                 obj.delete()
             else:
-                foreman.save()
+      
                 Obj.save()
                 bot.send_message(update.message.chat.id, 'Успешно создан новый иш хакки')
         

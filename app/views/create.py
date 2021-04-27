@@ -24,16 +24,14 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
 
 
 def create_material(request, object):
-    login = Foreman.objects.get(obj__title=object).login
-    user_id = Bot_users.objects.get(login=login).user_id
+
     m = Material.objects.create(obj=object)
     return redirect('/update_material/{}'.format(str(m.pk)))
 
 
 
 def create_salary(request, object):
-    login = Foreman.objects.get(obj__title=object).login
-    user_id = Bot_users.objects.get(login=login).user_id
+
     m = Salary.objects.create(obj=object)
     return redirect('/update_salary/{}'.format(str(m.pk)))
 
