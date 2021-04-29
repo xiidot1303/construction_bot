@@ -203,22 +203,14 @@ def create_material_send_price_material(update, context):
        
         if material_obj.summ_or_dollar == 'суммы':
             Obj.price_summ = str(float(Obj.price_summ) - (float(material_obj.amount) * float(material_obj.price)))
-            if float(Obj.price_summ) < 0:
-                bot.send_message(update.message.chat.id, 'Недостаточно средств')
-                material_obj.delete()
-            else:
-           
-                Obj.save()
-                bot.send_message(update.message.chat.id, 'Успешно создан новый материал')
+            
+            Obj.save()
+            bot.send_message(update.message.chat.id, 'Успешно создан новый материал')
         else:
             Obj.price_dollar = str(float(Obj.price_dollar) - (float(material_obj.amount) * float(material_obj.price)))
-            if float(Obj.price_dollar) < 0:
-                bot.send_message(update.message.chat.id, 'Недостаточно средств')
-                material_obj.delete()
-            else:
         
-                Obj.save()
-                bot.send_message(update.message.chat.id, 'Успешно создан новый материал')
+            Obj.save()
+            bot.send_message(update.message.chat.id, 'Успешно создан новый материал')
         
         bot.send_message(update.message.chat.id, 'Вы можете создать объекты и пополнить счёт прораба', reply_markup=ReplyKeyboardMarkup(keyboard=[['Создать объект', 'Пополнить счёт'], ['Создать материал', 'Создать иш хакки']], resize_keyboard=True))
         return MAIN_MENU_MANAGER
@@ -286,22 +278,14 @@ def create_salary_send_price_salary(update, context):
   
         if obj.summ_or_dollar == 'суммы':
             Obj.price_summ = str(float(Obj.price_summ) - (float(update.message.text)))
-            if float(Obj.price_summ) < 0:
-                bot.send_message(update.message.chat.id, 'Недостаточно средств')
-                obj.delete()
-            else:
-        
-                Obj.save()
-                bot.send_message(update.message.chat.id, 'Успешно создан новый иш хакки')
+            
+            Obj.save()
+            bot.send_message(update.message.chat.id, 'Успешно создан новый иш хакки')
         else:
             Obj.price_dollar = str(float(Obj.price_dollar) - (float(update.message.text)))        
-            if float(Obj.price_dollar) < 0:
-                bot.send_message(update.message.chat.id, 'Недостаточно средств')
-                obj.delete()
-            else:
-      
-                Obj.save()
-                bot.send_message(update.message.chat.id, 'Успешно создан новый иш хакки')
+     
+            Obj.save()
+            bot.send_message(update.message.chat.id, 'Успешно создан новый иш хакки')
         
 
         

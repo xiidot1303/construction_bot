@@ -45,20 +45,22 @@ class ForemanForm(ModelForm):
 class ClientForm(ModelForm):
     class Meta:
         model = Client
-        fields = {'name', 'login', 'password', 'obj'}
+        fields = {'name', 'login', 'password', 'obj', 'type'}
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'login': forms.TextInput(attrs={'class': 'form-control'}),
             'password': forms.TextInput(attrs={'class': 'form-control'}),
-            'obj': forms.SelectMultiple(attrs={'class': 'form-control'})
+            'obj': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            'type': forms.Select(attrs={'class': 'form-control'}, choices=[('Квартира', 'Квартира'), ('Участка', 'Участка')]),
         }
         labels = {
             'name': 'Имя',
             'login': 'Логин',
             'password': 'Пароль',
-            'obj': 'Объекты'
+            'obj': 'Объекты',
+            'type': 'Тип'
         }
-    field_order = ['name', 'login', 'password', 'obj']
+    field_order = ['name', 'login', 'password', 'type', 'obj']
 
 
 

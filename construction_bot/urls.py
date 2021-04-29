@@ -91,6 +91,8 @@ urlpatterns = [
     path('create_salary_title', Salary_titleCreateView.as_view(), name='create_salary_title'),
     path('delete_salary_title/<int:pk>', delete_salary_title, name = 'delete_salary_title'),
 
+    #reports
+    path('report_foreman/<str:foreman>/', report_foreman, name='report_foreman'),
 
     # get files
     path('get_excel/<str:file_path>', get_excel, name='get_excel'),

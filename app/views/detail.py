@@ -48,12 +48,9 @@ class MaterialDetailView(LoginRequiredMixin, DetailView):
                     obj.type = 'plot'
                 obj.save()
 
-                if float(Obj.price_summ) < 0:
-                    context['message'] = 'Недостаточно средств'
-                    obj.delete()
-                else:
-                    Obj.save()
-                    context['message'] = 'Успешно создано'
+                
+                Obj.save()
+                context['message'] = 'Успешно создано'
             else:
                 Obj.price_dollar = str(float(Obj.price_dollar) - (float(obj.amount) * float(obj.price)))
                 if obj.type == 'Квартира':
@@ -62,12 +59,8 @@ class MaterialDetailView(LoginRequiredMixin, DetailView):
                     obj.type = 'plot'
                 obj.save()
 
-                if float(Obj.price_dollar) < 0:
-                    context['message'] = 'Недостаточно средств'
-                    obj.delete()
-                else:
-                    Obj.save()
-                    context['message'] = 'Успешно создано'
+                Obj.save()
+                context['message'] = 'Успешно создано'
         except:
             context['message'] = 'Значения введены неверно'
             obj.delete()
@@ -95,12 +88,8 @@ class SalaryDetailView(LoginRequiredMixin, DetailView):
                     obj.type = 'plot'
                 obj.save()
 
-                if float(Obj.price_summ) < 0:
-                    context['message'] = 'Недостаточно средств'
-                    obj.delete()
-                else:
-                    Obj.save()
-                    context['message'] = 'Успешно создано'
+                Obj.save()
+                context['message'] = 'Успешно создано'
             else:
                 Obj.price_dollar = str(float(Obj.price_dollar) - float(obj.price))
                 if obj.type == 'Квартира':
@@ -109,12 +98,8 @@ class SalaryDetailView(LoginRequiredMixin, DetailView):
                     obj.type = 'plot'
                 obj.save()
 
-                if float(Obj.price_dollar) < 0:
-                    context['message'] = 'Недостаточно средств'
-                    obj.delete()
-                else:
-                    Obj.save()
-                    context['message'] = 'Успешно создано'
+                Obj.save()
+                context['message'] = 'Успешно создано'
         except:
             context['message'] = 'Значения введены неверно'
             obj.delete()

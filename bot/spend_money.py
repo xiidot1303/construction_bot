@@ -88,22 +88,14 @@ def send_price_salary(update, context):
         foreman = Foreman.objects.get(obj__title=obj.obj)
         if obj.summ_or_dollar == 'суммы':
             Obj.price_summ = str(float(Obj.price_summ) - (float(update.message.text)))
-            if float(Obj.price_summ) < 0:
-                bot.send_message(update.message.chat.id, 'Недостаточно средств')
-                Obj = Object.objects.get(title=obj.obj)
-                obj.delete()
-            else:
-                foreman.save()
-                Obj.save()
+            
+            foreman.save()
+            Obj.save()
         else:
             Obj.price_dollar = str(float(Obj.price_dollar) - (float(update.message.text)))        
-            if float(Obj.price_dollar) < 0:
-                bot.send_message(update.message.chat.id, 'Недостаточно средств')
-                Obj = Object.objects.get(title=obj.obj)
-                obj.delete()
-            else:
-                foreman.save()
-                Obj.save()
+            
+            foreman.save()
+            Obj.save()
 
         
         # return to object menu, where can spend money for materials or salary
@@ -115,7 +107,7 @@ def send_price_salary(update, context):
         i_back = InlineKeyboardButton(text='Назад', callback_data='back-to-objects_foreman')
         d = bot.send_message(update.message.chat.id, 'Тратить деньги на...', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
         bot.delete_message(update.message.chat.id, d.message_id)
-        bot.send_message(update.message.chat.id, 'Остаток денег:{} сумм, {} доллар\nТратить деньги на...'.format(Obj.price_summ, Obj.price_dollar), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
+        bot.send_message(update.message.chat.id, 'Остаток денег:{} сумм, {} доллар\nТратить деньги на...'.format(foreman.account_summ, foreman.account_dollar), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
 
 
         return SPEND_MONEY_FOR
@@ -184,22 +176,13 @@ def send_price_material(update, context):
         foreman = Foreman.objects.get(obj__title=material_obj.obj)
         if material_obj.summ_or_dollar == 'суммы':
             Obj.price_summ = str(float(Obj.price_summ) - (float(material_obj.amount) * float(material_obj.price)))
-            if float(Obj.price_summ) < 0:
-                bot.send_message(update.message.chat.id, 'Недостаточно средств')
-                Obj = Object.objects.get(title=material_obj.obj)
-                material_obj.delete()
-            else:
-                foreman.save()
-                Obj.save()
+            foreman.save()
+            Obj.save()
         else:
             Obj.price_dollar = str(float(Obj.price_dollar) - (float(material_obj.amount) * float(material_obj.price)))
-            if float(Obj.price_dollar) < 0:
-                bot.send_message(update.message.chat.id, 'Недостаточно средств')
-                Obj = Object.objects.get(title=material_obj.obj)
-                material_obj.delete()
-            else:
-                foreman.save()
-                Obj.save()
+
+            foreman.save()
+            Obj.save()
         
         # return to object menu, where can spend money for materials or salary
         foreman = Foreman.objects.get(obj__title=Obj.title)
@@ -209,5 +192,5 @@ def send_price_material(update, context):
         i_back = InlineKeyboardButton(text='Назад', callback_data='back-to-objects_foreman')
         d = bot.send_message(update.message.chat.id, 'Тратить деньги на...', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
         bot.delete_message(update.message.chat.id, d.message_id)
-        bot.send_message(update.message.chat.id, 'Остаток денег:{} сумм, {} доллар\nТратить деньги на...'.format(Obj.price_summ, Obj.price_dollar), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
+        bot.send_message(update.message.chat.id, 'Остаток денег:{} сумм, {} доллар\nТратить деньги на...'.format(foreman.account_summ, foreman.account_dollar), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
         return SPEND_MONEY_FOR

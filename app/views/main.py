@@ -383,3 +383,12 @@ def all_salaries(request, type):
     context = {'salaries': salaries, 'type': type_for_filter, 'price_summ': price_summ, 'price_dollar': price_dollar,
     'currency': currency, 'summ_to_dollar': summ_to_dollar, 'overall': overall}
     return render(request, 'views/all_salaries.html', context)
+
+def report_foreman(request, foreman):
+    all_foremans = Foreman.objects.all()
+    if foreman == 'Все':
+        transfers = transfer_money.objects.filter(transfered='True')
+    else:
+        transfers = transfer_money.objects.filter(transfered='True', foreman=foreman)
+    context = {'transfers': transfers, 'foreman': foreman, 'all_foremans': all_foremans}
+    return render(request, 'views/report_foreman.html', context)

@@ -23,6 +23,7 @@ class Client(models.Model):
     login = models.CharField(null=True, blank=False, max_length=100)
     password = models.CharField(null=True, blank=False, max_length=100)
     obj = models.ManyToManyField('Object')
+    type = models.CharField(null=True, blank=True, max_length=20) 
 
 
 class Material(models.Model):
@@ -68,3 +69,4 @@ class transfer_money(models.Model):
     summ_or_dollar = models.CharField(null=True, blank=True, max_length=10)
     price = models.CharField(null=True, blank=True, max_length=100)
     transfered = models.CharField(null=True, max_length=10, blank=True)
+    published = models.DateTimeField(db_index = True, null=True, auto_now_add=True, blank=True)

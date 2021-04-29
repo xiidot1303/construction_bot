@@ -105,18 +105,24 @@ def objects(update, context):
             i_back = InlineKeyboardButton(text='Назад', callback_data='back-to-objects_foreman')
             d = bot.send_message(update.message.chat.id, 'Тратить деньги на...', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
             bot.delete_message(update.message.chat.id, d.message_id)
-            bot.send_message(update.message.chat.id, 'Остаток денег:{} сумм, {} доллар\nТратить деньги на...'.format(obj.price_summ, obj.price_dollar), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
+            bot.send_message(update.message.chat.id, 'Остаток денег:{} сумм, {} доллар\nТратить деньги на...'.format(foreman.account_summ, foreman.account_dollar), reply_markup=InlineKeyboardMarkup([[i_material], [i_salary], [i_back]]))
 
             return SPEND_MONEY_FOR
         else:
+            client = Client.objects.get(obj__title=text)
             obj = Object.objects.get(title=text)
-            i_material_flat = InlineKeyboardButton(text='Материалы квартиры', callback_data='inf-material-flat_{}'.format(text))
-            i_material_plot = InlineKeyboardButton(text='Материалы участки', callback_data='inf-material-plot_{}'.format(text))
+            
+
+            i_material_flat = InlineKeyboardButton(text='Материалы', callback_data='inf-material-flat_{}'.format(text))
+            i_material_plot = InlineKeyboardButton(text='Материалы', callback_data='inf-material-plot_{}'.format(text))
             i_salary = InlineKeyboardButton(text='Иш хакки', callback_data='inf-salary_{}'.format(text))
             i_back = InlineKeyboardButton(text='Назад', callback_data='back-to-objects_client')
             d = bot.send_message(update.message.chat.id, 'Показать информацию о ...', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
             bot.delete_message(update.message.chat.id, d.message_id)
-            bot.send_message(update.message.chat.id, 'Остаток денег: {} сумм, {} доллар \nПоказать информацию о ...'.format(obj.price_summ, obj.price_dollar), reply_markup=InlineKeyboardMarkup([[i_material_flat], [i_material_plot], [i_salary], [i_back]]))
+            if client.type == 'Квартира':
+                bot.send_message(update.message.chat.id, 'Остаток денег: {} сумм, {} доллар \nПоказать информацию о ...'.format(foreman.account_summ, foreman.account_dollar), reply_markup=InlineKeyboardMarkup([[i_material_flat], [i_back]]))
+            else:
+                bot.send_message(update.message.chat.id, 'Остаток денег: {} сумм, {} доллар \nПоказать информацию о ...'.format(foreman.account_summ, foreman.account_dollar), reply_markup=InlineKeyboardMarkup([[i_material_plot], [i_salary], [i_back]]))
             return SHOW_INF_ABOUT
     except:
         update.message.reply_text('Нет такого объекта')

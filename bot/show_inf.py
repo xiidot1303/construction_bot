@@ -31,7 +31,7 @@ def show_inf_about(update, context):
 
     elif 'inf-salary' in data:
         sth, obj_title = data.split('_')
-        salaries = Salary.objects.filter(obj=obj_title, type='flat')
+        salaries = Salary.objects.filter(obj=obj_title, type='plot')
         n=1
         msg = ''
         for s in salaries:
@@ -42,11 +42,18 @@ def show_inf_about(update, context):
     elif 'back-show-inf' in data:
         sth, text = data.split('_')
         obj = Object.objects.get(title=text)
-        i_material_flat = InlineKeyboardButton(text='Материалы квартиры', callback_data='inf-material-flat_{}'.format(text))
-        i_material_plot = InlineKeyboardButton(text='Материалы участки', callback_data='inf-material-plot_{}'.format(text))
+        foreman = Foreman.objects.get(obj__title=text)
+        i_material_flat = InlineKeyboardButton(text='Материалы', callback_data='inf-material-flat_{}'.format(text))
+        i_material_plot = InlineKeyboardButton(text='Материалы', callback_data='inf-material-plot_{}'.format(text))
         i_salary = InlineKeyboardButton(text='Иш хакки', callback_data='inf-salary_{}'.format(text))
         i_back = InlineKeyboardButton(text='Назад', callback_data='back-to-objects_clients')
-        c.edit_message_text('Остаток денег: {} сумм, {} доллар \nПоказать информацию о ...'.format(obj.price_summ, obj.price_dollar), reply_markup=InlineKeyboardMarkup([[i_material_flat], [i_material_plot], [i_salary], [i_back]]))
+        client = Client.objects.get(obj__title=text)
+        if client.type == 'Квартира':
+            c.edit_message_text('Остаток денег: {} сумм, {} доллар \nПоказать информацию о ...'.format(foreman.account_summ, foreman.account_dollar), reply_markup=InlineKeyboardMarkup([[i_material_flat], [i_back]]))
+        else:
+            c.edit_message_text('Остаток денег: {} сумм, {} доллар \nПоказать информацию о ...'.format(foreman.account_summ, foreman.account_dollar), reply_markup=InlineKeyboardMarkup([[i_material_plot], [i_salary], [i_back]]))
+
+        
         return SHOW_INF_ABOUT
     
     elif 'back-to-objects' in data:
