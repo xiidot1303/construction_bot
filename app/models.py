@@ -2,9 +2,13 @@ from django.db import models
 #admin panel
 class Object(models.Model):
     title = models.CharField(null=True, blank=False, max_length=100)
-    price = models.CharField(null=True, blank=False, max_length=30)
-    price_summ = models.CharField(null=True, blank=True, max_length=30)
-    price_dollar = models.CharField(null=True, blank=True, max_length=30)
+    price = models.CharField(null=True, blank=False, max_length=30) #unnessary
+    price_summ = models.CharField(null=True, blank=True, max_length=30) #unnessary
+    price_dollar = models.CharField(null=True, blank=True, max_length=30) #unnessary
+    price_material_summ = models.CharField(null=True, blank=True, max_length=30)
+    price_material_dollar = models.CharField(null=True, blank=True, max_length=30)
+    price_salary_summ = models.CharField(null=True, blank=True, max_length=30)
+    price_salary_dollar = models.CharField(null=True, blank=True, max_length=30)
     def __str__(self):
         return self.title
 
