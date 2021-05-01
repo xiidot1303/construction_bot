@@ -41,7 +41,7 @@ class MaterialDetailView(LoginRequiredMixin, DetailView):
         Obj = Object.objects.get(title=obj.obj)
         try:
             if obj.summ_or_dollar == 'суммы':
-                Obj.price_summ = str(float(Obj.price_summ) - (float(obj.amount) * float(obj.price)))
+                Obj.price_material_summ = str(float(Obj.price_material_summ) - (float(obj.amount) * float(obj.price)))
                 if obj.type == 'Квартира':
                     obj.type = 'flat'
                 elif obj.type == 'Участка':
@@ -52,7 +52,7 @@ class MaterialDetailView(LoginRequiredMixin, DetailView):
                 Obj.save()
                 context['message'] = 'Успешно создано'
             else:
-                Obj.price_dollar = str(float(Obj.price_dollar) - (float(obj.amount) * float(obj.price)))
+                Obj.price_material_dollar = str(float(Obj.price_material_dollar) - (float(obj.amount) * float(obj.price)))
                 if obj.type == 'Квартира':
                     obj.type = 'flat'
                 elif obj.type == 'Участка':
@@ -81,7 +81,7 @@ class SalaryDetailView(LoginRequiredMixin, DetailView):
         Obj = Object.objects.get(title=obj.obj)
         try:
             if obj.summ_or_dollar == 'суммы':
-                Obj.price_summ = str(float(Obj.price_summ) - float(obj.price))
+                Obj.price_salary_summ = str(float(Obj.price_salary_summ) - float(obj.price))
                 if obj.type == 'Квартира':
                     obj.type = 'flat'
                 elif obj.type == 'Участка':
@@ -91,7 +91,7 @@ class SalaryDetailView(LoginRequiredMixin, DetailView):
                 Obj.save()
                 context['message'] = 'Успешно создано'
             else:
-                Obj.price_dollar = str(float(Obj.price_dollar) - float(obj.price))
+                Obj.price_salary_dollar = str(float(Obj.price_salary_dollar) - float(obj.price))
                 if obj.type == 'Квартира':
                     obj.type = 'flat'
                 elif obj.type == 'Участка':

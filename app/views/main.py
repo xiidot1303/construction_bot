@@ -356,11 +356,21 @@ def all_materials(request, type):
     'currency': currency, 'summ_to_dollar': summ_to_dollar, 'overall': overall}
     return render(request, 'views/all_materials.html', context)
 
-def all_salaries(request, type):
+def all_salaries(request, type, title):
+
+    del_salaries = Salary.objects.filter(title=None)
+    for m in del_salaries:
+        m.delete()
     if type == 'Все':
-        salaries = Salary.objects.all()
+        if title == 'Все':
+            salaries = Salary.objects.all()
+        else:
+            salaries = Salary.objects.filter(title=title)
     else:
-        salaries = Salary.objects.filter(type=type)
+        if title == 'Все':
+            salaries = Salary.objects.filter(type=type)
+        else:
+            salaries = Salary.objects.filter(type=type, title=title)
     
     type_for_filter = 'Все'
     if type == 'flat':
@@ -370,18 +380,26 @@ def all_salaries(request, type):
     price_summ = sum([float(i.price) for i in salaries.filter(summ_or_dollar='суммы')])
     price_dollar = sum([float(i.price) for i in salaries.filter(summ_or_dollar='доллары')])
     #### find currency
-    url = 'https://bank.uz/currency'
-    content = BeautifulSoup(requests.get(url).content, features='lxml')
-    top_left = content.find('div', {'class':"diogram-top-left"})
-    ul = top_left.find('ul', {'class': 'nav nav-tabs'})
-    tabs_a = ul.find('div', {'class': 'tabs-a'})
-    text = tabs_a.find_all('span', {'class': "medium-text"})
-    currency = float(text[1].text.replace(' ', ''))
+    #url = 'https://bank.uz/currency'
+    #content = BeautifulSoup(requests.get(url).content, features='lxml')
+    #top_left = content.find('div', {'class':"diogram-top-left"})
+    #ul = top_left.find('ul', {'class': 'nav nav-tabs'})
+    #tabs_a = ul.find('div', {'class': 'tabs-a'})
+    #text = tabs_a.find_all('span', {'class': "medium-text"})
+    #currency = float(text[1].text.replace(' ', ''))
     #_________
-    summ_to_dollar = round(float(price_summ / currency), 4)
+    summ_to_dollar = round(float(price_summ / currency()), 4)
     overall = price_dollar + summ_to_dollar
+    allsalaries = []
+    l = []
+    for i in Salary.objects.all():
+        if not i.title in l:
+            allsalaries.append(i)
+            l.append(i.title)
+
+
     context = {'salaries': salaries, 'type': type_for_filter, 'price_summ': price_summ, 'price_dollar': price_dollar,
-    'currency': currency, 'summ_to_dollar': summ_to_dollar, 'overall': overall}
+    'currency': currency(), 'summ_to_dollar': summ_to_dollar, 'overall': overall, 'title': title, 'allsalaries': allsalaries}
     return render(request, 'views/all_salaries.html', context)
 
 def report_foreman(request, foreman):

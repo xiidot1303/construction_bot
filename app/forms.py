@@ -6,19 +6,23 @@ from django import forms
 class ObjForm(ModelForm):
     class Meta:
         model = Object
-        fields = {'title', 'price_summ', 'price_dollar'}
+        fields = {'title', 'price_material_summ', 'price_material_dollar', 'price_salary_summ', 'price_salary_dollar'}
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'price_summ': forms.TextInput(attrs={'class': 'form-control'}),
-            'price_dollar': forms.TextInput(attrs={'class': 'form-control'})
+            'price_material_summ': forms.TextInput(attrs={'class': 'form-control'}),
+            'price_material_dollar': forms.TextInput(attrs={'class': 'form-control'}),
+            'price_salary_summ': forms.TextInput(attrs={'class': 'form-control'}),
+            'price_salary_dollar': forms.TextInput(attrs={'class': 'form-control'})
 
         }
         labels = {
             'title': 'Название',
-            'price_summ': 'Остаток денег (Сумм)',
-            'price_dollar': 'Остаток денег (Доллар)'
+            'price_material_summ': 'Остаток денег для материалов (Сумм)',
+            'price_material_dollar': 'Остаток денег для материалов ($)',
+            'price_salary_summ': 'Остаток денег для иш хакки (Сумм)',
+            'price_salary_dollar': 'Остаток денег для иш хакки ($)'
         }
-    field_order = ['title', 'price_summ', 'price_dollar']
+    field_order = ['title', 'price_material_summ', 'price_material_dollar', 'price_salary_summ', 'price_salary_dollar']
 
 class ForemanForm(ModelForm):
     class Meta:

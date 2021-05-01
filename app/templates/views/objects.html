@@ -9,8 +9,10 @@
                         <tr>
                             <th>№</th>
                             <th>Название</th>
-                            <th>Остаток денег (суммы)</th>
-                            <th>Остаток денег (доллары)</th>
+                            <th>Остаток денег для материалов (Сумм)</th>
+                            <th>Остаток денег для материалов ($)</th>
+                            <th>Остаток денег для иш хакки (Сумм)</th>
+                            <th>Остаток денег для иш хакки ($)</th>
                             <th>Действия</th>
                         </tr>
                     </thead>
@@ -19,8 +21,10 @@
                         <tr>
                             <td>{{ forloop.counter }}</td>
                             <td><a href="{% url 'update_obj' o.pk %}">{{ o.title }}</a></td>
-                            <td>{{ o.price_summ }}</td>
-                            <td>{{ o.price_dollar }}</td>
+                            <td>{{ o.price_material_summ }}</td>
+                            <td>{{ o.price_material_dollar }}</td>
+                            <td>{{ o.price_salary_summ }}</td>
+                            <td>{{ o.price_salary_dollar }}</td>
                             <td><a id = "a" href="{% url 'delete_object' o.pk %}" onclick="return confirm(&#39;Вы уверены?&#39;)" class="btn btn-danger btn-flat"><i class="fas fa-trash" aria-hidden="true"></i></a></td>
 
                         </tr>

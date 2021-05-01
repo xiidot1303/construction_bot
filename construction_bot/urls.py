@@ -79,7 +79,7 @@ urlpatterns = [
     path('update_salary/<int:pk>/', SalaryEditView.as_view()),
     path('salary_detail/<int:pk>/', SalaryDetailView.as_view()),
         #all
-    path('all_salaries/<str:type>/', all_salaries, name='all_salaries'),
+    path('all_salaries/<str:type>/<str:title>/', all_salaries, name='all_salaries'),
 
     #material_title
     path('material_titles', material_title, name='material_titles'),
