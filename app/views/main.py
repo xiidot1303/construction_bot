@@ -408,5 +408,19 @@ def report_foreman(request, foreman):
         transfers = transfer_money.objects.filter(transfered='True')
     else:
         transfers = transfer_money.objects.filter(transfered='True', foreman=foreman)
-    context = {'transfers': transfers, 'foreman': foreman, 'all_foremans': all_foremans}
+    account_summ = []
+    account_dollar = []
+    for i in transfers:
+        s = Foreman.objects.get(name=i.foreman).account_summ
+        if s == None:
+            account_summ.append('')
+        else:
+            account_summ.append(s)
+        d = Foreman.objects.get(name=i.foreman).account_dollar
+        if s == None:
+            account_dollar.append('')
+        else:
+            account_dollar.append(s)
+        
+    context = {'transfers': transfers, 'foreman': foreman, 'all_foremans': all_foremans, 'account_dollar': account_dollar, 'account_summ': account_summ}
     return render(request, 'views/report_foreman.html', context)

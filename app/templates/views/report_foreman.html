@@ -1,6 +1,6 @@
 {% extends "layout/basic.html" %}
 {% load static %}
-
+{% load index %}
 
 
 {% block link %}
@@ -28,6 +28,8 @@
                             <th>Название</th>
                             <th>Цена</th>
                             <th>Объект</th>
+                            <th>Остаток денег (сумм)</th>
+                            <th>Остаток денег ($)</th>
                             <th>Дата</th>
       
                             
@@ -49,6 +51,8 @@
                             <td>
                                 {{ t.object }}
                             </td>
+                            <td>{{ account_summ|index:forloop.counter0 }}</td>
+                            <td>{{ account_dollar|index:forloop.counter0 }}</td>
                             <td>{{ t.published|date:"d.m.Y H:m" }}</td>
                        </tr>
                         {% endfor %}
