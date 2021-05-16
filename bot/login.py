@@ -10,7 +10,9 @@ def login_as(update, context):
     
     elif text == 'Клиент':
         obj = Bot_users.objects.get_or_create(user_id=update.message.chat.id, who = 'client')
-
+    else:
+        update.message.reply_text('Авторизация как')
+        return LOGIN_AS    
     update.message.reply_text('Введите логин', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
     return SEND_LOGIN
 

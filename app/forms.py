@@ -32,7 +32,7 @@ class ForemanForm(ModelForm):
             'name': 'Имя',
             'login': 'Логин',
             'password': 'Пароль',
-            'obj': 'Объекты',
+            'obj': 'Объекты (Выберите несколько объектов с помощью Ctrl)',
             'account_summ': 'Счёт (сумм)',
             'account_dollar': 'Счёт (доллар)'
         }
