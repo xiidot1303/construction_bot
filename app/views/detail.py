@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.views.generic.detail import DetailView
 from app.forms import *
 from app.models import *
-
+from bot.functions import *
 class ForemanDetailView(LoginRequiredMixin, DetailView):
     model = Foreman
     def get_context_data(self, *args, **kwargs):
@@ -42,6 +42,7 @@ class MaterialDetailView(LoginRequiredMixin, DetailView):
         try:
             if obj.summ_or_dollar == 'суммы':
                 Obj.price_material_summ = str(float(Obj.price_material_summ) - (float(obj.amount) * float(obj.price)))
+                Obj.price_material_dollar = str(float(Obj.price_material_dollar) - (summ_to_dollar(float(obj.amount) * float(obj.price))))
                 if obj.type == 'Квартира':
                     obj.type = 'flat'
                 elif obj.type == 'Участка':
@@ -53,6 +54,7 @@ class MaterialDetailView(LoginRequiredMixin, DetailView):
                 context['message'] = 'Успешно создано'
             else:
                 Obj.price_material_dollar = str(float(Obj.price_material_dollar) - (float(obj.amount) * float(obj.price)))
+                Obj.price_material_summ = str(float(Obj.price_material_summ) - (dollar_to_summ(float(obj.amount) * float(obj.price))))
                 if obj.type == 'Квартира':
                     obj.type = 'flat'
                 elif obj.type == 'Участка':
@@ -82,6 +84,7 @@ class SalaryDetailView(LoginRequiredMixin, DetailView):
         try:
             if obj.summ_or_dollar == 'суммы':
                 Obj.price_salary_summ = str(float(Obj.price_salary_summ) - float(obj.price))
+                Obj.price_salary_dollar = str(float(Obj.price_salary_dollar) - (summ_to_dollar(obj.price)))
                 if obj.type == 'Квартира':
                     obj.type = 'flat'
                 elif obj.type == 'Участка':
@@ -92,6 +95,7 @@ class SalaryDetailView(LoginRequiredMixin, DetailView):
                 context['message'] = 'Успешно создано'
             else:
                 Obj.price_salary_dollar = str(float(Obj.price_salary_dollar) - float(obj.price))
+                Obj.price_salary_summ = str(float(Obj.price_salary_summ) - (dollar_to_summ(obj.price)))
                 if obj.type == 'Квартира':
                     obj.type = 'flat'
                 elif obj.type == 'Участка':

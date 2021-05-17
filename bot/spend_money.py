@@ -88,12 +88,12 @@ def send_price_salary(update, context):
         foreman = Foreman.objects.get(obj__title=obj.obj)
         if obj.summ_or_dollar == 'суммы':
             Obj.price_salary_summ = str(float(Obj.price_salary_summ) - (float(update.message.text)))
-            
+            Obj.price_salary_dollar = str(float(Obj.price_salary_dollar) - (summ_to_dollar(update.message.text)))
             foreman.save()
             Obj.save()
         else:
             Obj.price_salary_dollar = str(float(Obj.price_salary_dollar) - (float(update.message.text)))        
-            
+            Obj.price_salary_summ = str(float(Obj.price_salary_summ) - (dollar_to_summ(update.message.text)))
             foreman.save()
             Obj.save()
 
@@ -176,10 +176,12 @@ def send_price_material(update, context):
         foreman = Foreman.objects.get(obj__title=material_obj.obj)
         if material_obj.summ_or_dollar == 'суммы':
             Obj.price_material_summ = str(float(Obj.price_material_summ) - (float(material_obj.amount) * float(material_obj.price)))
+            Obj.price_material_dollar = str(float(Obj.price_material_dollar) - (summ_to_dollar(float(material_obj.amount) * float(material_obj.price))))
             foreman.save()
             Obj.save()
         else:
             Obj.price_material_dollar = str(float(Obj.price_material_dollar) - (float(material_obj.amount) * float(material_obj.price)))
+            Obj.price_material_summ = str(float(Obj.price_material_summ) - (dollar_to_summ(float(material_obj.amount) * float(material_obj.price))))
 
             foreman.save()
             Obj.save()

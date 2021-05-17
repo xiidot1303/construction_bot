@@ -54,13 +54,16 @@ def main_menu(update, context):
         user = Bot_users.objects.get(user_id=update.message.chat.id)
         login = user.login
         if user.who == 'foreman':
-            obj = Foreman.objects.get(login=login).obj
+            foreman = Foreman.objects.get(login=login)
+            obj = foreman.obj
+            balance_foreman = '\nСчет прораба:\n' + foreman.account_summ + ' sum,    ' + foreman.account_dollar +' $'
         else:
             obj = Client.objects.get(login=login).obj
+            balance_foreman = ''
         
         objects_list = [[i.title] for i in obj.all()]
         objects_list.append(['Главное меню'])
-        update.message.reply_text('Все объекты', reply_markup=ReplyKeyboardMarkup(keyboard=objects_list, resize_keyboard=True))
+        update.message.reply_text('Все объекты\n{}'.format(balance_foreman), reply_markup=ReplyKeyboardMarkup(keyboard=objects_list, resize_keyboard=True))
         return ConversationHandler.END
     if text == 'Выйти из аккаунта':
         update.message.reply_text('Вы действительно хотите выйти из бота?', reply_markup=ReplyKeyboardMarkup(keyboard=[['Да', 'Назад']], resize_keyboard=True))
@@ -120,9 +123,9 @@ def objects(update, context):
             d = bot.send_message(update.message.chat.id, 'Показать информацию о ...', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
             bot.delete_message(update.message.chat.id, d.message_id)
             if client.type == 'Квартира':
-                bot.send_message(update.message.chat.id, 'Остаток денег: {} сумм, {} доллар \nПоказать информацию о ...'.format(foreman.account_summ, foreman.account_dollar), reply_markup=InlineKeyboardMarkup([[i_material_flat], [i_back]]))
+                bot.send_message(update.message.chat.id, 'Остаток денег: \nдля материалов: {} сумм, {} доллар\nдля иш хакки: {} сумм, {} доллар\n \nПоказать информацию о ...'.format(obj.price_material_summ, obj.price_material_dollar, obj.price_salary_summ, obj.price_salary_dollar), reply_markup=InlineKeyboardMarkup([[i_material_flat], [i_back]]))
             else:
-                bot.send_message(update.message.chat.id, 'Остаток денег: {} сумм, {} доллар \nПоказать информацию о ...'.format(foreman.account_summ, foreman.account_dollar), reply_markup=InlineKeyboardMarkup([[i_material_plot], [i_salary], [i_back]]))
+                bot.send_message(update.message.chat.id, 'Остаток денег: \nдля материалов: {} сумм, {} доллар\nдля иш хакки: {} сумм, {} доллар\n \nПоказать информацию о ...'.format(obj.price_material_summ, obj.price_material_dollar, obj.price_salary_summ, obj.price_salary_dollar), reply_markup=InlineKeyboardMarkup([[i_material_plot], [i_salary], [i_back]]))
             return SHOW_INF_ABOUT
     except:
         update.message.reply_text('Нет такого объекта')

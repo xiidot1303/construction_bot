@@ -49,9 +49,9 @@ def show_inf_about(update, context):
         i_back = InlineKeyboardButton(text='Назад', callback_data='back-to-objects_clients')
         client = Client.objects.get(obj__title=text)
         if client.type == 'Квартира':
-            c.edit_message_text('Остаток денег: {} сумм, {} доллар \nПоказать информацию о ...'.format(foreman.account_summ, foreman.account_dollar), reply_markup=InlineKeyboardMarkup([[i_material_flat], [i_back]]))
+            c.edit_message_text('Остаток денег: \nдля материалов: {} сумм, {} доллар\nдля иш хакки: {} сумм, {} доллар\n \nПоказать информацию о ...'.format(obj.price_material_summ, obj.price_material_dollar, obj.price_salary_summ, obj.price_salary_dollar), reply_markup=InlineKeyboardMarkup([[i_material_flat], [i_back]]))
         else:
-            c.edit_message_text('Остаток денег: {} сумм, {} доллар \nПоказать информацию о ...'.format(foreman.account_summ, foreman.account_dollar), reply_markup=InlineKeyboardMarkup([[i_material_plot], [i_salary], [i_back]]))
+            c.edit_message_text('Остаток денег: \nдля материалов: {} сумм, {} доллар\nдля иш хакки: {} сумм, {} доллар\n \nПоказать информацию о ...'.format(obj.price_material_summ, obj.price_material_dollar, obj.price_salary_summ, obj.price_salary_dollar), reply_markup=InlineKeyboardMarkup([[i_material_plot], [i_salary], [i_back]]))
 
         
         return SHOW_INF_ABOUT
