@@ -33,13 +33,17 @@ def spend_money_for(update, context):
         sth, who = data.split('_')
         user = Bot_users.objects.get(user_id=c.message.chat.id)
         if who == 'foreman':
-            obj = Foreman.objects.get(login=user.login).obj
+            foreman = Foreman.objects.get(login=user.login)
+            obj = foreman.obj
+            balance_foreman = '\nСчет прораба:\n' + foreman.account_summ + ' sum,    ' + foreman.account_dollar +' $'
+
         else:
             obj = Client.objects.get(login=user.login).obj
+            balance_foreman = ''
         objects_list = [[i.title] for i in obj.all()]
         objects_list.append(['Главное меню'])
         bot.delete_message(c.message.chat.id, c.message.message_id)
-        bot.send_message(c.message.chat.id, 'Все объекты', reply_markup=ReplyKeyboardMarkup(keyboard=objects_list, resize_keyboard=True))
+        bot.send_message(c.message.chat.id, 'Все объекты\n{}'.format(balance_foreman), reply_markup=ReplyKeyboardMarkup(keyboard=objects_list, resize_keyboard=True))
         return ConversationHandler.END
 
 def send_type_salary(update, context):
