@@ -63,6 +63,7 @@ def show_inf_about(update, context):
             obj = Foreman.objects.get(login=user.login).obj
         else:
             obj = Client.objects.get(login=user.login).obj
+            
         objects_list = [[i.title] for i in obj.all()]
         objects_list.append(['Главное меню'])
         bot.delete_message(c.message.chat.id, c.message.message_id)

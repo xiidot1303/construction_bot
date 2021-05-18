@@ -90,9 +90,11 @@ def send_price_salary(update, context):
         obj.save()
         Obj = Object.objects.get(title=obj.obj)
         foreman = Foreman.objects.get(obj__title=obj.obj)
+        
         if obj.summ_or_dollar == 'суммы':
             Obj.price_salary_summ = str(float(Obj.price_salary_summ) - (float(update.message.text)))
             Obj.price_salary_dollar = str(float(Obj.price_salary_dollar) - (summ_to_dollar(update.message.text)))
+        
             foreman.account_summ = float(foreman.account_summ) - float(update.message.text)
             foreman.account_dollar = float(foreman.account_dollar) - (summ_to_dollar(update.message.text))
             foreman.save()
