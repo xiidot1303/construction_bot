@@ -93,11 +93,15 @@ def send_price_salary(update, context):
         if obj.summ_or_dollar == 'суммы':
             Obj.price_salary_summ = str(float(Obj.price_salary_summ) - (float(update.message.text)))
             Obj.price_salary_dollar = str(float(Obj.price_salary_dollar) - (summ_to_dollar(update.message.text)))
+            foreman.account_summ = float(foreman.account_summ) - float(update.message.text)
+            foreman.account_dollar = float(foreman.account_dollar) - (summ_to_dollar(update.message.text))
             foreman.save()
             Obj.save()
         else:
             Obj.price_salary_dollar = str(float(Obj.price_salary_dollar) - (float(update.message.text)))        
             Obj.price_salary_summ = str(float(Obj.price_salary_summ) - (dollar_to_summ(update.message.text)))
+            foreman.account_dollar = float(foreman.account_dollar) - float(update.message.text)
+            foreman.account_summ = float(foreman.account_summ) - (dollar_to_summ(update.message.text))
             foreman.save()
             Obj.save()
 
@@ -167,6 +171,7 @@ def send_summ_or_dollar_material(update, context):
     update.message.reply_text('Введите цену за 1шт(м, кг и т.д)', reply_markup=ReplyKeyboardRemove(remove_keyboard=True))
     return SEND_PRICE_MATERIAL
 
+
 def send_price_material(update, context):
     if update.message.text != '/reload':   
         if not is_float(update.message.text):
@@ -181,12 +186,15 @@ def send_price_material(update, context):
         if material_obj.summ_or_dollar == 'суммы':
             Obj.price_material_summ = str(float(Obj.price_material_summ) - (float(material_obj.amount) * float(material_obj.price)))
             Obj.price_material_dollar = str(float(Obj.price_material_dollar) - (summ_to_dollar(float(material_obj.amount) * float(material_obj.price))))
+            foreman.account_summ = float(foreman.account_summ) - (float(material_obj.amount) * float(material_obj.price))
+            foreman.account_dollar = float(foreman.account_dollar) - (summ_to_dollar(float(material_obj.amount) * float(material_obj.price)))
             foreman.save()
             Obj.save()
         else:
             Obj.price_material_dollar = str(float(Obj.price_material_dollar) - (float(material_obj.amount) * float(material_obj.price)))
             Obj.price_material_summ = str(float(Obj.price_material_summ) - (dollar_to_summ(float(material_obj.amount) * float(material_obj.price))))
-
+            foreman.account_dollar = float(foreman.account_dollar) - (float(material_obj.amount) * float(material_obj.price))
+            foreman.account_summ = float(foreman.account_summ) - (dollar_to_summ(float(material_obj.amount) * float(material_obj.price)))
             foreman.save()
             Obj.save()
         

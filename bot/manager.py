@@ -119,11 +119,13 @@ def send_trans_price(update, context):
     obj = Object.objects.get(title=trans_obj.object)
     if trans_obj.summ_or_dollar == 'Сумм':
         foreman.account_summ = float(foreman.account_summ) + float(text)
+        foreman.account_dollar = float(foreman.account_dollar) + summ_to_dollar(text)
         foreman.save()
         #obj.price_summ = float(obj.price_summ) - float(text)
         #obj.save()
     else:
         foreman.account_dollar = float(foreman.account_dollar) + float(text)
+        foreman.account_summ = float(foreman.account_summ) + dollar_to_summ(text)
         foreman.save()
         #obj.price_dollar = float(obj.price_dollar) - float(text)    
         #obj.save()
@@ -213,11 +215,13 @@ def create_material_send_price_material(update, context):
        
         if material_obj.summ_or_dollar == 'суммы':
             Obj.price_material_summ = str(float(Obj.price_material_summ) - (float(material_obj.amount) * float(material_obj.price)))
+            Obj.price_material_dollar = str(float(Obj.price_material_dollar) - (summ_to_dollar(float(material_obj.amount) * float(material_obj.price))))
             
             Obj.save()
             bot.send_message(update.message.chat.id, 'Успешно создан новый материал')
         else:
             Obj.price_material_dollar = str(float(Obj.price_material_dollar) - (float(material_obj.amount) * float(material_obj.price)))
+            Obj.price_material_summ = str(float(Obj.price_material_summ) - (dollar_to_summ(float(material_obj.amount) * float(material_obj.price))))
         
             Obj.save()
             bot.send_message(update.message.chat.id, 'Успешно создан новый материал')
@@ -288,11 +292,13 @@ def create_salary_send_price_salary(update, context):
   
         if obj.summ_or_dollar == 'суммы':
             Obj.price_salary_summ = str(float(Obj.price_salary_summ) - (float(update.message.text)))
+            Obj.price_salary_dollar = str(float(Obj.price_salary_dollar) - (summ_to_dollar(update.message.text)))
             
             Obj.save()
             bot.send_message(update.message.chat.id, 'Успешно создан новый иш хакки')
         else:
-            Obj.price_salary_dollar = str(float(Obj.price_salary_dollar) - (float(update.message.text)))        
+            Obj.price_salary_dollar = str(float(Obj.price_salary_dollar) - (float(update.message.text)))     
+            Obj.price_salary_summ = str(float(Obj.price_salary_summ) - (dollar_to_summ(update.message.text)))  
      
             Obj.save()
             bot.send_message(update.message.chat.id, 'Успешно создан новый иш хакки')
