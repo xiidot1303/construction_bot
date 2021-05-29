@@ -173,7 +173,7 @@ def create_material_send_material_title(update, context):
     obj = Material.objects.get(user_id=update.message.chat.id, title=None)
     obj.title = text
     obj.save()
-    update.message.reply_text('Выберите единицу измерения', reply_markup=ReplyKeyboardMarkup(keyboard=[['м', 'кг', 'м^3', 'м^2']], resize_keyboard=True))
+    update.message.reply_text('Выберите единицу измерения', reply_markup=ReplyKeyboardMarkup(keyboard=[['м', 'кг', 'м^3', 'м^2', 'шт']], resize_keyboard=True))
     return CREATE_MATERIAL_SELECT_MEASUREMENT
 
 def create_material_select_measurement(update, context):

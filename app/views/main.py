@@ -62,12 +62,18 @@ def material(request, obj):
     price_dollar = sum([float(i.amount)*float(i.price) for i in materials.filter(summ_or_dollar='доллары')])
     summ_to_dollar = round(float(price_summ / currency()), 4)
     overall = price_dollar + summ_to_dollar
+    Obj = Object.objects.get(title=obj)
+    obj_price_summ = Obj.price_material_summ
+    obj_price_dollar = Obj.price_material_dollar
     # ________create excel file
-    df = {'№': [], 'Название': [], 'Измерение': [], 'Количество': [], 'Цена': [], 'Всего (сум)': [], 'Всего ($)': [], 'Дата': []}
+    df = {'№': [], 'Название': [], 'Измерение': [], 'Количество': [], 'Цена': [], 'Всего (сум)': [], 'Всего ($)': [], 'Дата': [], '': [], 'Остаток денег (сум)': [], 'Остаток денег ($)': []}
     
     #add title
     df['№'] = [i for i in range(1, len(materials)+1)]
     df['Название'] = [i.title for i in materials]
+    df['Остаток денег (сум)'] = [obj_price_summ]
+    df['Остаток денег ($)'] = [obj_price_dollar]
+    df[''] = ['' for i in materials]
     df['Измерение'] = [i.measurement for i in materials]
     df['Количество'] = [i.amount for i in materials]
     df['Цена'] = [i.price for i in materials]
@@ -116,14 +122,19 @@ def sort_material(request, obj, type):
     price_dollar = sum([float(i.amount)*float(i.price) for i in materials.filter(summ_or_dollar='доллары')])
     summ_to_dollar = round(float(price_summ / currency()), 4)
     overall = price_dollar + summ_to_dollar
-
+    Obj = Object.objects.get(title=obj)
+    obj_price_summ = Obj.price_material_summ
+    obj_price_dollar = Obj.price_material_dollar
     # ________create excel file
-    df = {'№': [], 'Название': [], 'Измерение': [], 'Количество': [], 'Цена': [], 'Всего (сум)': [], 'Всего ($)': [], 'Дата': []}
+    df = {'№': [], 'Название': [], 'Измерение': [], 'Количество': [], 'Цена': [], 'Всего (сум)': [], 'Всего ($)': [], 'Дата': [], '': [], 'Остаток денег (сум)': [], 'Остаток денег ($)': []}
     
     #add title
     df['№'] = [i for i in range(1, len(materials)+1)]
     df['Название'] = [i.title for i in materials]
     df['Измерение'] = [i.measurement for i in materials]
+    df['Остаток денег (сум)'] = [obj_price_summ]
+    df['Остаток денег ($)'] = [obj_price_dollar]
+    df[''] = ['' for i in materials]
     df['Количество'] = [i.amount for i in materials]
     df['Цена'] = [i.price for i in materials]
     n = 0
@@ -176,12 +187,20 @@ def salary(request, obj):
     price_dollar = sum([float(i.price) for i in salaries.filter(summ_or_dollar='доллары')])
     summ_to_dollar = round(float(price_summ / currency()), 4)
     overall = price_dollar + summ_to_dollar
+
+    Obj = Object.objects.get(title=obj)
+    obj_price_summ = Obj.price_salary_summ
+    obj_price_dollar = Obj.price_salary_dollar
     #___to excel
-    df = {'№': [], 'Название': [], 'Цена (сум)': [], 'Цена ($)': [], 'Дата': []}
+    df = {'№': [], 'Название': [], 'Цена (сум)': [], 'Цена ($)': [], 'Дата': [], '': [], 'Остаток денег (сум)': [], 'Остаток денег ($)': []}
  
     #add title
     df['№'] = [i for i in range(1, len(salaries)+1)]
     df['Название'] = [i.title for i in salaries]
+
+    df['Остаток денег (сум)'] = [obj_price_summ]
+    df['Остаток денег ($)'] = [obj_price_dollar]
+    df[''] = ['' for i in salaries]
     for i in salaries:
         if i.summ_or_dollar == 'суммы':
             df['Цена (сум)'].append(str(i.price))
@@ -198,6 +217,7 @@ def salary(request, obj):
     df['Цена (сум)'].append(str(summ_to_dollar))
     df['Цена (сум)'].append('$'+str(overall))
     df['Цена ($)'].append(str(price_dollar))
+    
     for a in df:
         while len(df[a]) != len(df['Цена (сум)']):
             df[a].append(' ')
@@ -235,12 +255,19 @@ def sort_salary(request, obj, title, type):
     price_dollar = sum([float(i.price) for i in salaries.filter(summ_or_dollar='доллары')])
     summ_to_dollar = round(float(price_summ / currency()), 4)
     overall = price_dollar + summ_to_dollar
+    Obj = Object.objects.get(title=obj)
+    obj_price_summ = Obj.price_salary_summ
+    obj_price_dollar = Obj.price_salary_dollar
     #___to excel
-    df = {'№': [], 'Название': [], 'Цена (сум)': [], 'Цена ($)': [], 'Дата': []}
+    df = {'№': [], 'Название': [], 'Цена (сум)': [], 'Цена ($)': [], 'Дата': [], '': [], 'Остаток денег (сум)': [], 'Остаток денег ($)': []}
  
     #add title
     df['№'] = [i for i in range(1, len(salaries)+1)]
     df['Название'] = [i.title for i in salaries]
+
+    df['Остаток денег (сум)'] = [obj_price_summ]
+    df['Остаток денег ($)'] = [obj_price_dollar]
+    df[''] = ['' for i in salaries]
     for i in salaries:
         if i.summ_or_dollar == 'суммы':
             df['Цена (сум)'].append(str(i.price))
