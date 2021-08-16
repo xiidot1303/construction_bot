@@ -26,7 +26,7 @@ def delete_foreman(request, pk):
         # send message to user
         bot = telegram.Bot(token=TOKEN)
         try:
-            get = bot.sendMessage(chat_id=bot_user.user_id, text='Ваш профиль удален\nНажмите /cancel', reply_markup=ReplyKeyboardMarkup(keyboard=[['/cancel']], resize_keyboard=True))
+            get = bot.sendMessage(chat_id=bot_user.user_id, text=get_word('type cancel', update), reply_markup=ReplyKeyboardMarkup(keyboard=[['/cancel']], resize_keyboard=True))
 
         except:
             dedfedf = 0
@@ -44,7 +44,7 @@ def delete_client(request, pk):
             # send message to user
         bot = telegram.Bot(token=TOKEN)
         try:
-            get = bot.sendMessage(chat_id=bot_user.user_id, text='Ваш профиль удален\nНажмите /cancel', reply_markup=ReplyKeyboardMarkup(keyboard=[['/cancel']], resize_keyboard=True))
+            get = bot.sendMessage(chat_id=bot_user.user_id, text=get_word('type cancel', update), reply_markup=ReplyKeyboardMarkup(keyboard=[['/cancel']], resize_keyboard=True))
 
         except:
             dedfedf = 0
