@@ -1,5 +1,5 @@
 from telegram import Bot
-from telegram.ext import Dispatcher, ConversationHandler
+from telegram.ext import Dispatcher, ConversationHandler, PicklePersistence
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 from bot.main import *
 from bot.login import *
@@ -16,11 +16,12 @@ load_dotenv(os.path.join(basedir, '.env'))
 TOKEN = os.environ.get('TOKEN')
 WHERE = os.environ.get('WHERE')
 bot_obj = Bot(TOKEN)
+persistence = PicklePersistence(filename='filebot')
 if WHERE == 'SERVER':
     updater = 1213
-    dp = Dispatcher(bot_obj, None, workers=0, use_context=True)
+    dp = Dispatcher(bot_obj, None, workers=0, use_context=True, persistence=persistence)
 else:
-    updater = Updater(token=TOKEN, use_context=True)
+    updater = Updater(token=TOKEN, use_context=True, persistence=persistence)
     dp = updater.dispatcher
 
 objects_list = [i.title for i in Object.objects.all()]
@@ -44,6 +45,8 @@ reload_handler = ConversationHandler(
         EXIT_OR_NO: [MessageHandler(Filters.text(['Да', 'Назад']), exit_or_no)],
     },
     fallbacks=[CommandHandler('cancel', cancel)],
+    persistent=True,
+    name='reload'
 )
 
 select_objects = ConversationHandler(
@@ -67,6 +70,8 @@ select_objects = ConversationHandler(
         SHOW_INF_ABOUT: [CallbackQueryHandler(show_inf_about)],
     },
     fallbacks=[CommandHandler('cancel', cancel)],
+    persistent=True,
+    name='object'
 
 
 )
@@ -104,6 +109,8 @@ manager_handler = ConversationHandler(
 
     },
     fallbacks = [CommandHandler('cancel', cancel)],
+    persistent=True,
+    name='manager'
 
 )
 

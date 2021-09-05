@@ -1,3 +1,4 @@
+from bot.functions import summ_to_dollar
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from telegram import Update
@@ -56,11 +57,18 @@ def material(request, obj):
     for m in del_materials:
         m.delete()
 
-    materials = Material.objects.filter(obj=obj)
+    materials = Material.objects.filter(obj=obj).exclude(price=None)
     total_amount = [str(float(i.amount)*float(i.price)) for i in materials]
     price_summ = sum([float(i.amount)*float(i.price) for i in materials.filter(summ_or_dollar='суммы')])
     price_dollar = sum([float(i.amount)*float(i.price) for i in materials.filter(summ_or_dollar='доллары')])
-    summ_to_dollar = round(float(price_summ / currency()), 4)
+    summ_to_dollar = 0
+    for i in materials.filter(summ_or_dollar='суммы'):
+        if i.price_dollar == None or i.price_dollar == '':
+            i.price_dollar = round(float(float(i.price) / currency()), 4)
+            i.save()
+        summ_to_dollar += round(float(i.price_dollar), 4)
+
+    # summ_to_dollar = round(float(price_summ / currency()), 4)
     overall = price_dollar + summ_to_dollar
     Obj = Object.objects.get(title=obj)
     obj_price_summ = Obj.price_material_summ
@@ -120,7 +128,14 @@ def sort_material(request, obj, type):
     total_amount = [str(float(i.amount)*float(i.price)) for i in materials]
     price_summ = sum([float(i.amount)*float(i.price) for i in materials.filter(summ_or_dollar='суммы')])
     price_dollar = sum([float(i.amount)*float(i.price) for i in materials.filter(summ_or_dollar='доллары')])
-    summ_to_dollar = round(float(price_summ / currency()), 4)
+    # summ_to_dollar = round(float(price_summ / currency()), 4)
+    summ_to_dollar = 0
+    for i in materials.filter(summ_or_dollar='суммы'):
+        if i.price_dollar == None or i.price_dollar == '':
+            i.price_dollar = round(float(float(i.price) / currency()), 4)
+            i.save()
+        summ_to_dollar += round(float(i.price_dollar), 4)
+
     overall = price_dollar + summ_to_dollar
     Obj = Object.objects.get(title=obj)
     obj_price_summ = Obj.price_material_summ
@@ -185,7 +200,14 @@ def salary(request, obj):
     
     price_summ = sum([float(i.price) for i in salaries.filter(summ_or_dollar='суммы')])
     price_dollar = sum([float(i.price) for i in salaries.filter(summ_or_dollar='доллары')])
-    summ_to_dollar = round(float(price_summ / currency()), 4)
+    # summ_to_dollar = round(float(price_summ / currency()), 4)
+    summ_to_dollar = 0
+    for i in salaries.filter(summ_or_dollar='суммы'):
+        if i.price_dollar == None or i.price_dollar == '':
+            i.price_dollar = round(float(float(i.price) / currency()), 4)
+            i.save()
+        summ_to_dollar += round(float(i.price_dollar), 4)
+
     overall = price_dollar + summ_to_dollar
 
     Obj = Object.objects.get(title=obj)
@@ -253,7 +275,14 @@ def sort_salary(request, obj, title, type):
     
     price_summ = sum([float(i.price) for i in salaries.filter(summ_or_dollar='суммы')])
     price_dollar = sum([float(i.price) for i in salaries.filter(summ_or_dollar='доллары')])
-    summ_to_dollar = round(float(price_summ / currency()), 4)
+    # summ_to_dollar = round(float(price_summ / currency()), 4)
+    summ_to_dollar = 0
+    for i in salaries.filter(summ_or_dollar='суммы'):
+        if i.price_dollar == None or i.price_dollar == '':
+            i.price_dollar = round(float(float(i.price) / currency()), 4)
+            i.save()
+        summ_to_dollar += round(float(i.price_dollar), 4)
+
     overall = price_dollar + summ_to_dollar
     Obj = Object.objects.get(title=obj)
     obj_price_summ = Obj.price_salary_summ
@@ -377,7 +406,14 @@ def all_materials(request, type):
     text = tabs_a.find_all('span', {'class': "medium-text"})
     currency = float(text[1].text.replace(' ', ''))
     #_________
-    summ_to_dollar = round(float(price_summ / currency), 4)
+    # summ_to_dollar = round(float(price_summ / currency), 4)
+    summ_to_dollar = 0
+    for i in materials.filter(summ_or_dollar='суммы'):
+        if i.price_dollar == None or i.price_dollar == '':
+            i.price_dollar = round(float(float(i.price) / currency()), 4)
+            i.save()
+        summ_to_dollar += round(float(i.price_dollar), 4)
+
     overall = price_dollar + summ_to_dollar
     context = {'materials': materials, 'type': type_for_filter, 'total_amount': total_amount, 'price_summ': price_summ, 'price_dollar': price_dollar,
     'currency': currency, 'summ_to_dollar': summ_to_dollar, 'overall': overall}
@@ -415,7 +451,14 @@ def all_salaries(request, type, title):
     #text = tabs_a.find_all('span', {'class': "medium-text"})
     #currency = float(text[1].text.replace(' ', ''))
     #_________
-    summ_to_dollar = round(float(price_summ / currency()), 4)
+    # summ_to_dollar = round(float(price_summ / currency()), 4)
+    summ_to_dollar = 0
+    for i in salaries.filter(summ_or_dollar='суммы'):
+        if i.price_dollar == None or i.price_dollar == '':
+            i.price_dollar = round(float(float(i.price) / currency()), 4)
+            i.save()
+        summ_to_dollar += round(float(i.price_dollar), 4)
+
     overall = price_dollar + summ_to_dollar
     allsalaries = []
     l = []
