@@ -64,7 +64,7 @@ def material(request, obj):
     summ_to_dollar = 0
     for i in materials.filter(summ_or_dollar='суммы'):
         if i.price_dollar == None or i.price_dollar == '':
-            i.price_dollar = round(float(float(i.price) / currency()), 4)
+            i.price_dollar = round(float(float(i.price)*float(i.amount) / currency()), 4)
             i.save()
         summ_to_dollar += round(float(i.price_dollar), 4)
 
@@ -132,7 +132,7 @@ def sort_material(request, obj, type):
     summ_to_dollar = 0
     for i in materials.filter(summ_or_dollar='суммы'):
         if i.price_dollar == None or i.price_dollar == '':
-            i.price_dollar = round(float(float(i.price) / currency()), 4)
+            i.price_dollar = round(float(float(i.price)*float(i.amount) / currency()), 4)
             i.save()
         summ_to_dollar += round(float(i.price_dollar), 4)
 
