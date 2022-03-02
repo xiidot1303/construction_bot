@@ -53,3 +53,10 @@ class Salary_titleCreateView(LoginRequiredMixin, CreateView):
     success_url = 'salary_titles'
     permanent = True
     
+def create_incoming(request, obj):
+    obj = Object.objects.get(pk=obj)
+    client = Client.objects.filter(obj = obj)[0]
+
+    incoming = Incoming.objects.create(client=client, object=obj, price_material_summ='0', price_material_dollar='0', 
+    price_salary_summ='0', price_salary_dollar='0')
+    return redirect('/incoming/{}'.format(str(incoming.pk)))

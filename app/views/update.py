@@ -32,3 +32,11 @@ class SalaryEditView(LoginRequiredMixin, UpdateView):
     model = Salary
     form_class = SalaryForm
     success_url = '/salary_detail/{id}'
+
+class IncomingEditView(LoginRequiredMixin, UpdateView):
+    model = Incoming
+    form_class = IncomingForm
+    success_url = '/incoming_detail/{id}'
+    
+    permanent = True
+    

@@ -1,0 +1,14 @@
+{% extends 'layout/basic.html' %}
+{% block title %}Деталь{% endblock %}
+
+{% block link %}
+<meta http-equiv="refresh" content="0.01;url={% url 'update_obj' obj %}" />
+{% endblock %}
+
+{% block section %}
+
+<h1>{{ client }}</h1>
+
+
+<p class="btn btn-flat bg-orange"><a href="{% url 'update_obj' obj %}" style="color: whitesmoke;">Домой</a></p>
+{% endblock %}

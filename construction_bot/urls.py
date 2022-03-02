@@ -57,6 +57,10 @@ urlpatterns = [
     path('update_client/<int:pk>/', ClientEditView.as_view(), name = 'update_client'),
     path('client_detail/<int:pk>', ClientDetailView.as_view()),
     path('delete_client/<int:pk>/', delete_client, name='delete_client'),
+        # Incoming
+    path('create_incoming/<int:obj>/', create_incoming, name='create_incoming'),
+    path('incoming/<int:pk>/', IncomingEditView.as_view(), name='incoming'),
+    path('incoming_detail/<int:pk>/', IncomingDetailView.as_view()),
     #requests
     path('folder1', folder_foremans, name='folder_foremans'),
     path('folder2', folder_clients, name='folder_clients'),

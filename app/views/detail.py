@@ -4,6 +4,7 @@ from django.views.generic.detail import DetailView
 from app.forms import *
 from app.models import *
 from bot.functions import *
+from functions import my
 class ForemanDetailView(LoginRequiredMixin, DetailView):
     model = Foreman
     def get_context_data(self, *args, **kwargs):
@@ -24,6 +25,20 @@ class ClientDetailView(LoginRequiredMixin, DetailView):
         context['name'] = 'Имя: {}'.format(obj.name)
         return context
 
+class IncomingDetailView(LoginRequiredMixin, DetailView):
+    model = Incoming
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        incoming = context['object']
+        object = incoming.object
+        object.price_material_summ = my.summ_income(object.price_material_summ, incoming.price_material_summ)
+        object.price_material_dollar = my.summ_income(object.price_material_dollar, incoming.price_material_dollar)
+        object.price_salary_summ = my.summ_income(object.price_salary_summ, incoming.price_salary_summ)
+        object.price_salary_dollar = my.summ_income(object.price_salary_dollar, incoming.price_salary_dollar)
+        object.save()
+        context['client'] = incoming.client.name
+        context['obj'] = object.pk
+        return context
 
 class ObjDetailView(LoginRequiredMixin, DetailView):
     model = Object

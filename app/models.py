@@ -27,6 +27,8 @@ class Client(models.Model):
     password = models.CharField(null=True, blank=False, max_length=100)
     obj = models.ManyToManyField('Object')
     type = models.CharField(null=True, blank=True, max_length=20) 
+    def __str__(self) -> str:
+        return self.name
 
 
 class Material(models.Model):
@@ -72,7 +74,7 @@ class Incoming(models.Model):   # incoming from Clients
     price_salary_dollar = models.CharField(null=True, blank=True, max_length=30)
     client = models.ForeignKey('Client', null=True, blank=False, on_delete=models.PROTECT)
     object = models.ForeignKey('Object', null=True, blank=False, on_delete=models.PROTECT)
-
+    date = models.DateTimeField(db_index = True, null=True, auto_now_add=True, blank=True)
 #bot
 class Bot_users(models.Model):
     user_id = models.IntegerField(null=True, blank=False)

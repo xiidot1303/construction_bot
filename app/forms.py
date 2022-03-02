@@ -123,6 +123,27 @@ class CategoryForm(ModelForm):
         }
 
 
+class IncomingForm(ModelForm):
+    class Meta:
+        model = Incoming
+        fields = {'price_material_summ', 'price_material_dollar', 'price_salary_summ', 'price_salary_dollar', 'client'}
+        widgets = {
+            'client': forms.Select(attrs={'class': 'form-control'}),
+            'price_material_summ': forms.TextInput(attrs={'class': 'form-control'}),
+            'price_material_dollar': forms.TextInput(attrs={'class': 'form-control'}),
+            'price_salary_summ': forms.TextInput(attrs={'class': 'form-control'}),
+            'price_salary_dollar': forms.TextInput(attrs={'class': 'form-control'})
+
+        }
+        labels = {
+            'client': 'Клиент',
+            'price_material_summ': 'Материал (Сумм)',
+            'price_material_dollar': 'Материал ($)',
+            'price_salary_summ': 'Иш хакки (Сумм)',
+            'price_salary_dollar': 'Иш хакки ($)'
+        }
+    field_order = ['price_material_summ', 'price_material_dollar', 'price_salary_summ', 'price_salary_dollar', 'client']
+
 class SalaryForm(ModelForm):
     class Meta:
         model = Material
