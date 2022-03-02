@@ -494,3 +494,9 @@ def report_foreman(request, foreman):
         
     context = {'transfers': transfers, 'foreman': foreman, 'all_foremans': all_foremans, 'account_dollar': account_dollar, 'account_summ': account_summ}
     return render(request, 'views/report_foreman.html', context)
+
+
+def category(request):
+    obj = Category.objects.all()
+    context = {'categories': obj}
+    return render(request, 'views/category.html', context)

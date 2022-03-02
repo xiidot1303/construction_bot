@@ -42,6 +42,7 @@
                     <thead>
                         <tr>
                             <th>Название</th>
+                            <th>Категория</th>
                             <th>Измерение</th>
                             <th>Количество</th>
                             <th>Цена</th>
@@ -57,6 +58,7 @@
                         {% for m in materials %}
                         <tr>
                             <td>{{ m.title }}</td>
+                            <td>{{ m.category.title }}</td>
                             <td>{{ m.measurement }}</td>
                             <td>{{ m.amount }}</td>
                             <td>{{ m.price }}</td>

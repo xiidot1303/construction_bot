@@ -9,6 +9,8 @@ class ForemanAdmin(admin.ModelAdmin):
 class MaterialAdmin(admin.ModelAdmin):
     list_display = ('user_id', 'title', 'summ_or_dollar', 'price', 'obj')
 
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('title', )
 
 class SalaryAdmin(admin.ModelAdmin):
     list_display = ('user_id', 'title', 'summ_or_dollar', 'price', 'obj')
@@ -21,9 +23,11 @@ class Bot_usersAdmin(admin.ModelAdmin):
 
 class transfer_moneyAdmin(admin.ModelAdmin):
     list_display = ('user_id', 'foreman', 'object', 'transfered')
+
 admin.site.register(Object, ObjectAdmin)
 admin.site.register(Foreman, ForemanAdmin)
 admin.site.register(Material, MaterialAdmin)
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(Salary, SalaryAdmin)
 admin.site.register(Client, ClientAdmin)
 admin.site.register(Bot_users, Bot_usersAdmin)

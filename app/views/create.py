@@ -28,7 +28,11 @@ def create_material(request, object):
     m = Material.objects.create(obj=object)
     return redirect('/update_material/{}'.format(str(m.pk)))
 
-
+class CategoryCreateView(LoginRequiredMixin, CreateView):
+    template_name = 'create/create_category.html'
+    form_class = CategoryForm
+    success_url = '/categories'
+    permanent = True
 
 def create_salary(request, object):
 

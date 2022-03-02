@@ -70,6 +70,10 @@ urlpatterns = [
     path('material_detail/<int:pk>/', MaterialDetailView.as_view()),
         #all
     path('all_materials/<str:type>/', all_materials, name='all_materials'),
+        #category
+    path('category/create', CategoryCreateView.as_view(), name='create_category'),
+    path('categories', category, name='category'),
+    path('delete_category/<int:pk>/', delete_category, name='delete_category'),
 
     #salary
     path('salary/<str:obj>/', salary, name='salary'),
@@ -80,7 +84,6 @@ urlpatterns = [
     path('salary_detail/<int:pk>/', SalaryDetailView.as_view()),
         #all
     path('all_salaries/<str:type>/<str:title>/', all_salaries, name='all_salaries'),
-
     #material_title
     path('material_titles', material_title, name='material_titles'),
     path('create_material_title', Material_titleCreateView.as_view(), name='create_material_title'),

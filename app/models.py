@@ -40,9 +40,16 @@ class Material(models.Model):
     published = models.DateTimeField(db_index = True, null=True, auto_now_add=True, blank=True)
     type = models.CharField(null=True, blank=True, max_length=20)
     price_dollar = models.CharField(null=True, blank=True, max_length=30)
+    category = models.ForeignKey('Category', null=True, blank=False, on_delete=models.PROTECT)
+
 class Material_title(models.Model):
     title = models.CharField(null=True, max_length=200, verbose_name='Названия')
 
+
+class Category(models.Model):
+    title = models.CharField(null=True, blank=True, max_length=200)
+    def __str__(self) -> str:
+        return self.title
 
 class Salary(models.Model):
     user_id = models.IntegerField(null=True, blank=True)

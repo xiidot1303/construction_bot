@@ -102,6 +102,15 @@
                         <li><a href="{% url 'all_salaries' 'Все' 'Все' %}"><i class="fas fa-wallet" style="color: seashell;"></i>Иш хакки</a></li>
                       </ul>
                     </li>
+
+                    <li class=""><div class="link"><a> <i class="fas fa-folder icon"></i>Категория</a><i class="fa fa-chevron-down" style="color: white;"></i></div>
+                      <ul class="submenu">
+                        <li><a href="{% url 'category' %}"><i class="fas fa-list" style="color: seashell;"></i>Все</a></li>
+                        <li><a href="{% url 'create_category' %}"><i class="fa fa-plus" style="color: seashell;"></i>Создать</a></li>
+                      </ul>
+
+                    </li>
+
                 </ul>
             </section>
         </aside>

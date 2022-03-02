@@ -140,3 +140,8 @@ def delete_salary_title(request, pk):
     obj = Salary_title.objects.get(pk=pk)
     obj.delete()
     return redirect(salary_title)
+
+def delete_category(request, pk):
+    obj = Category.objects.get(pk=pk)
+    obj.delete()
+    return redirect(category)
