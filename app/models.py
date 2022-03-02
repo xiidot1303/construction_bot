@@ -65,6 +65,14 @@ class Salary_title(models.Model):
     title = models.CharField(null=True, max_length=200, verbose_name='Названия')
 
 
+class Incoming(models.Model):   # incoming from Clients
+    price_material_summ = models.CharField(null=True, blank=True, max_length=30)
+    price_material_dollar = models.CharField(null=True, blank=True, max_length=30)
+    price_salary_summ = models.CharField(null=True, blank=True, max_length=30)
+    price_salary_dollar = models.CharField(null=True, blank=True, max_length=30)
+    client = models.ForeignKey('Client', null=True, blank=False, on_delete=models.PROTECT)
+    object = models.ForeignKey('Object', null=True, blank=False, on_delete=models.PROTECT)
+
 #bot
 class Bot_users(models.Model):
     user_id = models.IntegerField(null=True, blank=False)
@@ -82,3 +90,4 @@ class transfer_money(models.Model):
     price = models.CharField(null=True, blank=True, max_length=100)
     transfered = models.CharField(null=True, max_length=10, blank=True)
     published = models.DateTimeField(db_index = True, null=True, auto_now_add=True, blank=True)
+
