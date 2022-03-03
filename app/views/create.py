@@ -76,7 +76,16 @@ def create_material_by_excel(request):
             excel = Excel.objects.get(pk=1)
             excel.file = file
             excel.save()
-            book = xlrd.open_workbook(file)
+            book = xlrd.open_workbook('files/{}'.format(str(excel.file)))
+            sheet = book.sheet_by_index(0)
+            title = sheet.col(1)
+            measurement = sheet.col(2)
+            amount = sheet.col(3)
+            price = sheet.col(4)
+            all_summ = sheet.col(5)
+            all_dollar = sheet.col(6)
+            category = sheet.col(7)
+            
             
             
 
