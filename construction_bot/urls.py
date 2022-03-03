@@ -61,6 +61,8 @@ urlpatterns = [
     path('create_incoming/<int:obj>/', create_incoming, name='create_incoming'),
     path('incoming/<int:pk>/', IncomingEditView.as_view(), name='incoming'),
     path('incoming_detail/<int:pk>/', IncomingDetailView.as_view()),
+    path('incoming_list/<int:pk>/', incoming, name='incoming_list'),
+    path('delete_incoming/<int:incoming_pk>/<int:client_pk>/', delete_incoming, name='delete_incoming'),
     #requests
     path('folder1', folder_foremans, name='folder_foremans'),
     path('folder2', folder_clients, name='folder_clients'),
@@ -72,6 +74,7 @@ urlpatterns = [
     path('create_material/<str:object>/', create_material, name='create_material'),
     path('update_material/<int:pk>/', MaterialEditView.as_view()),
     path('material_detail/<int:pk>/', MaterialDetailView.as_view()),
+    path('create_material_by_excel', create_material_by_excel, name='create_material_by_excel'),
         #all
     path('all_materials/<str:type>/', all_materials, name='all_materials'),
         #category

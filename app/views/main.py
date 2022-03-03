@@ -500,3 +500,10 @@ def category(request):
     obj = Category.objects.all()
     context = {'categories': obj}
     return render(request, 'views/category.html', context)
+
+def incoming(request, pk):
+    client = Client.objects.get(pk=pk)
+    incoming = Incoming.objects.filter(client = client).exclude(price_material_summ='0', price_material_dollar='0', 
+    price_salary_summ='0', price_salary_dollar='0').order_by('-pk')
+    context = {'list': incoming, 'client': client}
+    return render(request, 'views/incoming.html', context)

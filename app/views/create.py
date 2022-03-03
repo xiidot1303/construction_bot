@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView
 from app.forms import *
 from app.models import *
+import xlrd
+
 class ObjCreateView(LoginRequiredMixin, CreateView):
     template_name = 'create/create_obj.html'
     form_class = ObjForm
@@ -60,3 +62,35 @@ def create_incoming(request, obj):
     incoming = Incoming.objects.create(client=client, object=obj, price_material_summ='0', price_material_dollar='0', 
     price_salary_summ='0', price_salary_dollar='0')
     return redirect('/incoming/{}'.format(str(incoming.pk)))
+
+def create_material_by_excel(request):
+    if request.method == 'POST':
+        bbf = Material_excelFrom(request.POST, request.FILES)
+        if bbf.is_valid():
+            obj = bbf.cleaned_data['obj']
+            type = bbf.cleaned_data['type']
+            file = bbf.cleaned_data['file']
+            # print(file)
+            #get informations from excel file
+            excel = Excel.objects.get_or_create(pk=1)
+            excel = Excel.objects.get(pk=1)
+            excel.file = file
+            excel.save()
+            book = xlrd.open_workbook(file)
+            
+            
+
+
+
+            # end excel
+            return redirect(create_material_by_excel)
+        else:
+            objects = Object.objects.all()
+            bbf = Material_excelFrom()
+            context = {'form': bbf}
+            return render(request, 'create/create_material_by_excel.html', context)
+    else:
+        objects = Object.objects.all()
+        bbf = Material_excelFrom()
+        context = {'form': bbf}
+        return render(request, 'create/create_material_by_excel.html', context)

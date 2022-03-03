@@ -161,3 +161,11 @@ class SalaryForm(ModelForm):
             'type': forms.Select(attrs={'class': 'form-control'}, choices=[('Квартира', 'Квартира'), ('Участка', 'Участка')]),
         }
     field_order = ['title', 'summ_or_dollar', 'price', 'type']
+
+
+
+class Material_excelFrom(forms.Form):
+    obj = forms.ModelChoiceField(queryset=Object.objects.all(), label='Объект', widget=forms.Select(attrs={'class': 'form-control'}))
+    # obj = forms.CharField(max_length=100, label='Объект', widget=forms.Select(attrs={'class': 'form-control'}))
+    type = forms.CharField(max_length=20, label='Тип', widget=forms.Select(attrs={'class': 'form-control'}, choices=[('Квартира', 'Квартира'), ('Участка', 'Участка')]))
+    file = forms.FileField(label='Экзел', localize=True, required=True, widget=forms.FileInput(attrs={'class': 'form-control'}))

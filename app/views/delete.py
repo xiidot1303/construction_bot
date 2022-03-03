@@ -9,6 +9,8 @@ import os
 import telegram
 from telegram import ReplyKeyboardRemove, ReplyKeyboardMarkup, KeyboardButton
 from bot.functions import *
+from functions import my
+
 basedir = os.path.abspath(os.path.dirname(''))
 load_dotenv(os.path.join(basedir, '.env'))
 TOKEN = os.environ.get('TOKEN')
@@ -145,3 +147,16 @@ def delete_category(request, pk):
     obj = Category.objects.get(pk=pk)
     obj.delete()
     return redirect(category)
+
+def delete_incoming(request, incoming_pk, client_pk):
+    incoming_obj = Incoming.objects.get(pk=incoming_pk)
+    object = incoming_obj.object
+    object.price_material_summ = my.minus_income(object.price_material_summ, incoming_obj.price_material_summ)
+    object.price_material_dollar = my.minus_income(object.price_material_dollar, incoming_obj.price_material_dollar)
+    object.price_salary_summ = my.minus_income(object.price_salary_summ, incoming_obj.price_salary_summ)
+    object.price_salary_dollar = my.minus_income(object.price_salary_dollar, incoming_obj.price_salary_dollar)
+    object.save()
+    incoming_obj.delete()
+    return redirect(incoming, pk=client_pk)
+
+    

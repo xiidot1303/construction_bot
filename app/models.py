@@ -75,6 +75,16 @@ class Incoming(models.Model):   # incoming from Clients
     client = models.ForeignKey('Client', null=True, blank=False, on_delete=models.PROTECT)
     object = models.ForeignKey('Object', null=True, blank=False, on_delete=models.PROTECT)
     date = models.DateTimeField(db_index = True, null=True, auto_now_add=True, blank=True)
+
+
+
+    
+class Excel(models.Model):
+    file = models.FileField(upload_to='materials/', null=True, blank=True)
+
+
+
+
 #bot
 class Bot_users(models.Model):
     user_id = models.IntegerField(null=True, blank=False)

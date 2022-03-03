@@ -9,5 +9,6 @@ bot/__pycache__
 construction_bot/__pycache__
 construction_bot/__init__.py
 staticfiles
-files
+files/excel/*
+files/materials/*
 filebot

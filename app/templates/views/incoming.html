@@ -1,0 +1,55 @@
+{% extends "layout/basic.html" %}
+{% load static %}
+{% load index %}
+
+
+
+{% block h3 %}
+
+{{ clients }}
+
+{% endblock %}
+
+
+{% block section %}
+
+<div class="row" style="width: 80em;">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-body table-responsive no-padding">
+                <table class="table table-hover" id="userTable">
+                    <thead>
+                        <tr>
+                            <th>№</th>
+                            <th>Материал (Сумм)</th>
+                            <th>Материал ($)</th>
+                            <th>Иш хакки (Сумм)</th>
+                            <th>Иш хакки ($)</th>
+                            <th>Дата</th>
+                            <th>Действия</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for l in list %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ l.price_material_summ }}</td>
+                            <td>{{ l.price_material_dollar }}</td>
+                            <td>{{ l.price_salary_summ }}</td>
+                            <td>{{ l.price_salary_dollar }}</td>
+                            <td>{{ l.date|date:"d.m.Y" }}</td>
+                            <td>
+                                <a id = "a" href="{% url 'delete_incoming' l.pk l.client.pk %}" onclick="return confirm(&#39;Вы уверены?&#39;)" class="btn btn-danger btn-flat"><i class="fas fa-trash" aria-hidden="true"></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
