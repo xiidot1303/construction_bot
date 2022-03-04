@@ -85,8 +85,22 @@ def create_material_by_excel(request):
             all_summ = sheet.col(5)
             all_dollar = sheet.col(6)
             category = sheet.col(7)
+            n = 3
+            for t in title[3:]:
+                if t.value == '':
+                    break
+
+                if all_summ[n].value == '':
+                    currency = 'доллары'
+                else:
+                    currency = 'суммы'
+                category_ = str(category[n].value)
+                Category.objects.get_or_create(title=category_)
+                category_ = Category.objects.filter(title=category_)[0]
+                Material.objects.create(title = t.value, measurement = measurement[n].value, amount = str(amount[n].value), summ_or_dollar=currency, price=str(price[n].value).replace(',', ''), obj=obj, type=type, category=category_)
             
-            
+
+                n += 1
             
 
 

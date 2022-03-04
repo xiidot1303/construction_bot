@@ -74,11 +74,12 @@ def material(request, obj):
     obj_price_summ = Obj.price_material_summ
     obj_price_dollar = Obj.price_material_dollar
     # ________create excel file
-    df = {'№': [], 'Название': [], 'Измерение': [], 'Количество': [], 'Цена': [], 'Всего (сум)': [], 'Всего ($)': [], 'Дата': [], '': [], 'Остаток денег (сум)': [], 'Остаток денег ($)': []}
+    df = {'№': [], 'Название': [], 'Категория': [], 'Измерение': [], 'Количество': [], 'Цена': [], 'Всего (сум)': [], 'Всего ($)': [], 'Дата': [], '': [], 'Остаток денег (сум)': [], 'Остаток денег ($)': []}
     
     #add title
     df['№'] = [i for i in range(1, len(materials)+1)]
     df['Название'] = [i.title for i in materials]
+    df['Категория'] = [i.category.title for i in materials]
     df['Остаток денег (сум)'] = [obj_price_summ]
     df['Остаток денег ($)'] = [obj_price_dollar]
     df[''] = ['' for i in materials]
@@ -141,11 +142,12 @@ def sort_material(request, obj, type):
     obj_price_summ = Obj.price_material_summ
     obj_price_dollar = Obj.price_material_dollar
     # ________create excel file
-    df = {'№': [], 'Название': [], 'Измерение': [], 'Количество': [], 'Цена': [], 'Всего (сум)': [], 'Всего ($)': [], 'Дата': [], '': [], 'Остаток денег (сум)': [], 'Остаток денег ($)': []}
+    df = {'№': [], 'Название': [], 'Категория': [], 'Измерение': [], 'Количество': [], 'Цена': [], 'Всего (сум)': [], 'Всего ($)': [], 'Дата': [], '': [], 'Остаток денег (сум)': [], 'Остаток денег ($)': []}
     
     #add title
     df['№'] = [i for i in range(1, len(materials)+1)]
     df['Название'] = [i.title for i in materials]
+    df['Категория'] = [i.category.title for i in materials]
     df['Измерение'] = [i.measurement for i in materials]
     df['Остаток денег (сум)'] = [obj_price_summ]
     df['Остаток денег ($)'] = [obj_price_dollar]
@@ -398,13 +400,14 @@ def all_materials(request, type):
     price_summ = sum([float(i.amount)*float(i.price) for i in materials.filter(summ_or_dollar='суммы')])
     price_dollar = sum([float(i.amount)*float(i.price) for i in materials.filter(summ_or_dollar='доллары')])
     #### find currency
-    url = 'https://bank.uz/currency'
-    content = BeautifulSoup(requests.get(url).content, features='lxml')
-    top_left = content.find('div', {'class':"diogram-top-left"})
-    ul = top_left.find('ul', {'class': 'nav nav-tabs'})
-    tabs_a = ul.find('div', {'class': 'tabs-a'})
-    text = tabs_a.find_all('span', {'class': "medium-text"})
-    currency = float(text[1].text.replace(' ', ''))
+    # url = 'https://bank.uz/currency'
+    # content = BeautifulSoup(requests.get(url).content, features='lxml')
+    # top_left = content.find('div', {'class':"diogram-top-left"})
+    # ul = top_left.find('ul', {'class': 'nav nav-tabs'})
+    # tabs_a = ul.find('div', {'class': 'tabs-a'})
+    # text = tabs_a.find_all('span', {'class': "medium-text"})
+    # currency = float(text[1].text.replace(' ', ''))
+    currency_ = currency()
     #_________
     # summ_to_dollar = round(float(price_summ / currency), 4)
     summ_to_dollar = 0
@@ -416,7 +419,7 @@ def all_materials(request, type):
 
     overall = price_dollar + summ_to_dollar
     context = {'materials': materials, 'type': type_for_filter, 'total_amount': total_amount, 'price_summ': price_summ, 'price_dollar': price_dollar,
-    'currency': currency, 'summ_to_dollar': summ_to_dollar, 'overall': overall}
+    'currency': currency_, 'summ_to_dollar': summ_to_dollar, 'overall': overall}
     return render(request, 'views/all_materials.html', context)
 
 def all_salaries(request, type, title):
