@@ -9,7 +9,7 @@ import requests
 def currency():
     if WHERE != 'SERVER':
         return 10000.00
-    if False:
+    try:
 
         url = 'https://bank.uz/currency'
         content = BeautifulSoup(requests.get(url).content, features='lxml')
@@ -19,5 +19,5 @@ def currency():
         text = tabs_a.find_all('span', {'class': "medium-text"})
         curren = float(text[1].text.replace(' ', ''))
         return curren
-    else:
-        return 10839.97
+    except:
+        return 10900.20
