@@ -97,6 +97,10 @@ def create_material_by_excel(request):
                 category_ = str(category[n].value)
                 Category.objects.get_or_create(title=category_)
                 category_ = Category.objects.filter(title=category_)[0]
+                if type == 'Квартира':
+                    type = 'flat'
+                elif type == 'Участка':
+                    type = 'plot'
                 Material.objects.create(title = t.value, measurement = measurement[n].value, amount = str(amount[n].value), summ_or_dollar=currency, price=str(price[n].value).replace(',', ''), obj=obj, type=type, category=category_)
             
 

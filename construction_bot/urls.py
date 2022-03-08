@@ -76,7 +76,7 @@ urlpatterns = [
     path('material_detail/<int:pk>/', MaterialDetailView.as_view()),
     path('create_material_by_excel', create_material_by_excel, name='create_material_by_excel'),
         #all
-    path('all_materials/<str:type>/', all_materials, name='all_materials'),
+    path('all_materials/<str:type>/<str:category>/', all_materials, name='all_materials'),
         #category
     path('category/create', CategoryCreateView.as_view(), name='create_category'),
     path('categories', category, name='category'),

@@ -51,7 +51,7 @@ class Material_title(models.Model):
 class Category(models.Model):
     title = models.CharField(null=True, blank=True, max_length=200)
     def __str__(self) -> str:
-        return self.title
+        return str(self.title)
 
 class Salary(models.Model):
     user_id = models.IntegerField(null=True, blank=True)

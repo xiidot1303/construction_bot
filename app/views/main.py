@@ -386,11 +386,15 @@ def salary_title(request):
     return render(request, 'views/salary_titles.html', context)
 
 @login_required
-def all_materials(request, type):
+def all_materials(request, type, category):
     if type == 'Все':
         materials = Material.objects.all()
     else:
         materials = Material.objects.filter(type=type)
+    if category == 'Все':
+        materials = materials
+    else:
+        materials = materials.filter(category__title=category)
     total_amount = [str(float(i.amount)*float(i.price)) for i in materials]
     type_for_filter = 'Все'
     if type == 'flat':
@@ -418,8 +422,9 @@ def all_materials(request, type):
         summ_to_dollar += round(float(i.price_dollar), 4)
 
     overall = price_dollar + summ_to_dollar
+    categories = Category.objects.all()
     context = {'materials': materials, 'type': type_for_filter, 'total_amount': total_amount, 'price_summ': price_summ, 'price_dollar': price_dollar,
-    'currency': currency_, 'summ_to_dollar': summ_to_dollar, 'overall': overall}
+    'currency': currency_, 'summ_to_dollar': summ_to_dollar, 'overall': overall, 'categories': categories, 'category': category}
     return render(request, 'views/all_materials.html', context)
 
 def all_salaries(request, type, title):
