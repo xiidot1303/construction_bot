@@ -52,12 +52,16 @@ def folder_clients(request):
     return render(request, 'views/folder_clients.html', context)
 
 @login_required
-def material(request, obj):
+def material(request, obj, category):
     del_materials = Material.objects.filter(title=None)
     for m in del_materials:
         m.delete()
 
     materials = Material.objects.filter(obj=obj).exclude(price=None)
+    if category == 'Все':
+        materials = materials
+    else:
+        materials = materials.filter(category__title=category)
     total_amount = [str(float(i.amount)*float(i.price)) for i in materials]
     price_summ = sum([float(i.amount)*float(i.price) for i in materials.filter(summ_or_dollar='суммы')])
     price_dollar = sum([float(i.amount)*float(i.price) for i in materials.filter(summ_or_dollar='доллары')])
@@ -113,19 +117,23 @@ def material(request, obj):
 
     df.to_excel('files/excel/material_{}.xlsx'.format(obj))
     #_________
+    categories = Category.objects.all()
     context = {'materials': materials, 'total_amount': total_amount, 'file_path': 'material_{}'.format(obj), 'type': 'Все', 'obj': obj,
     'price_summ': price_summ, 'price_dollar': price_dollar,
-    'currency': currency, 'summ_to_dollar': summ_to_dollar, 'overall': overall}
+    'currency': currency, 'summ_to_dollar': summ_to_dollar, 'overall': overall, 'categories': categories, 'category': category}
     return render(request, 'views/material.html', context)
 
 
 @login_required
-def sort_material(request, obj, type):
+def sort_material(request, obj, type, category):
     del_materials = Material.objects.filter(title=None)
     for m in del_materials:
         m.delete()
-
     materials = Material.objects.filter(obj=obj, type=type)
+    if category == 'Все':
+        materials = materials
+    else:
+        materials = materials.filter(category__title=category)
     total_amount = [str(float(i.amount)*float(i.price)) for i in materials]
     price_summ = sum([float(i.amount)*float(i.price) for i in materials.filter(summ_or_dollar='суммы')])
     price_dollar = sum([float(i.amount)*float(i.price) for i in materials.filter(summ_or_dollar='доллары')])
@@ -184,10 +192,10 @@ def sort_material(request, obj, type):
         type_for_filter = 'Квартиры'
     elif type == 'plot':
         type_for_filter = 'Участки'
-
+    categories = Category.objects.all()
     context = {'materials': materials, 'total_amount': total_amount, 'file_path': 'material_{}'.format(obj), 'type': type_for_filter, 'obj': obj,
     'price_summ': price_summ, 'price_dollar': price_dollar,
-    'currency': currency, 'summ_to_dollar': summ_to_dollar, 'overall': overall}
+    'currency': currency, 'summ_to_dollar': summ_to_dollar, 'overall': overall, 'categories': categories, 'category': category}
     return render(request, 'views/material.html', context)
 
 

@@ -68,8 +68,8 @@ urlpatterns = [
     path('folder2', folder_clients, name='folder_clients'),
 
     #material
-    path('material/<str:obj>/', material, name='material'),
-    path('sort_material/<str:obj>/<str:type>/', sort_material, name='sort_material'), # sort 
+    path('material/<str:obj>/<str:category>/', material, name='material'),
+    path('sort_material/<str:obj>/<str:type>/<str:category>/', sort_material, name='sort_material'), # sort 
     path('delete_material/<int:pk>/', delete_material, name='delete_material'),
     path('create_material/<str:object>/', create_material, name='create_material'),
     path('update_material/<int:pk>/', MaterialEditView.as_view()),
